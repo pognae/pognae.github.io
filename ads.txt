@@ -1,2 +1,3 @@
 # Google AdSense 승인 후 아래 줄의 pub-XXXXXXXXXXXXXXXX를 실제 게시자 ID로 교체하세요.
 # google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
+google.com, pub-5461344534519122, DIRECT, f08c47fec0942fa0
