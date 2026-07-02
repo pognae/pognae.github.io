@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Calc365 개인정보처리방침 — 이용자 정보 수집 및 쿠키, 광고 관련 안내입니다.">
+    <title>개인정보처리방침 | Calc365</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#0f766e">
+    <script>
+      try {
+        var t = JSON.parse(localStorage.getItem("calc365:theme"));
+        if (t === "dark") document.documentElement.dataset.theme = "dark";
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="page-header">
+        <a class="page-brand" href="index.html">
+          <span class="brand-mark" aria-hidden="true">365</span>
+          <span>Calc365</span>
+        </a>
+        <button id="themeToggle" class="icon-button" type="button" aria-label="다크 모드" title="테마 전환">
+          <span aria-hidden="true">🌙</span>
+        </button>
+      </header>
+
+      <main class="page-content">
+        <h1>개인정보처리방침</h1>
+        <p class="page-meta">시행일: 2026년 7월 1일</p>
+
+        <section>
+          <h2>1. 수집하는 개인정보</h2>
+          <p>Calc365는 회원가입을 제공하지 않으며, 이름·이메일·전화번호 등 개인을 직접 식별할 수 있는 정보를 사용자로부터 수집하지 않습니다.</p>
+          <p>계산기 입력값은 사용자 기기에서만 처리되며 서버로 전송되지 않습니다. 즐겨찾기, 최근 사용, 테마 설정은 브라우저 <code>localStorage</code>에 저장됩니다.</p>
+        </section>
+
+        <section>
+          <h2>2. 자동 수집 정보</h2>
+          <p>웹사이트 운영 및 광고 게재를 위해 다음 정보가 자동으로 수집될 수 있습니다.</p>
+          <ul>
+            <li>IP 주소, 브라우저 종류, 접속 시간, 방문 페이지</li>
+            <li>Google Analytics 등 분석 도구를 도입할 경우 이용 통계</li>
+            <li>Google AdSense 등 광고 서비스의 쿠키 및 광고 식별자</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>3. 쿠키 및 로컬 저장소</h2>
+          <p>Calc365는 서비스 편의를 위해 로컬 저장소를 사용합니다. 광고 승인 후 Google AdSense 등 제3자 광고 파트너의 쿠키가 사용될 수 있으며, 이는 맞춤형 광고 제공 목적입니다.</p>
+          <p>브라우저 설정에서 쿠키 저장을 거부하거나 삭제할 수 있습니다. 다만 일부 기능이 제한될 수 있습니다.</p>
+        </section>
+
+        <section>
+          <h2>4. 개인정보의 제3자 제공</h2>
+          <p>Calc365는 이용자의 개인정보를 외부에 판매하지 않습니다. 다만 Google AdSense 등 광고·분석 서비스 이용 시 해당 사업자의 정책에 따라 정보가 처리될 수 있습니다.</p>
+          <ul>
+            <li><a href="https://policies.google.com/privacy" rel="noopener noreferrer">Google 개인정보처리방침</a></li>
+            <li><a href="https://policies.google.com/technologies/ads" rel="noopener noreferrer">Google 광고 정책</a></li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>5. 이용자의 권리</h2>
+          <p>브라우저에서 localStorage와 쿠키를 삭제하면 Calc365에 저장된 로컬 설정을 제거할 수 있습니다. 광고 관련 설정은 Google 광고 설정 페이지에서 관리할 수 있습니다.</p>
+        </section>
+
+        <section>
+          <h2>6. 정책 변경</h2>
+          <p>본 방침은 서비스 변경 또는 관련 법령에 따라 수정될 수 있으며, 변경 시 이 페이지에 게시합니다.</p>
+        </section>
+
+        <section>
+          <h2>7. 문의</h2>
+          <p>개인정보 관련 문의는 <a href="contact.html">문의 페이지</a>를 이용해 주세요.</p>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <nav aria-label="사이트 정보">
+          <a href="index.html">홈</a>
+          <a href="about.html">소개</a>
+          <a href="privacy.html" aria-current="page">개인정보처리방침</a>
+          <a href="contact.html">문의</a>
+        </nav>
+        <p>© Calc365 · 계산365</p>
+      </footer>
+    </div>
+    <script src="page.js"></script>
+  </body>
+</html>

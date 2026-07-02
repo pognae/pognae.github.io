@@ -1,0 +1,25 @@
+{
+  "name": "Calc365 | 계산365",
+  "short_name": "Calc365",
+  "description": "생활에 필요한 30종 계산기와 변환기를 한곳에서 무료로 사용하세요.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f7f8",
+  "theme_color": "#0f766e",
+  "lang": "ko",
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

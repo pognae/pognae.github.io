@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://pognae.github.io/calc365/sitemap.xml

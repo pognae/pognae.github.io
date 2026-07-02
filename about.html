@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Calc365(계산365) 소개 — 생활에 필요한 30종 계산기를 무료로 제공하는 웹 서비스입니다.">
+    <title>소개 | Calc365</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#0f766e">
+    <script>
+      try {
+        var t = JSON.parse(localStorage.getItem("calc365:theme"));
+        if (t === "dark") document.documentElement.dataset.theme = "dark";
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="page-header">
+        <a class="page-brand" href="index.html">
+          <span class="brand-mark" aria-hidden="true">365</span>
+          <span>Calc365</span>
+        </a>
+        <button id="themeToggle" class="icon-button" type="button" aria-label="다크 모드" title="테마 전환">
+          <span aria-hidden="true">🌙</span>
+        </button>
+      </header>
+
+      <main class="page-content">
+        <h1>Calc365 소개</h1>
+        <p class="page-lead">생활에 필요한 모든 계산을 한곳에서</p>
+
+        <section>
+          <h2>Calc365란?</h2>
+          <p>Calc365(계산365)는 퍼센트, 할인, 대출, D-day, BMI, 단위 변환 등 일상에서 자주 쓰는 <strong>30종 계산기</strong>를 브라우저에서 바로 사용할 수 있는 무료 웹 서비스입니다.</p>
+          <p>별도 설치나 회원가입 없이 사용할 수 있으며, 입력한 값은 서버로 전송되지 않고 사용자 기기에서만 계산됩니다.</p>
+        </section>
+
+        <section>
+          <h2>제공 기능</h2>
+          <ul>
+            <li>금융: 퍼센트, 할인, 부가세, 이자, 복리, 대출, 실수령액, 퇴직금</li>
+            <li>날짜·시간: 날짜 차이, D-day, 나이, 시간, 근무일, 주차</li>
+            <li>건강: BMI, BMR, 권장 칼로리, 물 섭취량, 체지방률</li>
+            <li>생활: 평균, 평수 변환, 전기·수도·가스 요금 추정</li>
+            <li>변환: 길이, 무게, 온도, 데이터, 속도</li>
+            <li>기타: 기본 계산기, QR 코드 생성</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>운영 방침</h2>
+          <p>금융·건강·요금 계산기는 <strong>간이 추정치</strong>를 제공합니다. 실제 금액, 세금, 보험료, 의료 판단 등은 전문 기관이나 공식 자료를 참고해 주세요.</p>
+          <p>Calc365는 GitHub Pages 기반의 정적 웹사이트로 운영되며, 광고 수익을 통해 서비스를 유지할 예정입니다.</p>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <nav aria-label="사이트 정보">
+          <a href="index.html">홈</a>
+          <a href="about.html" aria-current="page">소개</a>
+          <a href="privacy.html">개인정보처리방침</a>
+          <a href="contact.html">문의</a>
+        </nav>
+        <p>© Calc365 · 계산365</p>
+      </footer>
+    </div>
+    <script src="page.js"></script>
+  </body>
+</html>

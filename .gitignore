@@ -1,0 +1,12 @@
+# Chat extraction / dev artifacts
+msg-*.txt
+check-output.txt
+numbered-items.txt
+share-extracted.md
+share.html
+
+# Agent memory & tooling
+.cursor/
+.agents/
+AGENTS.md
+MEMORY.md
