@@ -27,6 +27,14 @@ const converters = {
   speed: {
     label: "속도",
     units: { "m/s": 1, "km/h": 0.2777777778, mph: 0.44704, knot: 0.5144444444 }
+  },
+  volume: {
+    label: "부피",
+    units: { ml: 1, l: 1000, gal: 3785.41, cup: 240 }
+  },
+  area: {
+    label: "면적",
+    units: { m2: 1, km2: 1000000, ft2: 0.092903, ac: 4046.86, ha: 10000 }
   }
 };
 
@@ -39,6 +47,9 @@ const tools = [
   { id: "loan", name: "대출 상환", category: "money", render: renderLoan },
   { id: "salary", name: "실수령액", category: "money", render: renderSalary },
   { id: "severance", name: "퇴직금", category: "money", render: renderSeverance },
+  { id: "exchange", name: "환율 계산", category: "money", render: renderExchange },
+  { id: "stock", name: "주식 수익률", category: "money", render: renderStock },
+  { id: "dividend", name: "배당금", category: "money", render: renderDividend },
 
   { id: "datediff", name: "날짜 계산", category: "date", render: renderDatediff },
   { id: "dday", name: "D-day", category: "date", render: renderDday },
@@ -46,27 +57,37 @@ const tools = [
   { id: "time", name: "시간 계산", category: "date", render: renderTime },
   { id: "workday", name: "근무일", category: "date", render: renderWorkday },
   { id: "weeknum", name: "주차", category: "date", render: renderWeeknum },
+  { id: "sleep", name: "수면 사이클", category: "date", render: renderSleep },
 
   { id: "bmi", name: "BMI", category: "health", render: renderBmi },
   { id: "bmr", name: "기초대사량", category: "health", render: renderBmr },
   { id: "calorie", name: "권장 칼로리", category: "health", render: renderCalorie },
   { id: "water", name: "물 섭취량", category: "health", render: renderWater },
   { id: "bodyfat", name: "체지방률", category: "health", render: renderBodyfat },
+  { id: "whr", name: "허리-엉덩이 비율", category: "health", render: renderWhr },
+  { id: "stdweight", name: "표준 체중", category: "health", render: renderStdWeight },
 
   { id: "average", name: "평균", category: "life", render: renderAverage },
   { id: "pyeong", name: "평수 변환", category: "life", render: renderPyeong },
   { id: "elec", name: "전기요금", category: "life", render: renderElec },
   { id: "watercost", name: "수도요금", category: "life", render: renderWatercost },
   { id: "gas", name: "가스요금", category: "life", render: renderGas },
+  { id: "cooking", name: "요리 단위", category: "life", render: renderCooking },
+  { id: "fuel", name: "여행 유류비", category: "life", render: renderFuel },
+  { id: "dutch", name: "더치페이", category: "life", render: renderDutch },
 
   { id: "length", name: "길이 변환", category: "convert", render: () => renderConverter("length") },
   { id: "weight", name: "무게 변환", category: "convert", render: () => renderConverter("weight") },
   { id: "temp", name: "온도 변환", category: "convert", render: renderTemp },
   { id: "data", name: "데이터 변환", category: "convert", render: () => renderConverter("data") },
   { id: "speed", name: "속도 변환", category: "convert", render: () => renderConverter("speed") },
+  { id: "volume", name: "부피 변환", category: "convert", render: () => renderConverter("volume") },
+  { id: "area", name: "면적 변환", category: "convert", render: () => renderConverter("area") },
 
   { id: "basic", name: "기본 계산기", category: "etc", render: renderBasic },
-  { id: "qr", name: "QR 코드", category: "etc", render: renderQr }
+  { id: "qr", name: "QR 코드", category: "etc", render: renderQr },
+  { id: "charcount", name: "글자 수 세기", category: "etc", render: renderCharCount },
+  { id: "hexdec", name: "16진수-10진수", category: "etc", render: renderHexDec }
 ];
 
 const els = {
@@ -743,7 +764,195 @@ function calcQr() {
   setResult("QR 생성됨", text);
 }
 
-/* ---------- 실행 ---------- */
+/* ---------- 신규 확장 계산기 ---------- */
+function renderExchange() {
+  els.body.innerHTML = form([
+    { label: "금액", html: moneyInput(1) },
+    {
+      label: "통화",
+      html: selectHtml([
+        { value: "USD", label: "USD $\rightarrow$ KRW" },
+        { value: "JPY", label: "JPY $\rightarrow$ KRW" },
+        { value: "EUR", label: "EUR $\rightarrow$ KRW" }
+      ])
+    }
+  ]);
+  setResult("0원", "간이 환율(고정값)로 계산합니다.");
+}
+function calcExchange() {
+  const amount = numberAt(0);
+  const currency = els.body.querySelector("select").value;
+  const rates = { USD: 1350, JPY: 9.1, EUR: 1450 };
+  const result = amount * (rates[currency] || 0);
+  setResult(formatWon(result), `1 ${currency} = ${rates[currency]}원 기준`);
+}
+
+function renderStock() {
+  els.body.innerHTML = form([
+    { label: "매수 단가", html: moneyInput(50000) },
+    { label: "현재 단가", html: moneyInput(55000) },
+    { label: "보유 수량", html: `<input type="number" value="10">` }
+  ]);
+  setResult("0원", "주식 투자 수익률을 계산합니다.");
+}
+function calcStock() {
+  const buy = numberAt(0);
+  const now = numberAt(1);
+  const qty = numberAt(2);
+  const profit = (now - buy) * qty;
+  const rate = ((now - buy) / buy) * 100;
+  setResult(formatWon(profit || 0), `수익률 ${formatNumber.format(rate)}%`);
+}
+
+function renderDividend() {
+  els.body.innerHTML = form([
+    { label: "보유 수량", html: `<input type="number" value="100">` },
+    { label: "주당 배당금", html: moneyInput(1000) }
+  ]);
+  setResult("0원", "예상 배당금 총액을 계산합니다.");
+}
+function calcDividend() {
+  const qty = numberAt(0);
+  const div = numberAt(1);
+  setResult(formatWon(qty * div || 0), `보유 ${formatNumber.format(qty)}주 기준`);
+}
+
+function renderSleep() {
+  els.body.innerHTML = form([
+    { label: "취침 예정 시각", html: `<input type="time" value="23:00">` }
+  ]);
+  setResult("-", "최적의 기상 시간을 추천합니다 (90분 사이클).");
+}
+function calcSleep() {
+  const time = els.body.querySelector("input").value;
+  if (!time) return;
+  const [h, m] = time.split(":").map(Number);
+  const date = new Date();
+  date.setHours(h, m, 0);
+  const recommendations = [4.5, 6, 7.5, 9].map(h_offset => {
+    const d = new Date(date.getTime() + h_offset * 3600000 + 15 * 60000);
+    return d.toTimeString().slice(0, 5);
+  });
+  setResult(recommendations[1], `추천 기상 시간: ${recommendations.join(", ")}`);
+}
+
+function renderWhr() {
+  els.body.innerHTML = form([
+    { label: "허리 둘레(cm)", html: `<input type="number" value="80">` },
+    { label: "엉덩이 둘레(cm)", html: `<input type="number" value="95">` }
+  ]);
+  setResult("0", "허리-엉덩이 비율(WHR)을 계산합니다.");
+}
+function calcWhr() {
+  const w = numberAt(0);
+  const h = numberAt(1);
+  const ratio = w / h;
+  setResult(formatNumber.format(ratio || 0), ratio > 0.9 ? "복부 비만 위험" : "정상 범위");
+}
+
+function renderStdWeight() {
+  els.body.innerHTML = form([
+    { label: "키(cm)", html: `<input type="number" value="170">` },
+    { label: "성별", html: genderSelect() }
+  ]);
+  setResult("0kg", "표준 체중을 계산합니다.");
+}
+function calcStdWeight() {
+  const h = numberAt(0) / 100;
+  const gender = els.body.querySelector("select").value;
+  const weight = gender === "male" ? (h * h) * 22 : (h * h) * 21;
+  setResult(`${formatNumber.format(weight || 0)} kg`, "BMI 21~22 기준 표준 체중");
+}
+
+function renderCooking() {
+  els.body.innerHTML = form([
+    { label: "값", html: `<input type="number" value="1">` },
+    {
+      label: "단위 변환",
+      html: selectHtml([
+        { value: "cup-ml", label: "1컵 $\rightarrow$ ml" },
+        { value: "tbsp-ml", label: "1큰술 $\rightarrow$ ml" },
+        { value: "tsp-ml", label: "1작은술 $\rightarrow$ ml" }
+      ])
+    }
+  ]);
+  setResult("0ml", "요리 단위(컵, 스푼)를 ml로 변환합니다.");
+}
+function calcCooking() {
+  const val = numberAt(0);
+  const mode = els.body.querySelector("select").value;
+  const rates = { cup: 240, tbsp: 15, tsp: 5 };
+  const key = mode.split("-")[0];
+  setResult(`${formatNumber.format(val * rates[key])} ml`, `${val} ${key} 기준`);
+}
+
+function renderFuel() {
+  els.body.innerHTML = form([
+    { label: "여행 거리(km)", html: `<input type="number" value="100">` },
+    { label: "차량 연비(km/L)", html: `<input type="number" value="12">` },
+    { label: "현재 유가(원/L)", html: moneyInput(1600) }
+  ]);
+  setResult("0원", "예상 여행 유류비를 계산합니다.");
+}
+function calcFuel() {
+  const dist = numberAt(0);
+  const eff = numberAt(1);
+  const price = numberAt(2);
+  const cost = (dist / eff) * price;
+  setResult(formatWon(cost || 0), `필요 연료: ${formatNumber.format(dist / eff)} L`);
+}
+
+function renderDutch() {
+  els.body.innerHTML = form([
+    { label: "총 금액", html: moneyInput(50000) },
+    { label: "인원 수", html: `<input type="number" value="4">` }
+  ]);
+  setResult("0원", "N분의 1 금액을 계산합니다.");
+}
+function calcDutch() {
+  const total = numberAt(0);
+  const count = numberAt(1);
+  setResult(formatWon(total / count || 0), `1인당 부담 금액`);
+}
+
+function renderCharCount() {
+  els.body.innerHTML = form([
+    { label: "텍스트 입력", full: true, html: `<textarea style="width:100%; min-height:150px; padding:10px; border:1px solid var(--line); border-radius:8px; background:var(--field-bg); color:var(--ink);"></textarea>` }
+  ], "분석하기");
+  setResult("0자", "글자 수를 분석합니다.");
+}
+function calcCharCount() {
+  const text = els.body.querySelector("textarea").value;
+  const len = text.length;
+  const noSpace = text.replace(/\s/g, "").length;
+  setResult(`${len}자`, `공백 제외: ${noSpace}자`);
+}
+
+function renderHexDec() {
+  els.body.innerHTML = form([
+    { label: "값", html: `<input type="text" value="FF">` },
+    {
+      label: "변환 방향",
+      html: selectHtml([
+        { value: "hex-dec", label: "16진수 $\rightarrow$ 10진수" },
+        { value: "dec-hex", label: "10진수 $\rightarrow$ 16진수" }
+      ])
+    }
+  ]);
+  setResult("0", "16진수와 10진수를 상호 변환합니다.");
+}
+function calcHexDec() {
+  const val = els.body.querySelector("input").value.trim();
+  const mode = els.body.querySelector("select").value;
+  if (mode === "hex-dec") {
+    const res = parseInt(val, 16);
+    setResult(isNaN(res) ? "오류" : formatNumber.format(res), "10진수 결과");
+  } else {
+    const res = Number(val).toString(16).toUpperCase();
+    setResult(isNaN(Number(val)) ? "오류" : res, "16진수 결과");
+  }
+}
+
 function numberAt(index) {
   const input = els.body.querySelectorAll("input")[index];
   return Number(input?.value || 0);
@@ -758,24 +967,35 @@ const handlers = {
   loan: calcLoan,
   salary: calcSalary,
   severance: calcSeverance,
+  exchange: calcExchange,
+  stock: calcStock,
+  dividend: calcDividend,
   datediff: calcDatediff,
   dday: calcDday,
   age: calcAge,
   time: calcTime,
   workday: calcWorkday,
   weeknum: calcWeeknum,
+  sleep: calcSleep,
   bmi: calcBmi,
   bmr: calcBmr,
   calorie: calcCalorie,
   water: calcWater,
   bodyfat: calcBodyfat,
+  whr: calcWhr,
+  stdweight: calcStdWeight,
   average: calcAverage,
   pyeong: calcPyeong,
   elec: () => calcUtility("kWh"),
   watercost: () => calcUtility("m³"),
   gas: () => calcUtility("m³"),
+  cooking: calcCooking,
+  fuel: calcFuel,
+  dutch: calcDutch,
   temp: calcTemp,
-  qr: calcQr
+  qr: calcQr,
+  charcount: calcCharCount,
+  hexdec: calcHexDec
 };
 
 function runCurrentTool() {
