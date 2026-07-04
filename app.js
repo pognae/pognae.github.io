@@ -1069,5 +1069,3 @@ if ("serviceWorker" in navigator) {
 }
 
 
-
-
