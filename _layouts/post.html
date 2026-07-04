@@ -1,0 +1,16 @@
+---
+layout: default
+---
+<article class="blog-post">
+  <header class="blog-post-header">
+    <h1>{{ page.title }}</h1>
+    <p class="page-meta">
+      <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%Y년 %m월 %d일" }}</time>
+      {% if page.category %} · {{ page.category }}{% endif %}
+    </p>
+  </header>
+  <div class="blog-body">
+    {{ content }}
+  </div>
+  <p class="blog-back"><a href="{{ '/blog/' | relative_url }}">← 블로그 목록</a></p>
+</article>

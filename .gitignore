@@ -10,3 +10,10 @@ share.html
 .agents/
 AGENTS.md
 MEMORY.md
+
+# Jekyll
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+vendor/

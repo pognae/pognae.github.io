@@ -1,0 +1,20 @@
+title: Calc365
+description: 생활에 필요한 모든 계산을 한곳에서
+lang: ko-KR
+url: "https://pognae.github.io"
+baseurl: ""
+permalink: /blog/:year/:month/:day/:slug/
+
+markdown: kramdown
+kramdown:
+  input: GFM
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - .gitignore
+  - .cursor
+  - .agents
+  - AGENTS.md
+  - MEMORY.md

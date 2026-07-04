@@ -1,0 +1,22 @@
+---
+layout: default
+title: 블로그
+description: Calc365 계산기 활용 팁과 생활 정보
+permalink: /blog/
+---
+<h1>Calc365 블로그</h1>
+<p class="page-lead">계산기 활용법, 생활 팁, 업데이트 소식을 전합니다.</p>
+
+<ul class="blog-list">
+  {% for post in site.posts %}
+  <li class="blog-list-item">
+    <a href="{{ post.url | relative_url }}">
+      <span class="blog-list-title">{{ post.title }}</span>
+      <span class="blog-list-meta">{{ post.date | date: "%Y.%m.%d" }}{% if post.category %} · {{ post.category }}{% endif %}</span>
+    </a>
+    {% if post.excerpt %}
+    <p class="blog-list-excerpt">{{ post.excerpt | strip_html | truncate: 120 }}</p>
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>

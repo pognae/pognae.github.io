@@ -1,4 +1,4 @@
-const CACHE = "calc365-v1";
+const CACHE = "calc365-v2";
 const ASSETS = [
   "./",
   "./index.html",
@@ -8,7 +8,8 @@ const ASSETS = [
   "./icons/icon.svg",
   "./about.html",
   "./privacy.html",
-  "./contact.html"
+  "./contact.html",
+  "./blog/"
 ];
 
 self.addEventListener("install", (event) => {
