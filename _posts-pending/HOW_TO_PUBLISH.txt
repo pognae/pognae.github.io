@@ -1,0 +1,48 @@
+_posts-pending 자동 발행 가이드
+==========================
+
+## 동작 방식
+
+1. `_posts-pending/`에 `YYYY-MM-DD-슬러그.md` 형식으로 파일을 올립니다.
+2. 매일 **09:00 KST** GitHub Actions가 실행됩니다.
+3. 파일명 날짜 ≤ 오늘(KST)이면 `_posts/`로 **자동 이동** → 공식 블로그에 발행됩니다.
+4. 아직 날짜가 안 된 글은 **미리보기 URL**로만 볼 수 있습니다.
+
+## 파일명 규칙 (필수)
+
+  YYYY-MM-DD-영문-슬러그.md
+
+예: 2026-07-20-net-salary-calculator-korea.md
+    → 2026년 7월 20일 09:00(KST)에 자동 발행
+
+## 미리보기 URL (발행 전)
+
+  https://pognae.github.io/preview/YYYY/MM/DD/슬러그/
+
+예: 2026-07-20-net-salary-calculator-korea.md
+    → https://pognae.github.io/preview/2026/07/20/net-salary-calculator-korea/
+
+※ noindex 처리 — 링크를 아는 사람만 접근 가능
+※ 블로그 목록·사이트맵에는 포함되지 않음
+
+## GitHub Pages 설정 (최초 1회)
+
+Repository → Settings → Pages → Build and deployment
+  Source: **GitHub Actions**
+
+## 로컬 테스트
+
+  node scripts/publish-due-posts.mjs   # 발행 대상 이동 시뮬레이션
+  node scripts/sync-preview.mjs        # 미리보기 폴더 생성
+  bundle exec jekyll serve             # 로컬 확인
+
+## 수동 즉시 발행
+
+파일명 날짜를 **오늘(KST) 이전**으로 바꾸거나,
+`_posts-pending/` → `_posts/`로 직접 이동 후 push.
+
+## 주의
+
+- front matter date가 아닌 **파일명 날짜**가 발행 기준입니다.
+- cron은 UTC 00:00 = KST 09:00에 실행됩니다.
+- push 시에도 워크플로가 실행되어 due 글은 즉시 발행됩니다.

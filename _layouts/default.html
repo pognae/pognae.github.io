@@ -4,6 +4,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="{{ page.description | default: site.description | escape }}">
+    {% if page.keywords %}<meta name="keywords" content="{{ page.keywords | escape }}">{% endif %}
+    <link rel="canonical" href="{{ page.url | replace:'index.html','' | absolute_url }}">
+    <meta property="og:type" content="{% if page.layout == 'post' %}article{% else %}website{% endif %}">
+    <meta property="og:title" content="{{ page.title | default: site.title | escape }}">
+    <meta property="og:description" content="{{ page.description | default: site.description | escape }}">
+    <meta property="og:url" content="{{ page.url | replace:'index.html','' | absolute_url }}">
+    <meta property="og:site_name" content="Calc365">
+    <meta property="og:locale" content="ko_KR">
+    {% if page.date %}<meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">{% endif %}
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="{{ page.title | default: site.title | escape }}">
+    <meta name="twitter:description" content="{{ page.description | default: site.description | escape }}">
+    {% if page.preview %}<meta name="robots" content="noindex, nofollow">{% endif %}
     <title>{{ page.title | escape }} | Calc365</title>
     <link rel="stylesheet" href="{{ '/styles.css' | relative_url }}">
     <link rel="icon" href="{{ '/icons/icon.svg' | relative_url }}" type="image/svg+xml">
@@ -15,6 +28,24 @@
         if (t === "dark") document.documentElement.dataset.theme = "dark";
       } catch (e) {}
     </script>
+    {% if page.layout == 'post' and page.preview != true %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": {{ page.title | jsonify }},
+      "description": {{ page.description | jsonify }},
+      "datePublished": "{{ page.date | date_to_xmlschema }}",
+      "author": { "@type": "Organization", "name": "Calc365" },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Calc365",
+        "logo": { "@type": "ImageObject", "url": "{{ '/icons/icon.svg' | absolute_url }}" }
+      },
+      "mainEntityOfPage": { "@type": "WebPage", "@id": "{{ page.url | replace:'index.html','' | absolute_url }}" }
+    }
+    </script>
+    {% endif %}
   </head>
   <body>
     <div class="page-shell">

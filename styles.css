@@ -679,6 +679,24 @@ button {
   border-top: 1px solid var(--line);
 }
 
+.preview-banner {
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid #f59e0b;
+  border-radius: 8px;
+  background: #fffbeb;
+  color: #92400e;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+[data-theme="dark"] .preview-banner {
+  border-color: #b45309;
+  background: #422006;
+  color: #fcd34d;
+}
+
 .faq-list {
   display: grid;
   gap: 16px;

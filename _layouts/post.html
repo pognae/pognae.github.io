@@ -2,6 +2,9 @@
 layout: default
 ---
 <article class="blog-post">
+  {% if page.preview %}
+  <p class="preview-banner" role="status">미리보기 — {{ page.date | date: "%Y.%m.%d" }} 09:00(KST)에 공개됩니다. 블로그 목록·검색에는 노출되지 않습니다.</p>
+  {% endif %}
   <header class="blog-post-header">
     <h1>{{ page.title }}</h1>
     <p class="page-meta">
