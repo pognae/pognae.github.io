@@ -27,3 +27,4 @@ exclude:
   - _preview
   - scripts
   - node_modules
+  - vendor/
