@@ -36,17 +36,8 @@ jobs:
       - name: Publish due posts (KST filename date)
         run: node scripts/publish-due-posts.mjs
 
-      - name: Commit published posts
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add _posts/ _posts-pending/
-          if git diff --staged --quiet; then
-            echo "No post files to commit."
-          else
-            git commit -m "chore: auto-publish scheduled blog posts [skip ci]"
-            git push
-          fi
+      - name: Verify auto-publish pipeline
+        run: node scripts/verify-auto-publish.mjs
 
       - name: Sync preview collection
         run: node scripts/sync-preview.mjs
@@ -67,7 +58,22 @@ jobs:
       - name: Verify build output
         run: |
           test -f _site/index.html
+          test -f _site/blog/index.html
           echo "Build OK — $(find _site -type f | wc -l) files"
+          echo "Blog posts in site: $(find _site/blog -name 'index.html' 2>/dev/null | wc -l)"
+
+      - name: Commit published posts
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add _posts/ _posts-pending/
+          if git diff --staged --quiet; then
+            echo "No post files to commit."
+          else
+            git commit -m "chore: auto-publish scheduled blog posts [skip ci]"
+            git push
+          fi
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
