@@ -59,6 +59,7 @@ jobs:
         with:
           ruby-version: "3.3"
           bundler-cache: true
+          cache-version: 1
 
       - name: Build with Jekyll
         run: bundle exec jekyll build --trace

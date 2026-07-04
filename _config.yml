@@ -27,4 +27,6 @@ exclude:
   - _preview
   - scripts
   - node_modules
-  - vendor/
+  - vendor
+  - vendor/bundle
+  - .bundle
