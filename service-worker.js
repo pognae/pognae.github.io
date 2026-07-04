@@ -1,8 +1,9 @@
-const CACHE = "calc365-v2";
+const CACHE = "calc365-v3";
 const ASSETS = [
   "./",
   "./index.html",
   "./app.js",
+  "./calculators-extra.js",
   "./styles.css",
   "./manifest.webmanifest",
   "./icons/icon.svg",

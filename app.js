@@ -953,11 +953,6 @@ function calcHexDec() {
   }
 }
 
-function numberAt(index) {
-  const input = els.body.querySelectorAll("input")[index];
-  return Number(input?.value || 0);
-}
-
 const handlers = {
   percent: calcPercent,
   discount: calcDiscount,
@@ -997,6 +992,57 @@ const handlers = {
   charcount: calcCharCount,
   hexdec: calcHexDec
 };
+
+function numberAt(index) {
+  const input = els.body.querySelectorAll("input")[index];
+  return Number(input?.value || 0);
+}
+
+function fieldHtml(field) {
+  if (field.type === "money") return moneyInput(field.default ?? "");
+  if (field.type === "select") return selectHtml(field.options);
+  if (field.type === "date") return `<input type="date" value="${field.default || today()}">`;
+  if (field.type === "time") return `<input type="time" value="${field.default || "09:00"}">`;
+  if (field.type === "text") return `<input type="text" value="${field.default ?? ""}">`;
+  if (field.type === "textarea") {
+    return `<textarea style="width:100%;min-height:120px;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--field-bg);color:var(--ink);">${field.default ?? ""}</textarea>`;
+  }
+  if (field.type === "gender") return genderSelect();
+  return `<input type="number" step="any" value="${field.default ?? 0}">`;
+}
+
+function registerExtraTools(entries) {
+  entries.forEach((entry) => {
+    tools.push({
+      id: entry.id,
+      name: entry.name,
+      category: entry.category,
+      render: entry.render || (() => {
+        els.body.innerHTML = form(
+          entry.fields.map((f) => ({ label: f.label, html: fieldHtml(f), full: f.full })),
+          entry.button || "계산하기"
+        );
+        setResult(entry.resultDefault || "0", entry.hint || "");
+      })
+    });
+    handlers[entry.id] = entry.calc
+      ? () => entry.calc({
+        n: (i) => numberAt(i),
+        sel: (i = 0) => els.body.querySelectorAll("select")[i]?.value,
+        text: () => els.body.querySelector("textarea")?.value || "",
+        input: (i = 0) => els.body.querySelectorAll("input")[i]?.value || "",
+        setResult,
+        formatWon,
+        formatNumber,
+        today
+      })
+      : () => {};
+  });
+}
+
+if (typeof window !== "undefined" && window.CALC365_EXTRA_TOOLS) {
+  registerExtraTools(window.CALC365_EXTRA_TOOLS);
+}
 
 function runCurrentTool() {
   const id = state.activeTool;
