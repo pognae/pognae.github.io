@@ -1,6 +1,7 @@
 title: Calc365
 description: 생활에 필요한 모든 계산을 한곳에서
 lang: ko-KR
+timezone: Asia/Seoul
 url: "https://pognae.github.io"
 baseurl: ""
 permalink: /blog/:year/:month/:day/:slug/
