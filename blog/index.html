@@ -114,13 +114,13 @@ permalink: /blog/
     // 페이지 정보 업데이트
     pageInfo.textContent = `${currentPage} / ${totalPages}`;
 
-    // 버튼 상태 업데이트
-    prevBtn.disabled = currentPage === 1;
-    nextBtn.disabled = currentPage === totalPages;
+    // 버튼 상태 업데이트 (1페이지=최신글, 이전=더 오래된 글, 다음=더 최신 글)
+    prevBtn.disabled = currentPage === totalPages;
+    nextBtn.disabled = currentPage === 1;
   }
 
-  prevBtn.addEventListener('click', () => showPage(currentPage - 1));
-  nextBtn.addEventListener('click', () => showPage(currentPage + 1));
+  prevBtn.addEventListener('click', () => showPage(currentPage + 1));
+  nextBtn.addEventListener('click', () => showPage(currentPage - 1));
 
   // 초기 로드
   showPage(1);
