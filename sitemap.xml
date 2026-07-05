@@ -1,42 +1,135 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://pognae.github.io/calc365/</loc>
+    <loc>https://pognae.github.io/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://pognae.github.io/calc365/about.html</loc>
+    <loc>https://pognae.github.io/about.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://pognae.github.io/calc365/privacy.html</loc>
+    <loc>https://pognae.github.io/privacy.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://pognae.github.io/calc365/contact.html</loc>
+    <loc>https://pognae.github.io/contact.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://pognae.github.io/calc365/blog/</loc>
+    <loc>https://pognae.github.io/blog/</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://pognae.github.io/calc365/blog/2026/07/01/welcome-to-calc365-blog/</loc>
+    <loc>https://pognae.github.io/blog/2026/07/05/ac-electricity-bill-faq/</loc>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://pognae.github.io/calc365/blog/2026/07/02/percent-calculator-tips/</loc>
+    <loc>https://pognae.github.io/blog/2026/07/05/bmi-calculator-calculator/</loc>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://pognae.github.io/calc365/blog/2026/07/03/bmi-calculator-guide/</loc>
+    <loc>https://pognae.github.io/blog/2026/07/05/body-fat-guide/</loc>
+    <lastmod>2026-07-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://pognae.github.io/blog/2026/07/05/compound-interest-faq/</loc>
+    <lastmod>2026-07-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://pognae.github.io/blog/2026/07/05/discount-rate-tips/</loc>
+    <lastmod>2026-07-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://pognae.github.io/blog/2026/07/05/dutch-pay-split-checklist/</loc>
+    <lastmod>2026-07-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://pognae.github.io/blog/2026/07/05/length-converter-compare/</loc>
+    <lastmod>2026-07-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://pognae.github.io/blog/2026/07/05/loan-interest-guide/</loc>
+    <lastmod>2026-07-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://pognae.github.io/blog/2026/07/05/percent-calculator-example/</loc>
+    <lastmod>2026-07-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://pognae.github.io/blog/2026/07/05/road-trip-fuel-cost-how-to/</loc>
+    <lastmod>2026-07-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://pognae.github.io/blog/2026/07/05/summer-vacation-budget-formula/</loc>
+    <lastmod>2026-07-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://pognae.github.io/blog/2026/07/05/tdee-calorie-how-to/</loc>
+    <lastmod>2026-07-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://pognae.github.io/blog/2026/07/05/temperature-converter-calculator/</loc>
+    <lastmod>2026-07-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://pognae.github.io/blog/2026/07/05/vat-calculator-formula/</loc>
+    <lastmod>2026-07-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://pognae.github.io/blog/2026/07/05/water-bill-tips/</loc>
+    <lastmod>2026-07-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://pognae.github.io/blog/2026/07/03/bmi-calculator-guide/</loc>
+    <lastmod>2026-07-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://pognae.github.io/blog/2026/07/02/percent-calculator-tips/</loc>
+    <lastmod>2026-07-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://pognae.github.io/blog/2026/07/01/welcome-to-calc365-blog/</loc>
+    <lastmod>2026-07-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
