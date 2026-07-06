@@ -2,7 +2,7 @@
 /**
  * _posts-pending → _posts 자동 이동
  * 파일명 앞 YYYY-MM-DD가 KST 기준 오늘 이하이면 발행(이동)
- * cron: 매일 09:00 KST (UTC 00:00)
+ * cron: 매일 09:00·15:00 KST (UTC 00:00, 06:00) + repository_dispatch 백업
  */
 import fs from "fs";
 import path from "path";

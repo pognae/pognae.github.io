@@ -4,9 +4,40 @@ _posts-pending 자동 발행 가이드
 ## 동작 방식
 
 1. `_posts-pending/`에 `YYYY-MM-DD-슬러그.md` 형식으로 파일을 올립니다.
-2. 매일 **09:00 KST** GitHub Actions가 실행됩니다.
+2. 매일 **09:00 KST**·**15:00 KST** GitHub Actions cron이 실행됩니다 (2회, 백업).
 3. 파일명 날짜 ≤ 오늘(KST)이면 `_posts/`로 **자동 이동** → 공식 블로그에 발행됩니다.
 4. 아직 날짜가 안 된 글은 **미리보기 URL**로만 볼 수 있습니다.
+
+## 자동 발행 스케줄 (3중)
+
+| 방식 | 시각 (KST) | 설명 |
+|------|-----------|------|
+| GitHub cron 1차 | 09:00 | UTC 00:00 |
+| GitHub cron 2차 | 15:00 | UTC 06:00 (cron 지연·누락 백업) |
+| 외부 스케줄러 | 10:00 권장 | cron-job.org → repository_dispatch |
+
+GitHub cron은 부하에 따라 수 시간 지연·건너뛸 수 있어 2차 cron과 외부 트리거를 함께 씁니다.
+
+## 외부 스케줄러 설정 (cron-job.org 등)
+
+1. GitHub → Settings → Developer settings → Personal access tokens
+   → **repo** 권한 토큰 발급 (fine-grained: Actions Read+Write)
+2. cron-job.org → Create cronjob:
+   - URL: `https://api.github.com/repos/pognae/pognae.github.io/dispatches`
+   - Schedule: `0 10 * * *` (매일 10:00 KST — 1차 cron 백업)
+   - Request method: POST
+   - Headers:
+     - `Accept: application/vnd.github+json`
+     - `Authorization: Bearer <YOUR_GITHUB_TOKEN>`
+     - `X-GitHub-Api-Version: 2022-11-28`
+   - Body (JSON): `{"event_type":"publish-blog","client_payload":{}}`
+3. 로컬 테스트:
+   `GITHUB_TOKEN=ghp_xxx node scripts/trigger-publish-remote.mjs`
+
+## CI 검증
+
+publish-due-posts 실행 직후 verify-auto-publish.mjs가 검사합니다.
+오늘 예정 글이 _posts-pending에 남아 있으면 **워크플로 실패** → Actions 알림.
 
 ## 파일명 규칙 (필수)
 
@@ -44,8 +75,8 @@ Repository → Settings → Pages → Build and deployment
 ## 주의
 
 - front matter date가 아닌 **파일명 날짜**가 발행 기준입니다.
-- cron은 UTC 00:00 = KST 09:00에 실행됩니다.
-- push 시에도 워크플로가 실행되어 due 글은 즉시 발행됩니다.
+- cron 1차 UTC 00:00 = KST 09:00, cron 2차 UTC 06:00 = KST 15:00.
+- push·repository_dispatch·workflow_dispatch 시에도 워크플로가 실행됩니다.
 
 ## 월별 키워드 테마 (2026-07 ~ 12)
 
