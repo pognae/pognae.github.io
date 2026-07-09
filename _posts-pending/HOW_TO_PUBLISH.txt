@@ -42,5 +42,5 @@ Custom domain: **monpoint.app** (CNAME 설정)
 ## 주의
 
 - 발행 기준은 front matter `date`가 아닌 **파일명 날짜**입니다.
-- 본문은 **300자 이상** 권장 (AdSense·SEO).
+- 본문은 **2000자 이상** 권장 (AdSense·SEO).
 - 계산기·도구 언급 없이 **정보형** 콘텐츠로 작성합니다.

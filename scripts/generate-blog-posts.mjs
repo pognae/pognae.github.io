@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 /**
  * MonPoint 수익형 블로그 SEO 글 대량 생성
- * _posts-pending/YYYY-MM-DD-slug.md (정보형, 계산기 언급 없음, 본문 300자+)
+ * _posts-pending/YYYY-MM-DD-slug.md (본문 2000자+, 키워드 최적화)
  */
 import fs from "fs";
 import path from "path";
+import { buildSeoBody, countBodyChars } from "./lib/seo-body.mjs";
 
 const ROOT = process.cwd();
 const OUT = path.join(ROOT, "_posts-pending");
@@ -144,48 +145,15 @@ function pickTopic(dateStr, index) {
 }
 
 function buildBody(topic, dateStr, y) {
-  const { k, kw, cat } = topic;
-  const mainKw = kw.split(",")[0].trim();
-  return `**${k}**은 많은 사람이 검색하는 실용 주제입니다. MonPoint(몬포인트)는 ${y}년 ${dateStr.slice(5, 7)}월 기준 **${mainKw}** 관련 정보를 생활·금융·건강 관점에서 쉽게 정리합니다.
-
-## ${k}이 중요한 이유
-
-- 일상 의사결정에 **직접적인 영향**을 줍니다
-- 잘못 알면 **불필요한 비용·시간**이 듭니다
-- 최신 정책·제도 변화를 **꾸준히 확인**해야 합니다
-
-## 핵심 체크포인트
-
-| 항목 | 설명 |
-|------|------|
-| 검색 키워드 | ${kw} |
-| 분류 | ${cat} |
-| 기준일 | ${dateStr} |
-| 정보 성격 | 참고용 생활·금융·건강 정보 |
-
-## 실전에서 이렇게 활용하세요
-
-1. **본문 표와 체크리스트**로 빠르게 훑어보기
-2. 공식 기관·전문가 **1차 자료**와 교차 확인
-3. 가족·지인과 **공유**해 놓치는 항목 줄이기
-
-## 주의사항
-
-MonPoint의 글은 **일반 정보 제공** 목적입니다. 세금·법률·의료 등 중요한 결정은 반드시 **공식 안내·전문가 상담**을 병행하세요. ${y}년 이후 제도가 바뀔 수 있으므로 발표 시점의 **최신 공지**를 우선합니다.
-
-## 자주 묻는 질문
-
-### Q. ${k} 정보는 무료로 볼 수 있나요?
-
-네. MonPoint(monpoint.app)의 모든 글은 **무료**로 열람할 수 있습니다.
-
-### Q. 모바일에서도 읽기 편한가요?
-
-네. 스마트폰·태블릿 브라우저에 최적화된 **가독성 중심** 레이아웃을 사용합니다.
-
-### Q. ${mainKw} 관련 최신 글은 어디서 보나요?
-
-[MonPoint 홈](/)에서 카테고리별 최신 글을 확인할 수 있으며, 매일 새 정보가 **자동 발행**됩니다.`;
+  const { k, kw, cat, angle } = topic;
+  return buildSeoBody({
+    keyword: k,
+    keywords: `${kw}, ${k}, MonPoint, 몬포인트`,
+    category: cat,
+    year: y,
+    dateStr,
+    angle: angle.suffix,
+  });
 }
 
 function buildPost(dateStr, index) {
@@ -247,6 +215,8 @@ function main() {
         continue;
       }
       fs.writeFileSync(filePath, post.content, "utf8");
+      const bodyLen = countBodyChars(post.content.split("---").slice(2).join("---"));
+      if (bodyLen < 2000) console.warn(`Short pending: ${post.filename} (${bodyLen})`);
       existing.add(post.filename.slice(11, -3));
       created += 1;
       made += 1;

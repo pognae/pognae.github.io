@@ -24,11 +24,11 @@ permalink: /
   </ul>
 
   <nav class="blog-pagination" aria-label="글 목록 페이지">
-    <button class="pagination-btn" id="prevBtn" type="button" aria-label="이전 페이지">← 이전</button>
+    <button class="pagination-btn" id="olderBtn" type="button" aria-label="더 오래된 글" title="더 오래된 글">← 이전</button>
     <div class="pagination-info">
       <span id="pageInfo">1 / 1</span>
     </div>
-    <button class="pagination-btn" id="nextBtn" type="button" aria-label="다음 페이지">다음 →</button>
+    <button class="pagination-btn" id="newerBtn" type="button" aria-label="더 최신 글" title="더 최신 글">다음 →</button>
   </nav>
 </div>
 
@@ -36,8 +36,8 @@ permalink: /
   const POSTS_PER_PAGE = 10;
   const allItems = Array.from(document.querySelectorAll(".blog-list-item"));
   const pageInfo = document.getElementById("pageInfo");
-  const prevBtn = document.getElementById("prevBtn");
-  const nextBtn = document.getElementById("nextBtn");
+  const newerBtn = document.getElementById("newerBtn");
+  const olderBtn = document.getElementById("olderBtn");
   let currentPage = 1;
   const totalPages = Math.max(1, Math.ceil(allItems.length / POSTS_PER_PAGE));
 
@@ -48,11 +48,12 @@ permalink: /
     allItems.forEach((item) => item.classList.remove("visible"));
     allItems.slice(start, end).forEach((item) => item.classList.add("visible"));
     pageInfo.textContent = `${currentPage} / ${totalPages}`;
-    prevBtn.disabled = currentPage === totalPages;
-    nextBtn.disabled = currentPage === 1;
+    // 1페이지=최신 · 이전(왼쪽)=더 오래된 · 다음(오른쪽)=더 최신
+    newerBtn.disabled = currentPage === 1;
+    olderBtn.disabled = currentPage === totalPages;
   }
 
-  prevBtn.addEventListener("click", () => showPage(currentPage + 1));
-  nextBtn.addEventListener("click", () => showPage(currentPage - 1));
+  newerBtn.addEventListener("click", () => showPage(currentPage - 1));
+  olderBtn.addEventListener("click", () => showPage(currentPage + 1));
   showPage(1);
 </script>
