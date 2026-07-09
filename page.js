@@ -1,6 +1,6 @@
 function readTheme() {
   try {
-    return JSON.parse(localStorage.getItem("calc365:theme")) || "light";
+    return JSON.parse(localStorage.getItem("monpoint:theme")) || "light";
   } catch {
     return "light";
   }
@@ -20,11 +20,7 @@ if (toggle) {
   applyTheme(readTheme());
   toggle.addEventListener("click", () => {
     const next = readTheme() === "dark" ? "light" : "dark";
-    localStorage.setItem("calc365:theme", JSON.stringify(next));
+    localStorage.setItem("monpoint:theme", JSON.stringify(next));
     applyTheme(next);
   });
-}
-
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("./service-worker.js").catch(() => {});
 }

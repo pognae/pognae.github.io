@@ -51,7 +51,7 @@ function hasCron(expr) {
   );
 }
 
-console.log("=== Calc365 블로그 자동 발행 점검 ===");
+console.log("=== MonPoint 블로그 자동 발행 점검 ===");
 console.log(`모드: ${isCI ? "CI (발행 후 검증)" : "로컬"}`);
 console.log(`KST 오늘: ${today}`);
 console.log(`_posts-pending: ${pendingTotal}편`);

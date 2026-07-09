@@ -1,127 +1,16 @@
 ---
-layout: default
-title: 블로그
-description: Calc365 계산기 활용 팁과 생활 정보
+layout: null
 permalink: /blog/
 ---
-<div id="blogContainer">
-  <h1>Calc365 블로그</h1>
-  <p class="page-lead">계산기 활용법, 생활 팁, 업데이트 소식을 전합니다.</p>
-
-  <ul class="blog-list" id="blogList">
-    {% for post in site.posts %}
-    <li class="blog-list-item" data-date="{{ post.date }}">
-      <a href="{{ post.url | relative_url }}">
-        <span class="blog-list-title">{{ post.title }}</span>
-        <span class="blog-list-meta">{{ post.date | date: "%Y.%m.%d" }}{% if post.category %} · {{ post.category }}{% endif %}</span>
-      </a>
-      {% if post.excerpt %}
-      <p class="blog-list-excerpt">{{ post.excerpt | strip_html | truncate: 120 }}</p>
-      {% endif %}
-    </li>
-    {% endfor %}
-  </ul>
-
-  <!-- 페이지 네비게이션 -->
-  <nav class="blog-pagination" aria-label="블로그 목록 페이지">
-    <button class="pagination-btn" id="prevBtn" type="button" aria-label="이전 페이지" title="이전 페이지">← 이전</button>
-    <div class="pagination-info">
-      <span id="pageInfo">1 / 1</span>
-    </div>
-    <button class="pagination-btn" id="nextBtn" type="button" aria-label="다음 페이지" title="다음 페이지">다음 →</button>
-  </nav>
-</div>
-
-<style>
-  #blogContainer {
-    max-width: 760px;
-    margin: 0 auto;
-    padding: 24px 20px 32px;
-  }
-
-  .blog-pagination {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    margin-top: 32px;
-    padding-top: 24px;
-    border-top: 1px solid var(--line);
-  }
-
-  .pagination-btn {
-    min-height: 40px;
-    padding: 8px 16px;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    background: var(--panel);
-    color: var(--ink);
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .pagination-btn:hover:not(:disabled) {
-    border-color: var(--accent);
-    background: var(--accent-soft);
-    color: var(--accent-dark);
-  }
-
-  .pagination-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  .pagination-info {
-    min-width: 80px;
-    text-align: center;
-    font-weight: 700;
-    color: var(--muted);
-  }
-
-  .blog-list-item {
-    display: none;
-  }
-
-  .blog-list-item.visible {
-    display: grid;
-  }
-</style>
-
-<script>
-  const POSTS_PER_PAGE = 10;
-  const blogList = document.getElementById('blogList');
-  const allItems = Array.from(document.querySelectorAll('.blog-list-item'));
-  const pageInfo = document.getElementById('pageInfo');
-  const prevBtn = document.getElementById('prevBtn');
-  const nextBtn = document.getElementById('nextBtn');
-  
-  let currentPage = 1;
-  const totalPages = Math.ceil(allItems.length / POSTS_PER_PAGE);
-
-  function showPage(page) {
-    currentPage = Math.max(1, Math.min(page, totalPages));
-    
-    const start = (currentPage - 1) * POSTS_PER_PAGE;
-    const end = start + POSTS_PER_PAGE;
-
-    // 모든 아이템 숨기기
-    allItems.forEach(item => item.classList.remove('visible'));
-
-    // 현재 페이지의 아이템만 표시
-    allItems.slice(start, end).forEach(item => item.classList.add('visible'));
-
-    // 페이지 정보 업데이트
-    pageInfo.textContent = `${currentPage} / ${totalPages}`;
-
-    // 버튼 상태 업데이트 (1페이지=최신글, 이전=더 오래된 글, 다음=더 최신 글)
-    prevBtn.disabled = currentPage === totalPages;
-    nextBtn.disabled = currentPage === 1;
-  }
-
-  prevBtn.addEventListener('click', () => showPage(currentPage + 1));
-  nextBtn.addEventListener('click', () => showPage(currentPage - 1));
-
-  // 초기 로드
-  showPage(1);
-</script>
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="refresh" content="0; url=/">
+    <link rel="canonical" href="https://monpoint.app/">
+    <title>Redirecting…</title>
+  </head>
+  <body>
+    <p><a href="/">MonPoint 홈으로 이동</a></p>
+  </body>
+</html>

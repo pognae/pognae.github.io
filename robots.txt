@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://pognae.github.io/sitemap.xml
+Sitemap: https://monpoint.app/sitemap.xml

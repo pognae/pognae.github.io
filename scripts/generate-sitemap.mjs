@@ -10,14 +10,13 @@ import path from "path";
 const ROOT = process.cwd();
 const POSTS_DIR = path.join(ROOT, "_posts");
 const OUT = path.join(ROOT, "sitemap.xml");
-const BASE = "https://pognae.github.io";
+const BASE = "https://monpoint.app";
 
 const STATIC_PAGES = [
-  { loc: "/", changefreq: "weekly", priority: "1.0" },
+  { loc: "/", changefreq: "daily", priority: "1.0" },
   { loc: "/about.html", changefreq: "monthly", priority: "0.6" },
   { loc: "/privacy.html", changefreq: "monthly", priority: "0.5" },
   { loc: "/contact.html", changefreq: "monthly", priority: "0.5" },
-  { loc: "/blog/", changefreq: "weekly", priority: "0.8" }
 ];
 
 function escapeXml(value) {

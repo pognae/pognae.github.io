@@ -1,8 +1,8 @@
-title: Calc365
-description: 생활에 필요한 모든 계산을 한곳에서
+title: MonPoint
+description: 생활·금융·건강 실용 정보 블로그 — 몬포인트
 lang: ko-KR
 timezone: Asia/Seoul
-url: "https://pognae.github.io"
+url: "https://monpoint.app"
 baseurl: ""
 permalink: /blog/:year/:month/:day/:slug/
 

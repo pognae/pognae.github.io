@@ -1,97 +1,46 @@
-_posts-pending 자동 발행 가이드
-==========================
+MonPoint 블로그 자동 발행 가이드
+=============================
+
+사이트: https://monpoint.app
 
 ## 동작 방식
 
 1. `_posts-pending/`에 `YYYY-MM-DD-슬러그.md` 형식으로 파일을 올립니다.
-2. 매일 **09:00 KST**·**15:00 KST** GitHub Actions cron이 실행됩니다 (2회, 백업).
-3. 파일명 날짜 ≤ 오늘(KST)이면 `_posts/`로 **자동 이동** → 공식 블로그에 발행됩니다.
+2. 매일 **09:00·15:00 KST** GitHub Actions cron이 실행됩니다 (2회 백업).
+3. 파일명 날짜 ≤ 오늘(KST)이면 `_posts/`로 **자동 이동** → 공개됩니다.
 4. 아직 날짜가 안 된 글은 **미리보기 URL**로만 볼 수 있습니다.
-
-## 자동 발행 스케줄 (3중)
-
-| 방식 | 시각 (KST) | 설명 |
-|------|-----------|------|
-| GitHub cron 1차 | 09:00 | UTC 00:00 |
-| GitHub cron 2차 | 15:00 | UTC 06:00 (cron 지연·누락 백업) |
-| 외부 스케줄러 | 10:00 권장 | cron-job.org → repository_dispatch |
-
-GitHub cron은 부하에 따라 수 시간 지연·건너뛸 수 있어 2차 cron과 외부 트리거를 함께 씁니다.
-
-## 외부 스케줄러 설정 (cron-job.org 등)
-
-1. GitHub → Settings → Developer settings → Personal access tokens
-   → **repo** 권한 토큰 발급 (fine-grained: Actions Read+Write)
-2. cron-job.org → Create cronjob:
-   - URL: `https://api.github.com/repos/pognae/pognae.github.io/dispatches`
-   - Schedule: `0 10 * * *` (매일 10:00 KST — 1차 cron 백업)
-   - Request method: POST
-   - Headers:
-     - `Accept: application/vnd.github+json`
-     - `Authorization: Bearer <YOUR_GITHUB_TOKEN>`
-     - `X-GitHub-Api-Version: 2022-11-28`
-   - Body (JSON): `{"event_type":"publish-blog","client_payload":{}}`
-3. 로컬 테스트:
-   `GITHUB_TOKEN=ghp_xxx node scripts/trigger-publish-remote.mjs`
-
-## CI 검증
-
-publish-due-posts 실행 직후 verify-auto-publish.mjs가 검사합니다.
-오늘 예정 글이 _posts-pending에 남아 있으면 **워크플로 실패** → Actions 알림.
 
 ## 파일명 규칙 (필수)
 
   YYYY-MM-DD-영문-슬러그.md
 
-예: 2026-07-20-net-salary-calculator-korea.md
-    → 2026년 7월 20일 09:00(KST)에 자동 발행
+예: 2026-08-01-summer-vacation-budget-guide.md
 
 ## 미리보기 URL (발행 전)
 
-  https://pognae.github.io/preview/YYYY/MM/DD/슬러그/
+  https://monpoint.app/preview/YYYY/MM/DD/슬러그/
 
-예: 2026-07-20-net-salary-calculator-korea.md
-    → https://pognae.github.io/preview/2026/07/20/net-salary-calculator-korea/
+※ noindex — 블로그 목록·사이트맵 제외
 
-※ noindex 처리 — 링크를 아는 사람만 접근 가능
-※ 블로그 목록·사이트맵에는 포함되지 않음
+## GitHub Pages 설정
 
-## GitHub Pages 설정 (최초 1회)
+Repository → Settings → Pages → Source: **GitHub Actions**
+Custom domain: **monpoint.app** (CNAME 설정)
 
-Repository → Settings → Pages → Build and deployment
-  Source: **GitHub Actions**
+## 로컬 명령
 
-## 로컬 테스트
+  node scripts/publish-due-posts.mjs
+  node scripts/sync-preview.mjs
+  node scripts/generate-sitemap.mjs
+  node scripts/seed-monpoint-blog.mjs        # 시드 26편 (_posts)
+  node scripts/generate-blog-posts.mjs       # pending 대량 생성
 
-  node scripts/publish-due-posts.mjs   # 발행 대상 이동 시뮬레이션
-  node scripts/sync-preview.mjs        # 미리보기 폴더 생성
-  bundle exec jekyll serve             # 로컬 확인
+## 외부 스케줄러 백업
 
-## 수동 즉시 발행
-
-파일명 날짜를 **오늘(KST) 이전**으로 바꾸거나,
-`_posts-pending/` → `_posts/`로 직접 이동 후 push.
+  GITHUB_TOKEN=ghp_xxx node scripts/trigger-publish-remote.mjs
 
 ## 주의
 
-- front matter date가 아닌 **파일명 날짜**가 발행 기준입니다.
-- cron 1차 UTC 00:00 = KST 09:00, cron 2차 UTC 06:00 = KST 15:00.
-- push·repository_dispatch·workflow_dispatch 시에도 워크플로가 실행됩니다.
-
-## 월별 키워드 테마 (2026-07 ~ 12)
-
-| 월 | 테마 |
-|----|------|
-| 7월 | 여름휴가·전기요금·유류비·D-day·할인·실수령액·BMI |
-| 8월 | 이사·전세·등록금·알바 시급·개강·주식·배당 |
-| 9월 | 추석·명절·귀성·경조사·다이어트·단위변환 |
-| 10월 | 건강검진·다이어트·대출·적금·연말 준비 |
-| 11월 | 블프·연말 쇼핑·상여금·연말정산·난방비 |
-| 12월 | 연봉 협상·새해·환급·저축·연간 정산 |
-
-## 일별 발행량
-
-- 2026-07-05: 15편 (오늘)
-- 그 외: 날짜별 6~9편 (자동 스케줄)
-- 재생성: node scripts/generate-blog-posts.mjs
-- manifest: _posts-pending/GENERATION_MANIFEST.txt
+- 발행 기준은 front matter `date`가 아닌 **파일명 날짜**입니다.
+- 본문은 **300자 이상** 권장 (AdSense·SEO).
+- 계산기·도구 언급 없이 **정보형** 콘텐츠로 작성합니다.

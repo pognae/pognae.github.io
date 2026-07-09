@@ -1,135 +1,119 @@
 #!/usr/bin/env node
 /**
- * Calc365 수익형 블로그 SEO 글 대량 생성
- * _posts-pending/YYYY-MM-DD-slug.md
+ * MonPoint 수익형 블로그 SEO 글 대량 생성
+ * _posts-pending/YYYY-MM-DD-slug.md (정보형, 계산기 언급 없음, 본문 300자+)
  */
 import fs from "fs";
 import path from "path";
 
 const ROOT = process.cwd();
 const OUT = path.join(ROOT, "_posts-pending");
-const START = "2026-07-05";
+const START = "2026-07-10";
 const END = "2026-12-31";
-const TODAY = "2026-07-05";
 
 const ANGLES = [
-  { suffix: "guide", title: "{k} — 완벽 가이드 ({y}년)", desc: "{k} 공식·예시·FAQ를 정리했습니다. Calc365 무료 계산기로 바로 확인하세요." },
-  { suffix: "how-to", title: "{k} 계산 방법 ({y}년 최신)", desc: "{k}을(를) 쉽게 구하는 방법과 자주 하는 실수를 정리했습니다." },
-  { suffix: "formula", title: "{k} 공식과 예시 ({y})", desc: "{k} 공식, 표, FAQ. Calc365에서 무료로 계산하세요." },
-  { suffix: "tips", title: "{k} 꿀팁 — 초보자도 3분 만에", desc: "{k} 실전 팁과 Calc365 계산기 활용법을 안내합니다." },
-  { suffix: "faq", title: "{k} 자주 묻는 질문 TOP5", desc: "{k} FAQ와 Calc365 계산기 사용법을 정리했습니다." },
-  { suffix: "calculator", title: "{k} 계산기 무료 사용법", desc: "Calc365 {k} 계산기로 빠르게 결과를 확인하는 방법입니다." },
-  { suffix: "example", title: "{k} 실전 예시 모음", desc: "{k} 실생활 예시와 계산 결과를 표로 정리했습니다." },
-  { suffix: "compare", title: "{k} 비교·체크리스트", desc: "{k} 전후 비교와 Calc365 계산기 연계 방법을 설명합니다." },
-  { suffix: "checklist", title: "{k} 체크리스트 ({y}년)", desc: "{k} 전 꼭 확인할 항목과 무료 계산 도구 안내." },
+  { suffix: "guide", title: "{k} 완벽 가이드 ({y}년 최신)", desc: "{k} 핵심 정리, 체크리스트, FAQ를 MonPoint에서 쉽게 확인하세요." },
+  { suffix: "how-to", title: "{k} 하는 방법 — 초보자도 이해하기 쉽게", desc: "{k} 절차와 주의사항, 자주 하는 실수를 단계별로 설명합니다." },
+  { suffix: "tips", title: "{k} 꿀팁 7가지 ({y})", desc: "{k} 실전 팁과 생활에 바로 쓰는 정보를 정리했습니다." },
+  { suffix: "faq", title: "{k} 자주 묻는 질문 TOP5", desc: "{k} FAQ와 2026년 기준 최신 정보를 담았습니다." },
+  { suffix: "checklist", title: "{k} 체크리스트 ({y}년)", desc: "{k} 전 꼭 확인할 항목과 준비 서류를 정리했습니다." },
+  { suffix: "summary", title: "{k} 총정리 — 한눈에 보기", desc: "{k} 개념, 비교 포인트, 실무 팁을 표로 정리했습니다." },
+  { suffix: "compare", title: "{k} 비교 가이드", desc: "{k} 선택 시 비교해야 할 조건과 장단점을 설명합니다." },
+  { suffix: "basics", title: "{k} 기초 개념", desc: "{k} 입문자를 위한 기본 용어와 흐름을 안내합니다." },
+  { suffix: "latest", title: "{k} 최신 동향 ({y})", desc: "{k} 관련 2026년 정책·트렌드와 대응 방법을 소개합니다." },
 ];
 
 const MONTH_TOPICS = {
   7: [
-    { k: "여름휴가비 계산", slug: "summer-vacation-budget", cat: "생활", tool: "여행 경비·더치페이", kw: "여름휴가비, 휴가비 계산, 여행 경비" },
-    { k: "에어컨 전기요금", slug: "ac-electricity-bill", cat: "생활", tool: "전기요금", kw: "에어컨 전기요금, 여름 전기세, 전기요금 계산" },
-    { k: "휴가 D-day", slug: "vacation-dday", cat: "날짜", tool: "D-day", kw: "휴가 D-day, D-day 계산, 디데이" },
-    { k: "여행 환율 계산", slug: "travel-exchange-rate", cat: "금융", tool: "환율", kw: "환율 계산, 여행 환전, 달러 환율" },
-    { k: "더치페이 계산", slug: "dutch-pay-split", cat: "생활", tool: "더치페이", kw: "더치페이, N빵 계산, 식사 비용 나누기" },
-    { k: "여행 유류비", slug: "road-trip-fuel-cost", cat: "생활", tool: "여행 유류비", kw: "유류비 계산, 기름값, 장거리 운전" },
-    { k: "연봉 실수령액", slug: "net-salary", cat: "금융", tool: "실수령액", kw: "실수령액, 월급 계산, 4대보험" },
-    { k: "할인율 계산", slug: "discount-rate", cat: "금융", tool: "할인", kw: "할인율 계산, 세일, 쿠폰 할인" },
-    { k: "BMI 계산", slug: "bmi-calculator", cat: "건강", tool: "BMI", kw: "BMI 계산, 체질량지수, 정상 범위" },
-    { k: "물 섭취량", slug: "water-intake", cat: "건강", tool: "물 섭취량", kw: "물 섭취량, 하루 물, 여름 수분" },
-    { k: "평수 m2 변환", slug: "pyeong-converter", cat: "생활", tool: "평수 변환", kw: "평수 계산, m2 변환, 아파트 평형" },
-    { k: "대출 이자", slug: "loan-interest", cat: "금융", tool: "대출 상환", kw: "대출 이자, 월 상환액, 원리금균등" },
-    { k: "부가세 계산", slug: "vat-calculator", cat: "금융", tool: "부가세", kw: "부가세 계산, VAT, 공급가" },
-    { k: "만나이 계산", slug: "korean-age", cat: "날짜", tool: "나이", kw: "만나이, 나이 계산, 세는나이" },
-    { k: "복리 이자", slug: "compound-interest", cat: "금융", tool: "복리", kw: "복리 계산, 복리 이자, 적금" },
-    { k: "퍼센트 계산", slug: "percent-calculator", cat: "금융", tool: "퍼센트", kw: "퍼센트 계산, 비율, 증감률" },
-    { k: "D-day 계산", slug: "dday-calculator", cat: "날짜", tool: "D-day", kw: "D-day, 디데이 계산" },
-    { k: "근무일 계산", slug: "workday-calculator", cat: "날짜", tool: "근무일", kw: "근무일, 휴가 일수, 주말 제외" },
-    { k: "권장 칼로리", slug: "tdee-calorie", cat: "건강", tool: "권장 칼로리", kw: "권장 칼로리, TDEE, 다이어트" },
-    { k: "수도요금 계산", slug: "water-bill", cat: "생활", tool: "수도요금", kw: "수도요금, 수도세 계산" },
-    { k: "가스요금 계산", slug: "gas-bill", cat: "생활", tool: "가스요금", kw: "가스요금, 가스비 계산" },
-    { k: "온도 변환", slug: "temperature-converter", cat: "변환", tool: "온도 변환", kw: "섭씨 화씨, 온도 변환" },
-    { k: "길이 단위 변환", slug: "length-converter", cat: "변환", tool: "길이 변환", kw: "cm inch, 길이 변환" },
-    { k: "체지방률", slug: "body-fat", cat: "건강", tool: "체지방률", kw: "체지방률, US Navy, 체형" },
-    { k: "퇴직금 계산", slug: "severance-pay", cat: "금융", tool: "퇴직금", kw: "퇴직금, 퇴직금 계산" },
+    { k: "여름휴가비 절약", slug: "summer-vacation-budget", cat: "생활", kw: "여름휴가비, 휴가비 절약, 여행 경비" },
+    { k: "폭염 건강관리", slug: "heat-wave-health", cat: "건강", kw: "폭염, 여름 건강, 온열질환" },
+    { k: "에어컨 전기세", slug: "ac-electricity-bill", cat: "생활", kw: "에어컨 전기요금, 여름 전기세" },
+    { k: "휴가철 교통비", slug: "holiday-transport-cost", cat: "생활", kw: "휴가 교통비, KTX 예매, 귀성" },
+    { k: "여름 다이어트", slug: "summer-diet-plan", cat: "건강", kw: "여름 다이어트, 체중 감량" },
+    { k: "장마철 습기 제거", slug: "rainy-season-dehumid", cat: "생활", kw: "장마, 습기, 제습" },
+    { k: "자동차 여름 점검", slug: "summer-car-check", cat: "생활", kw: "여름 차량 점검, 타이어 공기압" },
+    { k: "청년도약계좌", slug: "youth-leap-account", cat: "금융", kw: "청년도약계좌, 청년 적금" },
+    { k: "여름철 피부 관리", slug: "summer-skin-care", cat: "건강", kw: "여름 피부, 자외선, 선크림" },
+    { k: "물놀이 안전", slug: "water-safety-summer", cat: "건강", kw: "물놀이 안전, 익수 사고" },
+    { k: "원룸 여름 냉방", slug: "studio-cooling-tips", cat: "생활", kw: "원룸 냉방, 단열" },
+    { k: "휴가 대출 금리", slug: "vacation-loan-rate", cat: "금융", kw: "신용대출, 대출 금리" },
+    { k: "반려동물 여름 관리", slug: "pet-summer-care", cat: "생활", kw: "반려동물 여름, 강아지 더위" },
+    { k: "보양식 추천", slug: "summer-health-food", cat: "건강", kw: "보양식, 여름 음식" },
+    { k: "휴대폰 요금제", slug: "mobile-plan-compare", cat: "생활", kw: "휴대폰 요금제, 알뜰폰" },
   ],
   8: [
-    { k: "이사 비용 계산", slug: "moving-cost", cat: "생활", tool: "이사·평수", kw: "이사 비용, 이사 견적, 포장이사" },
-    { k: "전세 vs 월세", slug: "jeonse-vs-wolse", cat: "금융", tool: "대출 상환", kw: "전세, 월세, 전월세 전환" },
-    { k: "전세자금 대출", slug: "jeonse-loan", cat: "금융", tool: "대출 상환", kw: "전세자금 대출, 전세 대출 이자" },
-    { k: "학기 등록금", slug: "tuition-budget", cat: "생활", tool: "평균·퍼센트", kw: "등록금, 학비, 대학 학기" },
-    { k: "알바 시급 계산", slug: "part-time-hourly", cat: "금융", tool: "실수령액", kw: "알바 시급, 최저임금, 주휴수당" },
-    { k: "기숙사 생활비", slug: "dorm-living-cost", cat: "생활", tool: "평균", kw: "기숙사, 생활비, 한달 비용" },
-    { k: "개강 D-day", slug: "semester-dday", cat: "날짜", tool: "D-day", kw: "개강 D-day, 학기 시작" },
-    { k: "표준 체중", slug: "standard-weight", cat: "건강", tool: "표준 체중", kw: "표준 체중, 이상 체중, BMI" },
-    { k: "허리엉덩이 비율", slug: "whr-ratio", cat: "건강", tool: "허리-엉덩이 비율", kw: "WHR, 허리둘레, 건강" },
-    { k: "면적 변환", slug: "area-converter", cat: "변환", tool: "면적 변환", kw: "㎡ 평, 면적 변환" },
-    { k: "부피 변환", slug: "volume-converter", cat: "변환", tool: "부피 변환", kw: "리터 ml, 부피 변환" },
-    { k: "배당금 수익", slug: "dividend-yield", cat: "금융", tool: "배당금", kw: "배당금, 배당 수익률" },
-    { k: "주식 수익률", slug: "stock-return", cat: "금융", tool: "주식 수익률", kw: "주식 수익률, 수익 계산" },
-    { k: "단리 이자", slug: "simple-interest", cat: "금융", tool: "이자", kw: "단리, 이자 계산" },
-    { k: "날짜 차이", slug: "date-difference", cat: "날짜", tool: "날짜 계산", kw: "날짜 차이, 며칠" },
-    { k: "수면 사이클", slug: "sleep-cycle", cat: "건강", tool: "수면 사이클", kw: "수면 사이클, 기상 시간" },
-    { k: "요리 단위 변환", slug: "cooking-unit", cat: "생활", tool: "요리 단위", kw: "컵 ml, 요리 단위" },
-    { k: "글자 수 세기", slug: "character-count", cat: "기타", tool: "글자 수", kw: "글자수, 맞춤법, 원고" },
+    { k: "이사 비용", slug: "moving-cost-guide", cat: "생활", kw: "이사 비용, 포장이사" },
+    { k: "전세 갱신", slug: "jeonse-renewal", cat: "금융", kw: "전세 갱신, 전세 계약" },
+    { k: "개강 준비", slug: "semester-prep", cat: "생활", kw: "개강, 대학 준비" },
+    { k: "알바 세금", slug: "part-time-tax", cat: "금융", kw: "알바 세금, 3.3% 원천징수" },
+    { k: "기숙사 생활", slug: "dorm-life-tips", cat: "생활", kw: "기숙사, 대학 생활" },
+    { k: "장학금 신청", slug: "scholarship-application", cat: "생활", kw: "장학금, 국가장학금" },
+    { k: "가을 건강검진", slug: "autumn-health-check", cat: "건강", kw: "건강검진, 검진 예약" },
+    { k: "주식 입문", slug: "stock-investing-basics", cat: "금융", kw: "주식 입문, 주식 투자" },
+    { k: "적금 금리", slug: "savings-rate-compare", cat: "금융", kw: "적금 금리, 예금" },
+    { k: "자취방 절약", slug: "solo-living-save", cat: "생활", kw: "자취 절약, 원룸 생활비" },
+    { k: "수면 부족", slug: "sleep-deprivation", cat: "건강", kw: "수면 부족, 불면" },
+    { k: "비타민 선택", slug: "vitamin-guide", cat: "건강", kw: "비타민, 영양제" },
+    { k: "대학 등록금", slug: "tuition-payment", cat: "생활", kw: "등록금, 학자금 대출" },
+    { k: "교통카드 혜택", slug: "transit-card-benefit", cat: "생활", kw: "교통카드, 후불교통" },
   ],
   9: [
-    { k: "추석 경비", slug: "chuseok-budget", cat: "생활", tool: "평균·더치페이", kw: "추석 경비, 명절 비용, 귀성" },
-    { k: "명절 D-day", slug: "holiday-dday", cat: "날짜", tool: "D-day", kw: "추석 D-day, 명절 남은 날" },
-    { k: "귀성 유류비", slug: "holiday-fuel", cat: "생활", tool: "여행 유류비", kw: "귀성 유류비, 고속도로" },
-    { k: "경조사비", slug: "gift-money", cat: "생활", tool: "평균", kw: "경조사, 축의금, 조의금" },
-    { k: "가족 나이", slug: "family-age", cat: "날짜", tool: "나이", kw: "가족 나이, 만나이" },
-    { k: "가을 다이어트 BMI", slug: "autumn-diet-bmi", cat: "건강", tool: "BMI", kw: "다이어트, BMI, 가을" },
-    { k: "기초대사량", slug: "bmr-calculator", cat: "건강", tool: "기초대사량", kw: "BMR, 기초대사량" },
-    { k: "단리 vs 복리", slug: "simple-vs-compound", cat: "금융", tool: "복리·이자", kw: "단리 복리, 예금" },
-    { k: "할인 중복", slug: "stacked-discount", cat: "금융", tool: "할인·퍼센트", kw: "중복 할인, 쿠폰" },
-    { k: "무게 변환", slug: "weight-converter", cat: "변환", tool: "무게 변환", kw: "kg lb, 무게 변환" },
-    { k: "속도 변환", slug: "speed-converter", cat: "변환", tool: "속도 변환", kw: "km/h mph, 속도" },
-    { k: "데이터 용량", slug: "data-converter", cat: "변환", tool: "데이터 변환", kw: "GB MB, 데이터 변환" },
-    { k: "근무일 휴가", slug: "vacation-workdays", cat: "날짜", tool: "근무일", kw: "연차, 근무일 계산" },
-    { k: "16진수 변환", slug: "hex-decimal", cat: "기타", tool: "16진수 변환", kw: "16진수, 10진수" },
-    { k: "QR 코드", slug: "qr-generator", cat: "기타", tool: "QR 코드", kw: "QR 코드, QR 생성" },
+    { k: "추석 경비", slug: "chuseok-budget", cat: "생활", kw: "추석 경비, 명절 비용" },
+    { k: "귀성 교통", slug: "chuseok-traffic", cat: "생활", kw: "추석 귀성, 고속도로" },
+    { k: "명절 선물", slug: "holiday-gift-guide", cat: "생활", kw: "명절 선물, 추석 선물" },
+    { k: "경조사 매너", slug: "gift-money-etiquette", cat: "생활", kw: "경조사, 축의금, 조의금" },
+    { k: "가을 운동", slug: "autumn-exercise", cat: "건강", kw: "가을 운동, 걷기" },
+    { k: "환절기 감기", slug: "season-change-cold", cat: "건강", kw: "환절기, 감기 예방" },
+    { k: "다이어트 식단", slug: "autumn-diet-meal", cat: "건강", kw: "다이어트 식단, 체중" },
+    { k: "연휴 해외여행", slug: "holiday-travel-tips", cat: "생활", kw: "해외여행, 환전" },
+    { k: "가계부 작성", slug: "household-ledger", cat: "금융", kw: "가계부, 가계 관리" },
+    { k: "신용점수 올리기", slug: "credit-score-up", cat: "금융", kw: "신용점수, 신용관리" },
+    { k: "보험 갱신", slug: "insurance-renewal", cat: "금융", kw: "보험 갱신, 보험 비교" },
+    { k: "부업 소득신고", slug: "side-income-tax", cat: "금융", kw: "부업, 종소세" },
+    { k: "어린이 독감", slug: "child-flu-vaccine", cat: "건강", kw: "독감 예방접종, 어린이" },
+    { k: "장보기 절약", slug: "grocery-shopping-save", cat: "생활", kw: "장보기, 마트 할인" },
   ],
   10: [
-    { k: "건강검진 BMI", slug: "health-check-bmi", cat: "건강", tool: "BMI", kw: "건강검진, BMI, 공단" },
-    { k: "다이어트 칼로리", slug: "diet-calorie", cat: "건강", tool: "권장 칼로리", kw: "다이어트 칼로리, 감량" },
-    { k: "체지방 감량", slug: "fat-loss", cat: "건강", tool: "체지방률", kw: "체지방, 감량 목표" },
-    { k: "가을 전기요금", slug: "autumn-electricity", cat: "생활", tool: "전기요금", kw: "전기요금, 냉난방" },
-    { k: "월세 관리비", slug: "rent-maintenance", cat: "생활", tool: "평수·평균", kw: "월세, 관리비, 전세" },
-    { k: "주차 계산", slug: "week-number", cat: "날짜", tool: "주차", kw: "주차, 몇 주차" },
-    { k: "시간 계산", slug: "time-calculator", cat: "날짜", tool: "시간 계산", kw: "시간 계산, 근무시간" },
-    { k: "퍼센트 증감", slug: "percent-change", cat: "금융", tool: "퍼센트", kw: "증감률, 퍼센트" },
-    { k: "대출 갈아타기", slug: "loan-refinance", cat: "금융", tool: "대출 상환", kw: "대환 대출, 금리" },
-    { k: "적금 만기", slug: "savings-maturity", cat: "금융", tool: "복리", kw: "적금, 만기 금액" },
-    { k: "평균 점수", slug: "average-score", cat: "생활", tool: "평균", kw: "평균, 성적 계산" },
-    { k: "기본 계산기", slug: "basic-calculator", cat: "기타", tool: "기본 계산기", kw: "사칙연산, 계산기" },
+    { k: "건강검진 결과", slug: "health-check-result", cat: "건강", kw: "건강검진 결과, 검진 해석" },
+    { k: "금연 방법", slug: "quit-smoking-tips", cat: "건강", kw: "금연, 금연 방법" },
+    { k: "대출 상환 전략", slug: "loan-repayment-plan", cat: "금융", kw: "대출 상환, 원리금" },
+    { k: "연말 쇼핑", slug: "year-end-shopping", cat: "생활", kw: "연말 쇼핑, 할인" },
+    { k: "난방비 절약", slug: "heating-cost-save", cat: "생활", kw: "난방비, 겨울 난방" },
+    { k: "부동산 전망", slug: "housing-market-outlook", cat: "금융", kw: "부동산, 집값" },
+    { k: "노후 자금", slug: "retirement-fund-plan", cat: "금융", kw: "노후 자금, 은퇴 준비" },
+    { k: "스트레스 관리", slug: "stress-management", cat: "건강", kw: "스트레스, 멘탈 헬스" },
+    { k: "직장인 점심", slug: "office-lunch-healthy", cat: "건강", kw: "직장인 점심, 건강 식단" },
+    { k: "전기차 보조금", slug: "ev-subsidy-guide", cat: "생활", kw: "전기차 보조금, EV" },
+    { k: "주택연금", slug: "housing-pension", cat: "금융", kw: "주택연금, 역모기지" },
+    { k: "미세먼지 대응", slug: "fine-dust-health", cat: "건강", kw: "미세먼지, 공기질" },
   ],
   11: [
-    { k: "블랙프라이데이 할인", slug: "black-friday-discount", cat: "금융", tool: "할인", kw: "블랙프라이데이, 할인율" },
-    { k: "연말 쇼핑 예산", slug: "year-end-shopping", cat: "생활", tool: "평균·할인", kw: "연말 쇼핑, 예산" },
-    { k: "상여금 실수령", slug: "bonus-net-pay", cat: "금융", tool: "실수령액", kw: "상여금, 연말 상여" },
-    { k: "연말정산 준비", slug: "year-end-tax-prep", cat: "금융", tool: "실수령액", kw: "연말정산, 세금" },
-    { k: "연말 D-day", slug: "year-end-dday", cat: "날짜", tool: "D-day", kw: "연말 D-day, 12월 31일" },
-    { k: "물가 상승", slug: "inflation-rate", cat: "금융", tool: "퍼센트", kw: "물가, 인플레" },
-    { k: "예산 소진율", slug: "budget-burn", cat: "금융", tool: "퍼센트", kw: "예산, 소진율" },
-    { k: "겨울 난방비", slug: "winter-heating", cat: "생활", tool: "가스요금", kw: "난방비, 겨울 가스" },
-    { k: "연말 목표 저축", slug: "year-end-savings", cat: "금융", tool: "복리", kw: "저축, 목표 금액" },
-    { k: "크리스마스 예산", slug: "christmas-budget", cat: "생활", tool: "더치페이", kw: "크리스마스, 선물 예산" },
-    { k: "퇴직금 예상", slug: "severance-estimate", cat: "금융", tool: "퇴직금", kw: "퇴직금, 이직" },
-    { k: "CAGR 수익률", slug: "cagr-return", cat: "금융", tool: "주식 수익률", kw: "CAGR, 연평균 수익" },
+    { k: "연말정산 준비", slug: "year-end-tax-prep", cat: "금융", kw: "연말정산, 소득공제" },
+    { k: "블랙프라이데이", slug: "black-friday-tips", cat: "생활", kw: "블랙프라이데이, 할인" },
+    { k: "상여금 관리", slug: "bonus-money-plan", cat: "금융", kw: "상여금, 보너스" },
+    { k: "겨울 피부 건조", slug: "winter-skin-dry", cat: "건강", kw: "겨울 피부, 보습" },
+    { k: "연말 파티", slug: "year-end-party-budget", cat: "생활", kw: "연말 모임, 회식" },
+    { k: "크리스마스 선물", slug: "christmas-gift-ideas", cat: "생활", kw: "크리스마스 선물" },
+    { k: "재테크 입문", slug: "investing-for-beginners", cat: "금융", kw: "재테크, 투자 입문" },
+    { k: "연금저축", slug: "pension-savings-account", cat: "금융", kw: "연금저축, IRP" },
+    { k: "감기 예방", slug: "winter-cold-prevent", cat: "건강", kw: "감기 예방, 면역력" },
+    { k: "연말 여행", slug: "year-end-travel", cat: "생활", kw: "연말 여행, 국내 여행" },
+    { k: "보일러 점검", slug: "boiler-winter-check", cat: "생활", kw: "보일러, 겨울 점검" },
+    { k: "이직 준비", slug: "job-change-prep", cat: "금융", kw: "이직, 퇴사 준비" },
   ],
   12: [
-    { k: "연봉 협상", slug: "salary-negotiation", cat: "금융", tool: "실수령액", kw: "연봉 협상, 연봉 인상" },
-    { k: "새해 목표 D-day", slug: "new-year-dday", cat: "날짜", tool: "D-day", kw: "새해 D-day, 2027 목표" },
-    { k: "연말정산 환급", slug: "tax-refund", cat: "금융", tool: "실수령액", kw: "연말정산, 환급" },
-    { k: "내년 실수령액", slug: "next-year-salary", cat: "금융", tool: "실수령액", kw: "2027 연봉, 월급" },
-    { k: "새해 저축 계획", slug: "new-year-savings", cat: "금융", tool: "복리", kw: "저축, 새해 계획" },
-    { k: "겨울 BMI", slug: "winter-bmi", cat: "건강", tool: "BMI", kw: "겨울 체중, BMI" },
-    { k: "연간 대출 이자", slug: "annual-loan-interest", cat: "금융", tool: "대출 상환", kw: "연간 이자, 대출" },
-    { k: "12월 전기요금", slug: "december-electricity", cat: "생활", tool: "전기요금", kw: "12월 전기세" },
-    { k: "한 해 경과일", slug: "year-elapsed-days", cat: "날짜", tool: "날짜 계산", kw: "경과일, 365일" },
-    { k: "2027 만나이", slug: "age-2027", cat: "날짜", tool: "나이", kw: "2027 나이, 만나이" },
-    { k: "부가세 연말", slug: "vat-year-end", cat: "금융", tool: "부가세", kw: "부가세, 사업자" },
-    { k: "연간 여행비", slug: "annual-travel-cost", cat: "생활", tool: "여행 유류비", kw: "연간 여행, 여행비" },
+    { k: "연말정산 신고", slug: "year-end-tax-filing", cat: "금융", kw: "연말정산 신고, 환급" },
+    { k: "새해 목표", slug: "new-year-goals", cat: "생활", kw: "새해 목표, 계획" },
+    { k: "연봉 협상", slug: "salary-negotiation-tips", cat: "금융", kw: "연봉 협상, 연봉 인상" },
+    { k: "겨울 운동", slug: "winter-workout", cat: "건강", kw: "겨울 운동, 홈트" },
+    { k: "세금 환급", slug: "tax-refund-guide", cat: "금융", kw: "세금 환급, 종소세" },
+    { k: "새해 저축", slug: "new-year-saving-plan", cat: "금융", kw: "저축, 새해 재테크" },
+    { k: "연휴 귀경", slug: "new-year-traffic", cat: "생활", kw: "설 귀경, 연휴 교통" },
+    { k: "명절 음식", slug: "holiday-food-health", cat: "건강", kw: "명절 음식, 소화" },
+    { k: "방학 계획", slug: "winter-vacation-plan", cat: "생활", kw: "겨울 방학, 자녀 계획" },
+    { k: "부동산 세금", slug: "property-tax-year-end", cat: "금융", kw: "재산세, 종부세" },
+    { k: "건강 습관", slug: "healthy-habits-new-year", cat: "건강", kw: "건강 습관, 루틴" },
+    { k: "가계 결산", slug: "household-year-review", cat: "금융", kw: "가계 결산, 지출 분석" },
   ],
 };
 
@@ -146,7 +130,6 @@ function formatDate(d) {
 }
 
 function postsPerDay(dateStr) {
-  if (dateStr === TODAY) return 15;
   let h = 0;
   for (let i = 0; i < dateStr.length; i++) h = (h * 33 + dateStr.charCodeAt(i)) >>> 0;
   return 6 + (h % 4);
@@ -161,68 +144,48 @@ function pickTopic(dateStr, index) {
 }
 
 function buildBody(topic, dateStr, y) {
-  const { k, tool, kw } = topic;
-  return `**${k}**은(는) Calc365(계산365) 블로그에서 많은 독자가 찾는 주제입니다. ${y}년 ${dateStr.slice(5, 7)}월 기준으로 **${kw.split(",")[0].trim()}** 검색량이 꾸준히 높아, 실생활에 바로 쓸 수 있도록 공식·예시·FAQ를 정리했습니다.
+  const { k, kw, cat } = topic;
+  const mainKw = kw.split(",")[0].trim();
+  return `**${k}**은 많은 사람이 검색하는 실용 주제입니다. MonPoint(몬포인트)는 ${y}년 ${dateStr.slice(5, 7)}월 기준 **${mainKw}** 관련 정보를 생활·금융·건강 관점에서 쉽게 정리합니다.
 
-## ${k}이(가) 필요한 순간
+## ${k}이 중요한 이유
 
-- 가계·재테크·생활비를 **숫자로 확인**해야 할 때
-- 검색으로 공식을 찾다 **시간을 낭비**하고 싶지 않을 때
-- **무료·설치 없이** 모바일에서 바로 계산하고 싶을 때
+- 일상 의사결정에 **직접적인 영향**을 줍니다
+- 잘못 알면 **불필요한 비용·시간**이 듭니다
+- 최신 정책·제도 변화를 **꾸준히 확인**해야 합니다
 
-Calc365는 **${tool}** 등 45종 계산기를 한곳에 모은 무료 도구입니다. 입력값은 서버로 전송되지 않습니다.
-
-## ${k} 핵심 포인트
+## 핵심 체크포인트
 
 | 항목 | 설명 |
 |------|------|
 | 검색 키워드 | ${kw} |
-| 추천 도구 | Calc365 **${tool}** |
-| 카테고리 | ${topic.cat} |
-| 발행일 | ${dateStr} |
+| 분류 | ${cat} |
+| 기준일 | ${dateStr} |
+| 정보 성격 | 참고용 생활·금융·건강 정보 |
 
-## Calc365에서 계산하는 방법
+## 실전에서 이렇게 활용하세요
 
-1. [Calc365 홈](/) 접속
-2. 검색창에 **「${tool.split("·")[0]}」** 입력 또는 카테고리 **${topic.cat}** 선택
-3. **${tool}** 계산기 클릭
-4. 값 입력 후 **계산하기**
+1. **본문 표와 체크리스트**로 빠르게 훑어보기
+2. 공식 기관·전문가 **1차 자료**와 교차 확인
+3. 가족·지인과 **공유**해 놓치는 항목 줄이기
 
-30초 안에 결과를 확인할 수 있습니다.
+## 주의사항
 
-## ${k} 실전 예시
+MonPoint의 글은 **일반 정보 제공** 목적입니다. 세금·법률·의료 등 중요한 결정은 반드시 **공식 안내·전문가 상담**을 병행하세요. ${y}년 이후 제도가 바뀔 수 있으므로 발표 시점의 **최신 공지**를 우선합니다.
 
-- **예시 A**: 숫자만 바꿔 여러 시나리오를 비교해 보세요.
-- **예시 B**: 가족·동료와 공유할 때 **미리보기·스크린샷**으로 결과를 전달하세요.
-- **예시 C**: 월별·연말 계획을 세울 때 **같은 카테고리 계산기**를 함께 활용하세요.
+## 자주 묻는 질문
 
-## 함께 보면 좋은 Calc365 계산기
+### Q. ${k} 정보는 무료로 볼 수 있나요?
 
-- **${tool}** (본문 주제)
-- **퍼센트·할인·D-day·BMI** 등 연관 생활 계산기
-- [Calc365 블로그](/blog/)의 다른 ${topic.cat} 글
+네. MonPoint(monpoint.app)의 모든 글은 **무료**로 열람할 수 있습니다.
 
-## 자주 묻는 질문 (FAQ)
+### Q. 모바일에서도 읽기 편한가요?
 
-### Q. ${k} 계산기는 무료인가요?
+네. 스마트폰·태블릿 브라우저에 최적화된 **가독성 중심** 레이아웃을 사용합니다.
 
-네. [Calc365](/)의 **${tool}** 계산기는 **완전 무료**이며 회원가입이 필요 없습니다.
+### Q. ${mainKw} 관련 최신 글은 어디서 보나요?
 
-### Q. 모바일에서도 되나요?
-
-네. 브라우저만 있으면 **스마트폰·태블릿**에서 동일하게 사용할 수 있습니다.
-
-### Q. ${k} 결과가 실제와 다를 수 있나요?
-
-Calc365는 **간이 추정·참고용**입니다. 세금·금융·건강 등 중요한 결정은 **공식 자료·전문가**와 함께 확인하세요.
-
-### Q. ${dateStr}에 맞는 최신 정보인가요?
-
-${y}년 기준으로 작성되었으며, 법·요율·정책 변경 시 **공식 발표**를 우선하세요.
-
----
-
-**${k}**은 [Calc365 ${tool} 계산기](/)에서 지금 바로 확인하세요.`;
+[MonPoint 홈](/)에서 카테고리별 최신 글을 확인할 수 있으며, 매일 새 정보가 **자동 발행**됩니다.`;
 }
 
 function buildPost(dateStr, index) {
@@ -232,7 +195,7 @@ function buildPost(dateStr, index) {
   const fullSlug = `${slug}-${angle.suffix}`;
   const title = angle.title.replace(/{k}/g, k).replace(/{y}/g, y);
   const description = angle.desc.replace(/{k}/g, k).replace(/{y}/g, y);
-  const keywords = `${kw}, ${k}, Calc365, 계산365, ${topic.tool}`;
+  const keywords = `${kw}, ${k}, MonPoint, 몬포인트, ${cat}`;
 
   const fm = `---
 layout: post
@@ -291,21 +254,14 @@ function main() {
     summary.push(`${dateStr}: ${made}/${count}편`);
   }
 
-  const manifest = `# 블로그 생성 manifest
+  const manifest = `# MonPoint 블로그 생성 manifest
 생성일: ${new Date().toISOString()}
 기간: ${START} ~ ${END}
 신규 생성: ${created}편
 스킵(기존): ${skipped}건
-
-## 일별 요약 (처음 10일 + 마지막 5일)
-${summary.slice(0, 10).join("\n")}
-...
-${summary.slice(-5).join("\n")}
-
-총 ${summary.length}일 스케줄
+사이트: https://monpoint.app
 `;
   fs.writeFileSync(path.join(OUT, "GENERATION_MANIFEST.txt"), manifest, "utf8");
-
   console.log(`Created ${created} posts, skipped ${skipped}, days ${summary.length}`);
 }
 

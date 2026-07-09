@@ -3,7 +3,7 @@ layout: default
 ---
 <article class="blog-post">
   {% if page.preview %}
-  <p class="preview-banner" role="status">미리보기 — {{ page.date | date: "%Y.%m.%d" }} 09:00(KST)에 공개됩니다. 블로그 목록·검색에는 노출되지 않습니다.</p>
+  <p class="preview-banner" role="status">미리보기 — {{ page.date | date: "%Y.%m.%d" }} 09:00(KST)에 공개됩니다. 목록·검색에는 노출되지 않습니다.</p>
   {% endif %}
   <header class="blog-post-header">
     <h1>{{ page.title }}</h1>
@@ -15,5 +15,14 @@ layout: default
   <div class="blog-body">
     {{ content }}
   </div>
-  <p class="blog-back"><a href="{{ '/blog/' | relative_url }}">← 블로그 목록</a></p>
+  <aside class="ad-slot ad-slot-post" aria-label="광고">
+    <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-client="ca-pub-5461344534519122"
+      data-ad-slot=""
+      data-ad-format="auto"
+      data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </aside>
+  <p class="blog-back"><a href="{{ '/' | relative_url }}">← 글 목록</a></p>
 </article>
