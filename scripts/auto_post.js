@@ -49,10 +49,10 @@ async function scrapeKeyword() {
             }
         });
         if (response.data && response.data.result === 'success' && response.data.data && response.data.data.length > 0) {
-            const keyword = response.data.data[0];
-            const normalizedKeyword = keyword.normalize('NFC');
-            console.log(`Successfully extracted keyword from AdsenseFarm: ${normalizedKeyword}`);
-            return normalizedKeyword;
+            // AdsenseFarm 10개 키워드 배열로 반환
+            const keywords = response.data.data.map(k => k.normalize('NFC'));
+            console.log(`Successfully extracted ${keywords.length} keywords from AdsenseFarm`);
+            return keywords;
         } else {
             throw new Error('Invalid or empty response from API');
         }
@@ -65,13 +65,12 @@ async function scrapeKeyword() {
                     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
                 }
             });
-            // RSS XML에서 첫 번째 실제 키워드 아이템의 title 추출 (첫 번째 title은 채널 제목이므로 두 번째 title 사용)
-            const matches = [...fallbackResponse.data.matchAll(/<title>(.*?)<\/title>/g)];
-            if (matches && matches.length > 1) {
-                const keyword = matches[1][1]; // 인덱스 1이 첫 번째 트렌드 키워드
-                const normalizedKeyword = keyword.normalize('NFC').replace(/<!\[CDATA\[(.*?)\]\]>/, '$1');
-                console.log(`Successfully extracted keyword from Google Trends Fallback: ${normalizedKeyword}`);
-                return normalizedKeyword;
+            // RSS XML에서 상위 10개 키워드 추출
+            const matches = [...fallbackResponse.data.matchAll(/<title>(.*?)<\/title>/g)].slice(1, 11);
+            if (matches && matches.length > 0) {
+                const keywords = matches.map(m => m[1].normalize('NFC').replace(/<!\[CDATA\[(.*?)\]\]>/, '$1'));
+                console.log(`Successfully extracted ${keywords.length} keywords from Google Trends Fallback`);
+                return keywords;
             } else {
                 throw new Error('Failed to parse Google Trends RSS');
             }
@@ -161,13 +160,38 @@ tags: [${keyword}, 실시간검색어, 정보]
 
 async function main() {
     try {
-        const dateInfo = getCurrentDate();
-        const keyword = await scrapeKeyword();
-        const postContent = await generateBlogPost(keyword);
-        await savePost(keyword, postContent, dateInfo);
-        console.log('Auto posting completed successfully.');
-    } catch (err) {
-        console.error('Auto posting failed:', err);
+        const keywords = await scrapeKeyword(); // Now returns an array of keywords
+        console.log(`Found ${keywords.length} keywords.`);
+
+        // Limit to top 10 to avoid excessive API usage
+        const keywordsToProcess = keywords.slice(0, 10);
+        
+        for (let i = 0; i < keywordsToProcess.length; i++) {
+            const keyword = keywordsToProcess[i];
+            console.log(`\n[${i + 1}/${keywordsToProcess.length}] Processing keyword: ${keyword}`);
+            
+            // Generate distinct date info for each post to prevent identical timestamps
+            const now = new Date();
+            const dateInfo = getKSTDateString(now);
+            
+            try {
+                const postContent = await generateBlogPost(keyword);
+                await savePost(keyword, postContent, dateInfo);
+                console.log(`Successfully completed posting for: ${keyword}`);
+                
+                // Add a 10 second delay between requests to avoid rate limiting
+                if (i < keywordsToProcess.length - 1) {
+                    console.log('Waiting 10 seconds before next request...');
+                    await new Promise(resolve => setTimeout(resolve, 10000));
+                }
+            } catch (err) {
+                console.error(`Failed to process keyword ${keyword}:`, err.message);
+                // Continue with the next keyword even if one fails
+            }
+        }
+        console.log('\nAll keywords processed successfully!');
+    } catch (error) {
+        console.error('Auto posting failed:', error);
         process.exit(1);
     }
 }
