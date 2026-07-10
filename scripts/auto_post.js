@@ -56,36 +56,41 @@ async function scrapeKeyword() {
 
     await page.goto('https://adsensefarm.kr/realtime/', { waitUntil: 'networkidle2', timeout: 30000 });
     
-    // 구글 실시간 검색어 1위 추출 로직
-    // 사이트 구조에 맞춰 동적으로 추출 (h2 등에서 "구글 실시간 검색어"를 찾고 그 아래 리스트의 첫 항목 가져오기)
-    const keyword = await page.evaluate(() => {
-        // 모든 텍스트 요소를 순회하면서 "구글 실시간 검색어" 섹션 찾기
-        const headers = Array.from(document.querySelectorAll('h1, h2, h3, h4, div'));
-        let targetHeader = null;
-        for (const el of headers) {
-            if (el.innerText && el.innerText.includes('구글 실시간 검색어')) {
-                targetHeader = el;
-                break;
+    // 동적으로 검색어가 로드될 때까지 대기 (로딩 중일 때는 '-')
+    await page.waitForFunction(() => {
+        const subtitles = Array.from(document.querySelectorAll('.subtitle'));
+        for (const sub of subtitles) {
+            if (sub.innerText && sub.innerText.includes('구글 실시간 검색어')) {
+                let next = sub.nextElementSibling;
+                while (next) {
+                    if (next.classList && next.classList.contains('kwds')) {
+                        const kwSpan = next.querySelector('.keyword');
+                        if (kwSpan && kwSpan.innerText && kwSpan.innerText.trim() !== '-') {
+                            return true; // 로드 완료
+                        }
+                    }
+                    next = next.nextElementSibling;
+                }
             }
         }
-        
-        if (!targetHeader) return null;
-        
-        // 해당 헤더 다음에 오는 첫 번째 리스트(ul/ol) 또는 리스트 아이템 형태의 텍스트 찾기
-        let current = targetHeader.nextElementSibling;
-        while (current) {
-            // ol/ul 내부의 첫 번째 li
-            const firstLi = current.querySelector('li');
-            if (firstLi) {
-                // "1. 키워드" 또는 "키워드" 형태로 나오는 부분 정제
-                return firstLi.innerText.replace(/^[0-9\.\-\s]+/, '').trim();
+        return false;
+    }, { timeout: 30000 });
+
+    const keyword = await page.evaluate(() => {
+        const subtitles = Array.from(document.querySelectorAll('.subtitle'));
+        for (const sub of subtitles) {
+            if (sub.innerText && sub.innerText.includes('구글 실시간 검색어')) {
+                let next = sub.nextElementSibling;
+                while (next) {
+                    if (next.classList && next.classList.contains('kwds')) {
+                        const kwSpan = next.querySelector('.keyword');
+                        if (kwSpan && kwSpan.innerText) {
+                            return kwSpan.innerText.trim();
+                        }
+                    }
+                    next = next.nextElementSibling;
+                }
             }
-            // div 안에 텍스트가 줄바꿈으로 있는 경우
-            const textLines = current.innerText.split('\n').map(l => l.trim()).filter(l => l);
-            if (textLines.length > 0) {
-                return textLines[0].replace(/^[0-9\.\-\s]+/, '').trim();
-            }
-            current = current.nextElementSibling;
         }
         return null;
     });
