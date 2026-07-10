@@ -171,8 +171,7 @@ async function main() {
             console.log(`\n[${i + 1}/${keywordsToProcess.length}] Processing keyword: ${keyword}`);
             
             // Generate distinct date info for each post to prevent identical timestamps
-            const now = new Date();
-            const dateInfo = getKSTDateString(now);
+            const dateInfo = getCurrentDate();
             
             try {
                 const postContent = await generateBlogPost(keyword);
