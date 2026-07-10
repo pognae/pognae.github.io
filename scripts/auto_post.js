@@ -38,19 +38,47 @@ function getCurrentDate() {
 async function scrapeKeyword() {
     console.log('Fetching realtime keywords from API...');
     try {
-        const response = await axios.get('https://adsensefarm.kr/realtime/googletrend.php');
+        const response = await axios.get('https://adsensefarm.kr/realtime/googletrend.php', {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Accept': 'application/json, text/javascript, */*; q=0.01',
+                'Accept-Language': 'ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7',
+                'Referer': 'https://adsensefarm.kr/realtime/',
+                'X-Requested-With': 'XMLHttpRequest',
+                'Connection': 'keep-alive'
+            }
+        });
         if (response.data && response.data.result === 'success' && response.data.data && response.data.data.length > 0) {
             const keyword = response.data.data[0];
-            // NFC 정규화 처리 (Mac 등에서 자소 분리된 한글을 합침)
             const normalizedKeyword = keyword.normalize('NFC');
-            console.log(`Successfully extracted keyword: ${normalizedKeyword}`);
+            console.log(`Successfully extracted keyword from AdsenseFarm: ${normalizedKeyword}`);
             return normalizedKeyword;
         } else {
             throw new Error('Invalid or empty response from API');
         }
     } catch (error) {
-        console.error('Failed to fetch keyword API:', error.message);
-        throw new Error('Failed to extract Google realtime keyword.');
+        console.error('Failed to fetch from AdsenseFarm API:', error.message);
+        console.log('Attempting fallback: Fetching directly from Google Trends RSS (KR)...');
+        try {
+            const fallbackResponse = await axios.get('https://trends.google.co.kr/trends/trendingsearches/daily/rss?geo=KR', {
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                }
+            });
+            // RSS XML에서 첫 번째 실제 키워드 아이템의 title 추출 (첫 번째 title은 채널 제목이므로 두 번째 title 사용)
+            const matches = [...fallbackResponse.data.matchAll(/<title>(.*?)<\/title>/g)];
+            if (matches && matches.length > 1) {
+                const keyword = matches[1][1]; // 인덱스 1이 첫 번째 트렌드 키워드
+                const normalizedKeyword = keyword.normalize('NFC').replace(/<!\[CDATA\[(.*?)\]\]>/, '$1');
+                console.log(`Successfully extracted keyword from Google Trends Fallback: ${normalizedKeyword}`);
+                return normalizedKeyword;
+            } else {
+                throw new Error('Failed to parse Google Trends RSS');
+            }
+        } catch (fallbackError) {
+            console.error('Fallback failed:', fallbackError.message);
+            throw new Error('Failed to extract Google realtime keyword from all sources.');
+        }
     }
 }
 
