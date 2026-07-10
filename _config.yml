@@ -2,6 +2,7 @@ title: MonoPoint
 description: 생활·금융·건강 실용 정보 블로그 — 모노포인트
 lang: ko-KR
 timezone: Asia/Seoul
+future: true
 url: "https://monopoint.app"
 baseurl: ""
 permalink: /blog/:year/:month/:day/:slug/
