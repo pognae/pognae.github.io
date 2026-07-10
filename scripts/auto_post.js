@@ -60,7 +60,7 @@ async function scrapeKeyword() {
         console.error('Failed to fetch from AdsenseFarm API:', error.message);
         console.log('Attempting fallback: Fetching directly from Google Trends RSS (KR)...');
         try {
-            const fallbackResponse = await axios.get('https://trends.google.co.kr/trends/trendingsearches/daily/rss?geo=KR', {
+            const fallbackResponse = await axios.get('https://trends.google.com/trending/rss?geo=KR', {
                 headers: {
                     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
                 }
