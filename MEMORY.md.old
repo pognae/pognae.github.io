@@ -1,0 +1,169 @@
+# Memory — cursor
+
+> Generated: 2026-07-05 09:58:01  
+> Total memories: **12**  
+> Breakdown: fact: 1, decision: 3, preference: 2, context: 1, event: 1, learning: 1, artifact: 2, error: 1
+
+---
+
+## Instructions
+
+*Standing rules, constraints, and guidelines to always follow.*
+
+*No memories of this type.*
+
+---
+
+## Facts
+
+*Verified information, project status, and established truths.*
+
+### Calc365(계산365): pognae/pognae.github.io 저장소의 정적 생활...
+
+Calc365(계산365): pognae/pognae.github.io 저장소의 정적 생활 계산기 허브. 슬로건 '생활에 필요한 모든 계산을 한곳에서'. HTML/CSS/JS만 사용, 서버 없음. 45종 계산기(금융·날짜·건강·생활·단위변환·기타). localStorage로 테마/즐겨찾기/최근사용, PWA, AdSense 준비, SEO(robots/sitemap/OG). 배포 URL README에는 calc365/ 경로로 적혀 있으나 실제 repo는 pognae.github.io 사용자 사이트(루트).
+
+*Confidence: 0.95 | Status: active | Created: 2026-07-04T22:28:19 | Tags: `calc365`, `project-overview`, `readme`*
+
+---
+
+## Decisions
+
+*Architectural choices, approach selections, and their rationale.*
+
+### 블로그 자동 발행 시스템: _posts-pending/에 YYYY-MM-DD-slug.md...
+
+블로그 자동 발행 시스템: _posts-pending/에 YYYY-MM-DD-slug.md 업로드 → GitHub Actions 매일 09:00 KST(cron UTC 00:00) + push 시 scripts/publish-due-posts.mjs가 파일명 날짜<=오늘(KST)이면 _posts/로 이동. scripts/sync-preview.mjs가 pending을 _preview/ 컬렉션으로 복사해 /preview/YYYY/MM/DD/slug/ 미리보기(noindex). 가이드: _posts-pending/HOW_TO_PUBLISH.txt
+
+*Confidence: 1 | Status: active | Created: 2026-07-04T22:28:59 | Tags: `calc365`, `blog`, `auto-publish`, `github-actions`*
+
+### Jekyll 블로그 추가: _config.yml, Gemfile, _layouts/defa...
+
+Jekyll 블로그 추가: _config.yml, Gemfile, _layouts/default.html·post.html, blog/index.html, _posts/ 초기 글 3개. index.html 카테고리 탭 기타 옆 블로그 링크(blog/). 푸터에도 블로그 링크. SEO 메타(canonical, OG, JSON-LD BlogPosting) 레이아웃 적용.
+
+*Confidence: 1 | Status: active | Created: 2026-07-04T22:28:33 | Tags: `calc365`, `jekyll`, `blog`*
+
+### 사이드바 검색 input 아래 Generated_image.png 배너 추가(index.h...
+
+사이드바 검색 input 아래 Generated_image.png 배너 추가(index.html .sidebar-banner, styles.css). Smart Nutrition Facts Scanner 이미지. 루트 Generated_image.png 참조.
+
+*Confidence: 1 | Status: active | Created: 2026-07-04T22:28:30 | Tags: `calc365`, `ui`, `banner`*
+
+---
+
+## Goals
+
+*Objectives, targets, and milestones to track progress.*
+
+*No memories of this type.*
+
+---
+
+## Commitments
+
+*Promises, obligations, and TODOs that need follow-through.*
+
+*No memories of this type.*
+
+---
+
+## Preferences
+
+*User and entity preferences for personalization.*
+
+### 사용자 선호: 응답은 한국어로 작성. 블로그는 수익형 목적. 자동발행은 파일명 날짜 기준,...
+
+사용자 선호: 응답은 한국어로 작성. 블로그는 수익형 목적. 자동발행은 파일명 날짜 기준, KST 09:00, pending→posts 이동, 미리보기 URL(noindex).
+
+*Confidence: 1 | Status: active | Created: 2026-07-04T22:30:04 | Tags: `calc365`, `user-preference`, `language`*
+
+### 사용자 선호: 블로그 자동발행 기준=파일명 날짜, pending→posts 자동이동, Gi...
+
+사용자 선호: 블로그 자동발행 기준=파일명 날짜, pending→posts 자동이동, GitHub Actions cron, KST 09:00 발행, 발행 전 미리보기 URL 제공(noindex). 커�unication은 한국어 응답 선호.
+
+*Confidence: 1 | Status: active | Created: 2026-07-04T22:29:05 | Tags: `calc365`, `user-preference`, `blog`*
+
+---
+
+## Relationships
+
+*Entity connections, team context, and collaboration patterns.*
+
+*No memories of this type.*
+
+---
+
+## Context
+
+*Session summaries, status updates, and conversation state.*
+
+### 현재 블로그 글 상태(2026-07-05): _posts/에 welcome, percent...
+
+현재 블로그 글 상태(2026-07-05): _posts/에 welcome, percent-tips, bmi-guide, net-salary(2026-07-10) 4개. _posts-pending/에 SEO 글 10개(2026-07-10~19) 대기. preview 컬렉션 permalink /preview/:year/:month/:day/:slug/, 공식 블로그 permalink /blog/:year/:month/:day/:slug/.
+
+*Confidence: 0.95 | Status: active | Created: 2026-07-04T22:29:09 | Tags: `calc365`, `blog`, `status`*
+
+---
+
+## Events
+
+*Important conversations, milestones, and temporal occurrences.*
+
+### Calc365 세션 작업 요약(2026-07-03~05): 1)app.js 계산기 버그 수...
+
+Calc365 세션 작업 요약(2026-07-03~05): 1)app.js 계산기 버그 수정 2)사이드바 배너 3)Jekyll 블로그+블로그 버튼 4)SEO pending 글 10개 5)자동발행/미리보기 스크립트 6)Pages workflow 수정. AdSense client ca-pub-5461344534519122 index.html에 설정됨.
+
+*Confidence: 1 | Status: active | Created: 2026-07-04T22:29:12 | Tags: `calc365`, `session-summary`*
+
+---
+
+## Learnings
+
+*Knowledge acquired from experience, corrections, and insights.*
+
+### GitHub Pages 배포: .github/workflows/pages.yml. buil...
+
+GitHub Pages 배포: .github/workflows/pages.yml. build job(Jekyll+Node24+Ruby3.3+configure-pages@v5)과 deploy job(deploy-pages@v4) 분리. Pages Source는 GitHub Actions로 설정 필요. 초기 실패 원인: configure-pages 누락, 단일 job, branch 배포와 충돌 가능. service-worker CACHE calc365-v2.
+
+*Confidence: 0.95 | Status: active | Created: 2026-07-04T22:29:02 | Tags: `calc365`, `github-pages`, `ci-cd`*
+
+---
+
+## Observations
+
+*Patterns noticed, behavioral notes, and recurring themes.*
+
+*No memories of this type.*
+
+---
+
+## Artifacts
+
+*Tool outputs, files, reports, and external references.*
+
+### 수익형 블로G SEO 글 10개를 _posts-pending/에 파일별로 준비. 키워드: ...
+
+수익형 블로G SEO 글 10개를 _posts-pending/에 파일별로 준비. 키워드: 실수령액, D-day, 할인율, BMI, 대출이자, 부가세, 퇴직금, 만나이, 평수변환, 복리. 각 글 front matter에 title/description/keywords/category, 본문 FAQ·내부링크 포함. _config.yml exclude로 pending은 빌드 제외.
+
+*Confidence: 1 | Status: active | Created: 2026-07-04T22:28:37 | Tags: `calc365`, `blog`, `seo`, `posts-pending`*
+
+### README 파일 구조: index.html, app.js, styles.css, page...
+
+README 파일 구조: index.html, app.js, styles.css, page.js, about/privacy/contact.html, manifest.webmanifest, service-worker.js, robots.txt, sitemap.xml, ads.txt, icons/icon.svg. 2026-07-03 업데이트로 계산기 15종 추가해 총 45종(환율, 주식수익률, 배당금, 수면사이클, WHR, 표준체중, 요리단위, 유류비, 더치페이, 부피/면적 변환, 글자수, 16진수 변환 등).
+
+*Confidence: 0.95 | Status: active | Created: 2026-07-04T22:28:23 | Tags: `calc365`, `readme`, `file-structure`*
+
+---
+
+## Errors
+
+*Failure records, bugs, and lessons learned from mistakes.*
+
+### 계산기 미작동 버그 수정: app.js tools 배열에 renderAphugae 등 미구...
+
+계산기 미작동 버그 수정: app.js tools 배열에 renderAphugae 등 미구현 render 함수 60여개 참조로 ReferenceError 발생, 전체 JS 중단. README 기준 구현된 도구만 남기거나 이후 45종으로 확장 구현 필요. 근본 원인은 tools 배열과 render/handler 함수 불일치.
+
+*Confidence: 1 | Status: active | Created: 2026-07-04T22:28:26 | Tags: `calc365`, `bug-fix`, `app-js`*
+
+---
+
+*End of memory export.*

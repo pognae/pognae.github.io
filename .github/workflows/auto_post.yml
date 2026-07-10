@@ -1,0 +1,37 @@
+name: Auto Post Realtime Keywords
+
+on:
+  schedule:
+    # 4시간마다 실행 (UTC 기준 0, 4, 8, 12, 16, 20시 -> KST 기준 9, 13, 17, 21, 1, 5시)
+    - cron: '0 */4 * * *'
+  workflow_dispatch: # 수동 실행 트리거
+
+jobs:
+  scrape-and-post:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Run Scraper and Generator Script
+        env:
+          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+        run: node scripts/auto_post.js
+        
+      - name: Commit and push new post
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add _posts/
+          git commit -m "Auto-post realtime keyword" || echo "No changes to commit"
+          git push

@@ -1,0 +1,13 @@
+{
+  "name": "monpoint-autopost",
+  "version": "1.0.0",
+  "description": "Automated SEO blog posting script",
+  "main": "scripts/auto_post.js",
+  "scripts": {
+    "start": "node scripts/auto_post.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "puppeteer": "^22.0.0"
+  }
+}
