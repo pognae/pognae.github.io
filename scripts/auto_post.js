@@ -37,71 +37,22 @@ function getCurrentDate() {
 }
 
 async function scrapeKeyword() {
-    console.log('Starting puppeteer to scrape realtime keywords...');
-    const browser = await puppeteer.launch({
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
-        headless: 'new'
-    });
-    const page = await browser.newPage();
-    
-    // 빠른 로딩을 위해 이미지/CSS 차단
-    await page.setRequestInterception(true);
-    page.on('request', (req) => {
-        if (req.resourceType() === 'image' || req.resourceType() === 'stylesheet' || req.resourceType() === 'font') {
-            req.abort();
+    console.log('Fetching realtime keywords from API...');
+    try {
+        const response = await axios.get('https://adsensefarm.kr/realtime/googletrend.php');
+        if (response.data && response.data.result === 'success' && response.data.data && response.data.data.length > 0) {
+            const keyword = response.data.data[0];
+            // NFC 정규화 처리 (Mac 등에서 자소 분리된 한글을 합침)
+            const normalizedKeyword = keyword.normalize('NFC');
+            console.log(`Successfully extracted keyword: ${normalizedKeyword}`);
+            return normalizedKeyword;
         } else {
-            req.continue();
+            throw new Error('Invalid or empty response from API');
         }
-    });
-
-    await page.goto('https://adsensefarm.kr/realtime/', { waitUntil: 'networkidle2', timeout: 30000 });
-    
-    // 동적으로 검색어가 로드될 때까지 대기 (로딩 중일 때는 '-')
-    await page.waitForFunction(() => {
-        const subtitles = Array.from(document.querySelectorAll('.subtitle'));
-        for (const sub of subtitles) {
-            if (sub.innerText && sub.innerText.includes('구글 실시간 검색어')) {
-                let next = sub.nextElementSibling;
-                while (next) {
-                    if (next.classList && next.classList.contains('kwds')) {
-                        const kwSpan = next.querySelector('.keyword');
-                        if (kwSpan && kwSpan.innerText && kwSpan.innerText.trim() !== '-') {
-                            return true; // 로드 완료
-                        }
-                    }
-                    next = next.nextElementSibling;
-                }
-            }
-        }
-        return false;
-    }, { timeout: 30000 });
-
-    const keyword = await page.evaluate(() => {
-        const subtitles = Array.from(document.querySelectorAll('.subtitle'));
-        for (const sub of subtitles) {
-            if (sub.innerText && sub.innerText.includes('구글 실시간 검색어')) {
-                let next = sub.nextElementSibling;
-                while (next) {
-                    if (next.classList && next.classList.contains('kwds')) {
-                        const kwSpan = next.querySelector('.keyword');
-                        if (kwSpan && kwSpan.innerText) {
-                            return kwSpan.innerText.trim();
-                        }
-                    }
-                    next = next.nextElementSibling;
-                }
-            }
-        }
-        return null;
-    });
-
-    await browser.close();
-    
-    if (!keyword) {
+    } catch (error) {
+        console.error('Failed to fetch keyword API:', error.message);
         throw new Error('Failed to extract Google realtime keyword.');
     }
-    console.log(`Successfully extracted keyword: ${keyword}`);
-    return keyword;
 }
 
 async function generateBlogPost(keyword) {
