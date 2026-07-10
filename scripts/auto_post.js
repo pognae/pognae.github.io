@@ -93,7 +93,7 @@ async function generateBlogPost(keyword) {
 이 키워드를 메인 주제로 삼아 다음 조건에 맞춰 완벽한 블로그 포스트 마크다운(Markdown) 본문을 작성해 주세요.
 
 [작성 조건]
-1. 분량 보장: 매우 상세하고 깊이 있는 정보를 제공하여 **공백 포함 최소 5,000자 이상**의 분량을 확보해야 합니다.
+1. 분량 보장: 상세하고 깊이 있는 정보를 제공하여 **공백 포함 최소 2,500자 이상**의 분량을 작성해야 합니다.
 2. 어조: '~합니다', '~입니다'로 끝나는 정중체 사용.
 3. 글 구조:
    - 매력적인 서론 (독자의 호기심 유발 및 글의 목적 명시)
@@ -117,7 +117,7 @@ async function generateBlogPost(keyword) {
                 'Authorization': `Bearer ${NVIDIA_API_KEY}`,
                 'Content-Type': 'application/json'
             },
-            timeout: 120000 // 2분 대기 (글이 길어 생성 시간이 필요함)
+            timeout: 300000 // 5분 대기 (글이 길어 생성 시간이 오래 걸릴 수 있음)
         });
 
         const content = response.data.choices[0].message.content;
