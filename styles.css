@@ -154,6 +154,7 @@ button {
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--panel);
+  min-width: 0;
 }
 
 .blog-list-item a {
@@ -161,16 +162,21 @@ button {
   gap: 4px;
   text-decoration: none;
   color: var(--ink);
+  min-width: 0;
 }
 
 .blog-list-title {
   font-size: 18px;
   font-weight: 800;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .blog-list-meta {
   font-size: 13px;
   color: var(--muted);
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .blog-list-excerpt {
@@ -178,6 +184,13 @@ button {
   font-size: 14px;
   line-height: 1.6;
   color: var(--muted);
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .blog-pagination {
