@@ -12,7 +12,7 @@
   <meta property="og:title" content="{{ page.title | default: site.title | escape }}">
   <meta property="og:description" content="{{ page.description | default: site.description | escape }}">
   <meta property="og:url" content="{{ page.url | replace:'index.html','' | absolute_url }}">
-  <meta property="og:site_name" content="MonPoint">
+  <meta property="og:site_name" content="MonoPoint">
   <meta property="og:locale" content="ko_KR">
   {% if page.date %}
   <meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">{% endif %}
@@ -29,7 +29,7 @@
     crossorigin="anonymous"></script>
   <script>
     try {
-      var t = JSON.parse(localStorage.getItem("monpoint:theme"));
+      var t = JSON.parse(localStorage.getItem("MonoPoint:theme"));
       if (t === "dark") document.documentElement.dataset.theme = "dark";
     } catch (e) { }
   </script>
@@ -41,10 +41,10 @@
       "headline": {{ page.title | jsonify }},
       "description": {{ page.description | jsonify }},
       "datePublished": "{{ page.date | date_to_xmlschema }}",
-      "author": { "@type": "Organization", "name": "MonPoint" },
+      "author": { "@type": "Organization", "name": "MonoPoint" },
       "publisher": {
         "@type": "Organization",
-        "name": "MonPoint",
+        "name": "MonoPoint",
         "logo": { "@type": "ImageObject", "url": "{{ '/icons/icon.svg' | absolute_url }}" }
       },
       "mainEntityOfPage": { "@type": "WebPage", "@id": "{{ page.url | replace:'index.html','' | absolute_url }}" }
@@ -55,7 +55,7 @@
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
-      "name": "MonPoint",
+      "name": "MonoPoint",
       "url": "{{ site.url }}",
       "description": {{ site.description | jsonify }},
       "inLanguage": "ko-KR"
@@ -69,7 +69,7 @@
     <header class="page-header">
       <a class="page-brand" href="{{ '/' | relative_url }}">
         <span class="brand-mark" aria-hidden="true">MP</span>
-        <span>MonPoint</span>
+        <span>MonoPoint</span>
       </a>
       <button id="themeToggle" class="icon-button" type="button" aria-label="다크 모드" title="테마 전환">
         <span aria-hidden="true">🌙</span>
@@ -88,7 +88,7 @@
         <a href="{{ '/privacy.html' | relative_url }}">개인정보처리방침</a>
         <a href="{{ '/contact.html' | relative_url }}">문의</a>
       </nav>
-      <p>© MonPoint · monpoint.app</p>
+      <p>© MonoPoint · MonoPoint.app</p>
     </footer>
   </div>
   <script src="{{ '/page.js' | relative_url }}"></script>
