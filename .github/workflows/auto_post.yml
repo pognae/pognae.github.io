@@ -9,6 +9,9 @@ on:
 jobs:
   scrape-and-post:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
     
     steps:
       - name: Checkout repository
@@ -34,3 +37,8 @@ jobs:
           git add _posts/
           git commit -m "Auto-post realtime keyword" || echo "No changes to commit"
           git push
+
+      - name: Trigger Build and Deploy
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run pages.yml
