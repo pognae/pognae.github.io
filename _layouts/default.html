@@ -1,36 +1,40 @@
 <!doctype html>
 <html lang="ko">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="{{ page.description | default: site.description | escape }}">
-    {% if page.keywords %}<meta name="keywords" content="{{ page.keywords | escape }}">{% endif %}
-    <link rel="canonical" href="{{ page.url | replace:'index.html','' | absolute_url }}">
-    <meta property="og:type" content="{% if page.layout == 'post' %}article{% else %}website{% endif %}">
-    <meta property="og:title" content="{{ page.title | default: site.title | escape }}">
-    <meta property="og:description" content="{{ page.description | default: site.description | escape }}">
-    <meta property="og:url" content="{{ page.url | replace:'index.html','' | absolute_url }}">
-    <meta property="og:site_name" content="MonPoint">
-    <meta property="og:locale" content="ko_KR">
-    {% if page.date %}<meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">{% endif %}
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="{{ page.title | default: site.title | escape }}">
-    <meta name="twitter:description" content="{{ page.description | default: site.description | escape }}">
-    {% if page.preview %}<meta name="robots" content="noindex, nofollow">{% endif %}
-    <title>{% if page.title %}{{ page.title | escape }} | {% endif %}MonPoint</title>
-    <link rel="stylesheet" href="{{ '/styles.css' | relative_url }}">
-    <link rel="icon" href="{{ '/icons/icon.svg' | relative_url }}" type="image/svg+xml">
-    <meta name="theme-color" content="#0f766e">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5461344534519122"
-      crossorigin="anonymous"></script>
-    <script>
-      try {
-        var t = JSON.parse(localStorage.getItem("monpoint:theme"));
-        if (t === "dark") document.documentElement.dataset.theme = "dark";
-      } catch (e) {}
-    </script>
-    {% if page.layout == 'post' and page.preview != true %}
-    <script type="application/ld+json">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="{{ page.description | default: site.description | escape }}">
+  {% if page.keywords %}
+  <meta name="keywords" content="{{ page.keywords | escape }}">{% endif %}
+  <link rel="canonical" href="{{ page.url | replace:'index.html','' | absolute_url }}">
+  <meta property="og:type" content="{% if page.layout == 'post' %}article{% else %}website{% endif %}">
+  <meta property="og:title" content="{{ page.title | default: site.title | escape }}">
+  <meta property="og:description" content="{{ page.description | default: site.description | escape }}">
+  <meta property="og:url" content="{{ page.url | replace:'index.html','' | absolute_url }}">
+  <meta property="og:site_name" content="MonPoint">
+  <meta property="og:locale" content="ko_KR">
+  {% if page.date %}
+  <meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">{% endif %}
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="{{ page.title | default: site.title | escape }}">
+  <meta name="twitter:description" content="{{ page.description | default: site.description | escape }}">
+  {% if page.preview %}
+  <meta name="robots" content="noindex, nofollow">{% endif %}
+  <title>{% if page.title %}{{ page.title | escape }} | {% endif %}MonoPoint</title>
+  <link rel="stylesheet" href="{{ '/styles.css' | relative_url }}">
+  <link rel="icon" href="{{ '/icons/icon.svg' | relative_url }}" type="image/svg+xml">
+  <meta name="theme-color" content="#0f766e">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5461344534519122"
+    crossorigin="anonymous"></script>
+  <script>
+    try {
+      var t = JSON.parse(localStorage.getItem("monpoint:theme"));
+      if (t === "dark") document.documentElement.dataset.theme = "dark";
+    } catch (e) { }
+  </script>
+  {% if page.layout == 'post' and page.preview != true %}
+  <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "BlogPosting",
@@ -46,8 +50,8 @@
       "mainEntityOfPage": { "@type": "WebPage", "@id": "{{ page.url | replace:'index.html','' | absolute_url }}" }
     }
     </script>
-    {% elsif page.url == '/' or page.url == '/index.html' %}
-    <script type="application/ld+json">
+  {% elsif page.url == '/' or page.url == '/index.html' %}
+  <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
@@ -57,34 +61,37 @@
       "inLanguage": "ko-KR"
     }
     </script>
-    {% endif %}
-  </head>
-  <body>
-    <div class="page-shell">
-      <header class="page-header">
-        <a class="page-brand" href="{{ '/' | relative_url }}">
-          <span class="brand-mark" aria-hidden="true">MP</span>
-          <span>MonPoint</span>
-        </a>
-        <button id="themeToggle" class="icon-button" type="button" aria-label="다크 모드" title="테마 전환">
-          <span aria-hidden="true">🌙</span>
-        </button>
-      </header>
+  {% endif %}
+</head>
 
-      <main class="page-content">
-        {{ content }}
-      </main>
+<body>
+  <div class="page-shell">
+    <header class="page-header">
+      <a class="page-brand" href="{{ '/' | relative_url }}">
+        <span class="brand-mark" aria-hidden="true">MP</span>
+        <span>MonPoint</span>
+      </a>
+      <button id="themeToggle" class="icon-button" type="button" aria-label="다크 모드" title="테마 전환">
+        <span aria-hidden="true">🌙</span>
+      </button>
+    </header>
 
-      <footer class="site-footer">
-        <nav aria-label="사이트 정보">
-          <a href="{{ '/' | relative_url }}"{% unless page.url contains '/blog/' and page.layout != 'post' %} aria-current="page"{% endunless %}>홈</a>
-          <a href="{{ '/about.html' | relative_url }}">소개</a>
-          <a href="{{ '/privacy.html' | relative_url }}">개인정보처리방침</a>
-          <a href="{{ '/contact.html' | relative_url }}">문의</a>
-        </nav>
-        <p>© MonPoint · monpoint.app</p>
-      </footer>
-    </div>
-    <script src="{{ '/page.js' | relative_url }}"></script>
-  </body>
+    <main class="page-content">
+      {{ content }}
+    </main>
+
+    <footer class="site-footer">
+      <nav aria-label="사이트 정보">
+        <a href="{{ '/' | relative_url }}" {% unless page.url contains '/blog/' and page.layout !='post' %}
+          aria-current="page" {% endunless %}>홈</a>
+        <a href="{{ '/about.html' | relative_url }}">소개</a>
+        <a href="{{ '/privacy.html' | relative_url }}">개인정보처리방침</a>
+        <a href="{{ '/contact.html' | relative_url }}">문의</a>
+      </nav>
+      <p>© MonPoint · monpoint.app</p>
+    </footer>
+  </div>
+  <script src="{{ '/page.js' | relative_url }}"></script>
+</body>
+
 </html>
