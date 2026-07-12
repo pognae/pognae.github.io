@@ -15,7 +15,7 @@ minimal_mistakes_skin: "air" # 깔끔하고 가독성 좋은 'air' 스킨 적용
 author:
   name   : "MonoPoint"
   avatar : "/icons/icon.svg"
-  bio    : "검색량 높은 생활·금융·건강 주제를 쉽게 정리한 수익형 정보 블로그입니다."
+  bio    : "생활·금융·건강 등 다양한 주제를 쉽게 정리한 정보 블로그입니다."
   links:
     - label: "Home"
       icon: "fas fa-fw fa-home"
