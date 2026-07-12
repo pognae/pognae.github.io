@@ -1,0 +1,7 @@
+main:
+  - title: "Home"
+    url: /
+  - title: "소개"
+    url: /about.html
+  - title: "문의"
+    url: /contact.html

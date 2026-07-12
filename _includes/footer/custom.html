@@ -1,0 +1,40 @@
+<!-- start custom footer snippets -->
+<div class="visitor-stats-container" style="display: flex; justify-content: center; align-items: center; margin-top: 20px; font-size: 0.85em; opacity: 0.8; gap: 8px;">
+  <i class="fas fa-users" style="color: #4b5563;"></i>
+  <span><strong>오늘:</strong> <span id="todayVisitors">-</span>명</span>
+  <span style="color: #d1d5db;">|</span>
+  <span><strong>전체:</strong> <span id="totalVisitors">-</span>명</span>
+</div>
+
+<script>
+async function fetchVisitorStats() {
+  try {
+    const todayEl = document.getElementById("todayVisitors");
+    const totalEl = document.getElementById("totalVisitors");
+    if (!todayEl || !totalEl) return;
+
+    const host = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+                 ? 'monopoint.app' 
+                 : window.location.hostname;
+    
+    const res = await fetch(`https://hits.sh/${host}.svg?view=today-total`);
+    if (!res.ok) return;
+    
+    const svgText = await res.text();
+    const match = svgText.match(/<text[^>]*>([\d,]+\s*\/\s*[\d,]+)<\/text>/g);
+    
+    if (match && match.length > 0) {
+      const lastTextNode = match[match.length - 1];
+      const numbersMatch = lastTextNode.match(/>([\d,]+)\s*\/\s*([\d,]+)</);
+      if (numbersMatch && numbersMatch.length >= 3) {
+        todayEl.textContent = numbersMatch[1];
+        totalEl.textContent = numbersMatch[2];
+      }
+    }
+  } catch (error) {
+    console.error("방문자 통계를 불러오는 데 실패했습니다.", error);
+  }
+}
+fetchVisitorStats();
+</script>
+<!-- end custom footer snippets -->
