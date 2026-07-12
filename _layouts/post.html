@@ -3,7 +3,8 @@ layout: default
 ---
 <article class="blog-post">
   {% if page.preview %}
-  <p class="preview-banner" role="status">미리보기 — {{ page.date | date: "%Y.%m.%d" }} 09:00(KST)에 공개됩니다. 목록·검색에는 노출되지 않습니다.</p>
+  <p class="preview-banner" role="status">미리보기 — {{ page.date | date: "%Y.%m.%d" }} 09:00(KST)에 공개됩니다. 목록·검색에는 노출되지
+    않습니다.</p>
   {% endif %}
   <header class="blog-post-header">
     <h1>{{ page.title }}</h1>
@@ -16,24 +17,17 @@ layout: default
     {{ content }}
   </div>
   <aside class="ad-slot ad-slot-post" aria-label="광고">
-    <ins class="adsbygoogle"
-      style="display:block"
-      data-ad-client="ca-pub-5461344534519122"
-      data-ad-slot=""
-      data-ad-format="auto"
-      data-full-width-responsive="true"></ins>
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5461344534519122" data-ad-slot=""
+      data-ad-format="auto" data-full-width-responsive="true"></ins>
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </aside>
   <p class="blog-back"><a href="{{ '/' | relative_url }}">← 글 목록</a></p>
 
-  <!-- Utterances 댓글 시스템 -->
-  <div class="comments" style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee;">
-    <script src="https://utteranc.es/client.js"
-            repo="pognae/pognae.github.io"
-            issue-term="pathname"
-            theme="github-light"
-            crossorigin="anonymous"
-            async>
-    </script>
+  <!-- Cusdis 댓글 시스템 (완전 무료, 익명 지원, 광고 없음) -->
+  <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee;">
+    <div id="cusdis_thread" data-host="https://cusdis.com" data-app-id="db02f8b9-8563-4eda-9b25-892c45f40249"
+      data-page-id="{{ page.id }}" data-page-url="{{ page.url | absolute_url }}" data-page-title="{{ page.title }}">
+    </div>
+    <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
   </div>
 </article>
