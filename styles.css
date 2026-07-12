@@ -362,3 +362,53 @@ button {
   color: var(--muted);
   font-size: 13px;
 }
+
+.footer-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.visitor-stats {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: var(--panel-soft);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  font-size: 13px;
+  color: var(--muted);
+  transition: all 0.2s ease;
+}
+
+.visitor-stats:hover {
+  background: var(--panel);
+  border-color: var(--accent);
+  box-shadow: 0 4px 12px rgba(15, 118, 110, 0.08);
+}
+
+[data-theme="dark"] .visitor-stats:hover {
+  box-shadow: 0 4px 12px rgba(45, 212, 191, 0.12);
+}
+
+.visitor-icon {
+  color: var(--accent);
+}
+
+.stat-item strong {
+  color: var(--ink);
+  font-weight: 700;
+  margin-left: 2px;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-divider {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--line);
+}
