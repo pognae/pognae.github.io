@@ -25,6 +25,11 @@ layout: default
 
   <!-- Cusdis 댓글 시스템 (완전 무료, 익명 지원, 광고 없음) -->
   <div style="margin-top: 40px; padding-top: 30px; padding-bottom: 50px; border-top: 1px solid #eee; min-height: 300px;">
+    <style>
+      #cusdis_thread iframe {
+        min-height: 350px !important;
+      }
+    </style>
     <div id="cusdis_thread" data-host="https://cusdis.com" data-app-id="db02f8b9-8563-4eda-9b25-892c45f40249"
       data-page-id="{{ page.id }}" data-page-url="{{ page.url | absolute_url }}" data-page-title="{{ page.title }}">
     </div>
