@@ -94,7 +94,7 @@ async function generateBlogPost(keyword) {
 
 [작성 조건]
 1. 언어: **반드시 100% 한국어(Korean)로만 작성**하세요. 외국어로 된 키워드가 주어지더라도 한국어로 번역하여 설명해야 하며, 본문에 외국어 문장이나 단락이 포함되어서는 절대 안 됩니다.
-2. 분량 보장: 상세하고 깊이 있는 정보를 제공하여 **공백 포함 최소 2,500자 이상**의 분량을 작성해야 합니다.
+2. 분량 보장: 상세하고 깊이 있는 정보를 제공하여 **공백 포함 최소 4,000자 이상**의 분량을 작성해야 합니다.
 3. 어조: '~합니다', '~입니다'로 끝나는 정중체 사용.
 4. 글 구조:
    - 매력적인 서론 (독자의 호기심 유발 및 글의 목적 명시)
@@ -165,8 +165,8 @@ async function main() {
         const keywords = await scrapeKeyword(); // Now returns an array of keywords
         console.log(`Found ${keywords.length} keywords.`);
 
-        // Limit to top 10 to avoid excessive API usage
-        const keywordsToProcess = keywords.slice(0, 10);
+        // Limit to top 5 to avoid excessive API usage
+        const keywordsToProcess = keywords.slice(0, 5);
         
         for (let i = 0; i < keywordsToProcess.length; i++) {
             const keyword = keywordsToProcess[i];

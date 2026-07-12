@@ -2,8 +2,8 @@ name: Auto Post Realtime Keywords
 
 on:
   schedule:
-    # 4시간마다 실행 (UTC 기준 0, 4, 8, 12, 16, 20시 -> KST 기준 9, 13, 17, 21, 1, 5시)
-    - cron: '0 */4 * * *'
+    # 5시간마다 실행
+    - cron: '0 */5 * * *'
   workflow_dispatch: # 수동 실행 트리거
 
 jobs:
