@@ -25,6 +25,7 @@
   @media (max-width: 64em) {
     .author__urls-wrapper {
       display: block !important;
+      position: relative;
     }
     
     .author__urls {
@@ -42,13 +43,23 @@
     
     .author__urls > li.visitor-counter-li {
       display: flex !important;
-      justify-content: center !important;
-      margin: 15px 0 0 0 !important;
+      position: absolute;
+      right: 0;
+      top: 5px; /* Follow 버튼과 같은 선상, 조금 위로 조정 */
+      margin: 0 !important;
+      z-index: 10;
     }
 
     /* 모바일/태블릿에서 'Follow' (또는 '소개') 버튼을 눌러 .open 클래스가 들어갔을 때는 모든 항목 노출 */
     .author__urls.open > li {
       display: block !important;
+    }
+    
+    .author__urls.open > li.visitor-counter-li {
+      position: relative;
+      top: 0;
+      justify-content: center !important;
+      margin: 15px 0 0 0 !important;
     }
   }
 </style>
