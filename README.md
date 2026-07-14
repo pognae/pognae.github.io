@@ -1,69 +1,50 @@
-# Calc365
+# MonoPoint
 
-Calc365(계산365)는 공유 ChatGPT 대화에서 확정된 생활 계산기 허브 이름을 기준으로 구현한 정적 웹앱입니다. 서버 없이 순수 HTML/CSS/JavaScript로 동작하며 GitHub Pages에 그대로 배포할 수 있습니다.
+MonoPoint(모노포인트)는 구글 실시간 트렌드 키워드를 활용해 생활, 금융, 건강 실용 정보를 제공하는 **발행형 Jekyll 정적 블로그**입니다.
+NVIDIA NIM Llama 모델 API를 통해 고품질의 SEO 최적화 한국어 콘텐츠를 주기적으로 생성하고, GitHub Actions 및 Cloudflare Pages를 통해 무중단으로 자동 배포됩니다.
 
-**슬로건:** 생활에 필요한 모든 계산을 한곳에서
+- **도메인**: [https://monopoint.app](https://monopoint.app)
+- **배포 기술**: GitHub Actions + Jekyll (정적 사이트 생성) + Cloudflare Pages 도메인 연동
 
-## 주요 기능
+## 주요 특징
 
-- 30종 생활 계산기 (아래 목록)
-- 카테고리 탭 · 검색 · 즐겨찾기 · 최근 사용 (localStorage 저장)
-- 라이트/다크 모드 토글 (localStorage 저장)
-- PWA 지원 (홈 화면 추가, 오프라인 캐시)
-- SEO: `robots.txt`, `sitemap.xml`, Open Graph 메타 태그
-- 애드센스 준비: `ads.txt`, 광고 슬롯 마크업
-- 정책 페이지: 소개 / 개인정보처리방침 / 문의
+- **실시간 트렌드 포스팅**: 구글 트렌드 인기 검색어 1~5위를 5시간마다 자동으로 스크랩하여 콘텐츠를 발행합니다.
+- **NVIDIA NIM Llama-3.1 기반 작성**: 고성능 LLM API를 활용해 단순 정보 나열이 아닌, 에디터 톤앤매너를 지닌 4,000자 이상의 고품질 한글 포스트를 자동으로 생성합니다.
+- **강력한 SEO 및 애드센스 최적화**:
+  - `jekyll-seo-tag` 기반 메타 데이터 태그 자동 생성
+  - 자동 갱신되는 `sitemap.xml` 및 올바른 `robots.txt` 구성
+  - 광고 승인을 돕는 필수 페이지 완비 (소개, 개인정보처리방침, 문의) 및 `ads.txt` 연동
+- **오역 방지(Sanitization) 로직**: 자동 생성 과정에서 종종 발생하는 한자 `們`, 일어/태국어 혼입 등의 기계번역 오역 패턴을 원천적으로 필터링 및 정제합니다.
 
-## 포함된 계산기 (45종)
-
-### 금융
-- 퍼센트 · 할인 · 부가세 · 이자(단리) · 복리 · 대출 상환 · 연봉 실수령액 · 퇴직금 · 환율 · 주식 수익률 · 배당금
-
-### 날짜·시간
-- 날짜 차이 · D-day · 나이 · 시간 · 근무일 · 주차 · 수면 사이클
-
-### 건강
-- BMI · BMR · 권장 칼로리(TDEE) · 물 섭취량 · 체지방률(US Navy) · 허리-엉덩이 비율 · 표준 체중
-
-### 생활
-- 평균 · 평수↔㎡ · 전기·수도·가스 요금 추정 · 요리 단위 · 여행 유류비 · 더치페이
-
-### 단위 변환
-- 길이 · 무게 · 온도 · 데이터 · 속도 · 부피 · 면적
-
-### 기타
-- 기본 계산기 · QR 코드 생성 · 글자 수 세기 · 16진수-10진수 변환
-
-> 금융/건강/요금 계산기는 간이 추정치이며, 실제 금액·수치와 차이가 있을 수 있습니다.
-
-## 실행
-
-브라우저에서 `index.html`을 열면 바로 사용할 수 있습니다.
-
-## GitHub Pages 배포
-
-1. 저장소 Settings → Pages → Source: `main` 브랜치, `/ (root)` 선택
-2. 배포 URL: `https://pognae.github.io/calc365/`
-3. AdSense 승인 후 `ads.txt`의 `pub-XXXXXXXXXXXXXXXX`를 실제 게시자 ID로 교체
-
-## 파일 구조
+## 시스템 구성 및 디렉토리 구조
 
 ```
-calc365/
-├── index.html          # 메인 앱
-├── app.js              # 계산기 로직
-├── styles.css          # 공통 스타일
-├── page.js             # 정적 페이지 공통 스크립트
-├── about.html          # 소개
-├── privacy.html        # 개인정보처리방침
-├── contact.html        # 문의
-├── manifest.webmanifest
-├── service-worker.js
-├── robots.txt
-├── sitemap.xml
-├── ads.txt
-└── icons/icon.svg
+pognae.github.io/
+├── _posts/                 # 발행된 마크다운 블로그 포스트 저장소
+├── _posts-pending/         # 발행 예정/대기 중인 임시 포스트
+├── _layouts/               # 레이아웃 정의 (Jekyll 표준 규격)
+├── _includes/              # HTML 컴포넌트 모듈
+│   ├── head/custom.html    # 애드센스 스크립트 및 반응형 스타일 오버라이드
+│   └── author-profile-custom-links.html  # 방문자 수 카운터(hits) 노출 영역
+├── scripts/                # 자동화 스크립트 폴더
+│   └── auto_post.js        # 구글 트랜드 수집 및 NVIDIA NIM API 활용 블로그 생성 코어
+├── .github/workflows/      # GitHub Actions 자동 배포/포스팅 워크플로우
+│   ├── auto_post.yml       # 5시간 주기 자동 스크랩 및 포스팅 트리거
+│   └── pages.yml           # Jekyll 빌드 및 GitHub Pages 배포 파이프라인
+├── _config.yml             # Jekyll 사이트 설정 파일
+├── robots.txt              # 크롤러 수집 가이드라인 파일
+├── sitemap.xml             # 수집기 색인용 사이트맵 파일
+└── ads.txt                 # 구글 애드센스 대리점 식별 정보 파일
 ```
+
+## 환경 변수 설정 (Secrets)
+
+자동 포스팅 파이프라인 작동을 위해 GitHub Repository Secrets에 아래 환경 변수 설정이 필요합니다.
+- `NVIDIA_API_KEY`: NVIDIA NIM API 액세스를 위한 API 키값
+
+
+
+
 
 ## 업데이트 내역
 - **2026-07-03**: 계산기 15종 추가 (총 45종)
