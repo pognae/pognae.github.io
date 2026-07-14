@@ -1,6 +1,7 @@
 <!-- start custom head snippets -->
 <!-- 구글 애드센스 자동 광고 -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5461344534519122" crossorigin="anonymous"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5461344534519122"
+  crossorigin="anonymous"></script>
 
 <style>
   /* 글 제목 밑줄 제거 */
@@ -14,6 +15,7 @@
   .visitor-counter-li {
     list-style: none;
   }
+
   .visitor-counter-div {
     display: flex;
     justify-content: flex-start;
@@ -27,44 +29,53 @@
       display: block !important;
       position: relative;
     }
-    
+
     .author__urls {
       display: block !important;
-      position: static !important; /* 부모(author__urls-wrapper) 기준으로 절대 배치되도록 static 강제 */
-      visibility: visible !important; /* 테마의 기본 숨김 처리 무력화 */
+      position: static !important;
+      /* 부모(author__urls-wrapper) 기준으로 절대 배치되도록 static 강제 */
+      visibility: visible !important;
+      /* 테마의 기본 숨김 처리 무력화 */
       opacity: 1 !important;
       border: none !important;
       box-shadow: none !important;
       padding: 0 !important;
       margin: 0 !important;
-      height: 0; /* 불필요한 높이 차지 방지 */
-      overflow: visible !important; /* 절대 배치된 요소가 잘리지 않도록 함 */
+      height: 0;
+      /* 불필요한 높이 차지 방지 */
+      overflow: visible !important;
+      /* 절대 배치된 요소가 잘리지 않도록 함 */
     }
 
     /* 기본적으로 다른 링크 항목들은 숨기고 방문자 수만 노출 */
-    .author__urls > li {
+    .author__urls>li {
       display: none !important;
     }
-    
-    .author__urls > li.visitor-counter-li {
+
+    .author__urls>li.visitor-counter-li {
       display: flex !important;
       position: absolute;
       right: 0;
-      top: 5px; /* Follow 버튼과 같은 선상, 조금 위로 조정 */
+      top: -14px;
+      /* Follow 버튼과 같은 선상, 조금 위로 조정 */
       margin: 0 !important;
       z-index: 10;
     }
 
     /* 모바일/태블릿에서 'Follow' (또는 '소개') 버튼을 눌러 .open 클래스가 들어갔을 때는 모든 항목 노출 */
-    .author__urls.open, .author__urls.is--visible {
+    .author__urls.open,
+    .author__urls.is--visible {
       height: auto !important;
       position: absolute !important;
     }
-    .author__urls.open > li, .author__urls.is--visible > li {
+
+    .author__urls.open>li,
+    .author__urls.is--visible>li {
       display: block !important;
     }
-    
-    .author__urls.open > li.visitor-counter-li, .author__urls.is--visible > li.visitor-counter-li {
+
+    .author__urls.open>li.visitor-counter-li,
+    .author__urls.is--visible>li.visitor-counter-li {
       position: relative;
       top: 0;
       justify-content: center !important;
