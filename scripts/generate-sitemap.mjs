@@ -10,7 +10,7 @@ import path from "path";
 const ROOT = process.cwd();
 const POSTS_DIR = path.join(ROOT, "_posts");
 const OUT = path.join(ROOT, "sitemap.xml");
-const BASE = "https://monpoint.app";
+const BASE = "https://monopoint.app";
 
 const STATIC_PAGES = [
   { loc: "/", changefreq: "daily", priority: "1.0" },
