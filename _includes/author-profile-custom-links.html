@@ -2,21 +2,33 @@
   <div class="visitor-counter-div" style="padding: 10px 0; font-size: 0.9em; color: #666;">
     <i class="fas fa-fw fa-eye" aria-hidden="true"></i> 방문자 수: <span id="visitor-count">...</span>
   </div>
-  
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
     import { getDatabase, ref, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
 
     // TODO: 생성하신 Firebase 프로젝트의 구성(Config) 설정값으로 덮어쓰세요.
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "firebase/app";
+    import { getAnalytics } from "firebase/analytics";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
     const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-      databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT_ID.appspot.com",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
+      apiKey: "AIzaSyDPYxfnpDiWCATrZ_ms-uvcw-HxqkAOwf8",
+      authDomain: "web-counter-82d0e.firebaseapp.com",
+      projectId: "web-counter-82d0e",
+      storageBucket: "web-counter-82d0e.firebasestorage.app",
+      messagingSenderId: "550559667131",
+      appId: "1:550559667131:web:7b986827d2111c431faa9e",
+      measurementId: "G-YRWH1F24QT"
     };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
 
     try {
       const app = initializeApp(firebaseConfig);
@@ -36,7 +48,7 @@
         console.error("Firebase 트랜잭션 오류:", error);
         document.getElementById('visitor-count').innerText = "설정 필요";
       });
-    } catch(e) {
+    } catch (e) {
       console.log("Firebase가 아직 초기화되지 않았습니다.");
       document.getElementById('visitor-count').innerText = "설정 필요";
     }
