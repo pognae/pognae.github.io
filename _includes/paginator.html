@@ -1,0 +1,35 @@
+{% if paginator.total_pages > 1 %}
+<nav class="pagination">
+  <ul>
+    <!-- 이전(Prev) 버튼: 더 과거의 글로 가려면 페이지 번호가 늘어나야 함 (next_page) -->
+    {% if paginator.next_page %}
+      <li><a href="{{ paginator.next_page_path | relative_url }}">&laquo; 이전</a></li>
+    {% else %}
+      <li><a href="#" class="disabled"><span aria-hidden="true">&laquo; 이전</span></a></li>
+    {% endif %}
+
+    <!-- 중간 페이지 번호 (원한다면 유지, 여기서는 생략하고 이전/다음만 유지하거나 기본 테마의 번호 렌더링 추가) -->
+    {% assign start = paginator.page | minus: 2 %}
+    {% assign end = paginator.page | plus: 2 %}
+    {% if start < 1 %}{% assign start = 1 %}{% endif %}
+    {% if end > paginator.total_pages %}{% assign end = paginator.total_pages %}{% endif %}
+
+    {% for page in (start..end) %}
+      {% if page == paginator.page %}
+        <li><a href="#" class="disabled current">{{ page }}</a></li>
+      {% elsif page == 1 %}
+        <li><a href="{{ paginator.previous_page_path | relative_url | remove: 'page2/' | remove: 'page3/' | remove: 'page4/' | remove: 'page5/' | append: '/' | replace: '//', '/' }}">{{ page }}</a></li>
+      {% else %}
+        <li><a href="{{ site.paginate_path | replace: ':num', page | relative_url }}">{{ page }}</a></li>
+      {% endif %}
+    {% endfor %}
+
+    <!-- 다음(Next) 버튼: 최신 글로 가려면 페이지 번호가 줄어야 함 (previous_page) -->
+    {% if paginator.previous_page %}
+      <li><a href="{{ paginator.previous_page_path | relative_url }}">다음 &raquo;</a></li>
+    {% else %}
+      <li><a href="#" class="disabled"><span aria-hidden="true">다음 &raquo;</span></a></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
