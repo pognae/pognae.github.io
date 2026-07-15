@@ -2,24 +2,43 @@
   <div class="visitor-counter-div" style="padding: 10px 0; font-size: 0.9em; color: #666;">
     <i class="fas fa-fw fa-eye" aria-hidden="true"></i> 방문자 수: <span id="visitor-count">...</span>
   </div>
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      // 나중에 Cloudflare Worker 도메인으로 변경하세요. (예: https://counter.your-worker.workers.dev)
-      const workerUrl = "https://counter.monopoint.workers.dev/"; 
-      
-      fetch(workerUrl)
-        .then(response => response.json())
-        .then(data => {
-          if(data.visits) {
-            document.getElementById('visitor-count').innerText = data.visits.toLocaleString();
-          } else {
-            document.getElementById('visitor-count').innerText = "조회 불가";
+  
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getDatabase, ref, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+
+    // TODO: 생성하신 Firebase 프로젝트의 구성(Config) 설정값으로 덮어쓰세요.
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    try {
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase(app);
+      const visitRef = ref(db, 'site_visits/total');
+
+      runTransaction(visitRef, (currentData) => {
+        return (currentData === null) ? 1 : currentData + 1;
+      }).then(() => {
+        onValue(visitRef, (snapshot) => {
+          const data = snapshot.val();
+          if (data) {
+            document.getElementById('visitor-count').innerText = data.toLocaleString();
           }
-        })
-        .catch(err => {
-          console.error("Counter fetch error:", err);
-          document.getElementById('visitor-count').innerText = "-";
         });
-    });
+      }).catch((error) => {
+        console.error("Firebase 트랜잭션 오류:", error);
+        document.getElementById('visitor-count').innerText = "설정 필요";
+      });
+    } catch(e) {
+      console.log("Firebase가 아직 초기화되지 않았습니다.");
+      document.getElementById('visitor-count').innerText = "설정 필요";
+    }
   </script>
 </li>
