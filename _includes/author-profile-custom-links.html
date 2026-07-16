@@ -7,28 +7,18 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
     import { getDatabase, ref, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
 
-    // TODO: 생성하신 Firebase 프로젝트의 구성(Config) 설정값으로 덮어쓰세요.
-    // Import the functions you need from the SDKs you need
-    import { initializeApp } from "firebase/app";
-    import { getAnalytics } from "firebase/analytics";
-    // TODO: Add SDKs for Firebase products that you want to use
-    // https://firebase.google.com/docs/web/setup#available-libraries
-
-    // Your web app's Firebase configuration
-    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    // Firebase 구성(Config) 설정값
     const firebaseConfig = {
       apiKey: "AIzaSyDPYxfnpDiWCATrZ_ms-uvcw-HxqkAOwf8",
       authDomain: "web-counter-82d0e.firebaseapp.com",
+      // Realtime Database URL은 필수입니다. 보통 아래와 같은 형식입니다. (Firebase 콘솔의 Realtime DB 메뉴 상단에서도 확인 가능합니다)
+      databaseURL: "https://web-counter-82d0e-default-rtdb.firebaseio.com",
       projectId: "web-counter-82d0e",
       storageBucket: "web-counter-82d0e.firebasestorage.app",
       messagingSenderId: "550559667131",
       appId: "1:550559667131:web:7b986827d2111c431faa9e",
       measurementId: "G-YRWH1F24QT"
     };
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
 
     try {
       const app = initializeApp(firebaseConfig);
