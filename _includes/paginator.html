@@ -1,24 +1,63 @@
+{% assign locale = include.locale | default: site.locale %}
 {% if paginator.total_pages > 1 %}
 <nav class="pagination" aria-label="Pagination">
   {% assign paginate_path_last = site.paginate_path | split: '/' | last %}
   {% assign first_page_path = paginator.first_page_path | default: site.paginate_path | replace: paginate_path_last, '' | replace: '//', '/' | relative_url %}
   <ul>
-    {% comment %} 왼쪽 버튼 (이전): 과거 글 (페이지 번호 증가) {% endcomment %}
+    {% comment %} 왼쪽 버튼: 이전 (과거 글 = next_page) {% endcomment %}
     {% if paginator.next_page %}
-      <li><a href="{{ site.paginate_path | replace: ':num', paginator.next_page | replace: '//', '/' | relative_url }}" class="pagination--pager" title="과거 글 보기">&laquo; 이전</a></li>
+      <li><a href="{{ site.paginate_path | replace: ':num', paginator.next_page | replace: '//', '/' | relative_url }}">&laquo; 이전</a></li>
     {% else %}
-      <li><a href="#" class="pagination--pager disabled"><span aria-hidden="true">&laquo; 이전</span></a></li>
+      <li><a href="#" class="disabled"><span aria-hidden="true">&laquo; 이전</span></a></li>
     {% endif %}
 
-    {% comment %} 오른쪽 버튼 (다음): 최신 글 (페이지 번호 감소) {% endcomment %}
+    {% comment %} 페이지 번호들 {% endcomment %}
+    {% assign page_start = 2 %}
+    {% if paginator.page > 4 %}
+      {% assign page_start = paginator.page | minus: 2 %}
+      <li><a href="#" class="disabled">&hellip;</a></li>
+    {% endif %}
+
+    {% assign page_end = paginator.total_pages | minus: 1 %}
+    {% assign pages_to_end = paginator.total_pages | minus: paginator.page %}
+    {% if pages_to_end > 4 %}
+      {% assign page_end = paginator.page | plus: 2 %}
+    {% endif %}
+
+    {% comment %} 1페이지 링크 {% endcomment %}
+    {% if paginator.page == 1 %}
+      <li><a href="#" class="disabled current">1</a></li>
+    {% else %}
+      <li><a href="{{ first_page_path }}">1</a></li>
+    {% endif %}
+
+    {% for index in (page_start..page_end) %}
+      {% if index == paginator.page %}
+        <li><a href="#" class="disabled current">{{ index }}</a></li>
+      {% else %}
+        <li><a href="{{ site.paginate_path | replace: ':num', index | relative_url }}">{{ index }}</a></li>
+      {% endif %}
+    {% endfor %}
+
+    {% if pages_to_end > 3 %}
+      <li><a href="#" class="disabled">&hellip;</a></li>
+    {% endif %}
+
+    {% if paginator.page == paginator.total_pages %}
+      <li><a href="#" class="disabled current">{{ paginator.page }}</a></li>
+    {% else %}
+      <li><a href="{{ site.paginate_path | replace: ':num', paginator.total_pages | replace: '//', '/' | relative_url }}">{{ paginator.total_pages }}</a></li>
+    {% endif %}
+
+    {% comment %} 오른쪽 버튼: 다음 (최신 글 = previous_page) {% endcomment %}
     {% if paginator.previous_page %}
       {% if paginator.previous_page == 1 %}
-        <li><a href="{{ first_page_path }}" class="pagination--pager" title="최신 글 보기">다음 &raquo;</a></li>
+        <li><a href="{{ first_page_path }}">다음 &raquo;</a></li>
       {% else %}
-        <li><a href="{{ site.paginate_path | replace: ':num', paginator.previous_page | replace: '//', '/' | relative_url }}" class="pagination--pager" title="최신 글 보기">다음 &raquo;</a></li>
+        <li><a href="{{ site.paginate_path | replace: ':num', paginator.previous_page | replace: '//', '/' | relative_url }}">다음 &raquo;</a></li>
       {% endif %}
     {% else %}
-      <li><a href="#" class="pagination--pager disabled"><span aria-hidden="true">다음 &raquo;</span></a></li>
+      <li><a href="#" class="disabled"><span aria-hidden="true">다음 &raquo;</span></a></li>
     {% endif %}
   </ul>
 </nav>
