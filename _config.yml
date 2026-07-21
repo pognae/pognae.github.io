@@ -27,6 +27,8 @@ footer:
       url: "/about.html"
     - label: "개인정보처리방침"
       url: "/privacy.html"
+    - label: "이용약관"
+      url: "/terms.html"
     - label: "문의"
       url: "/contact.html"
 

@@ -71,7 +71,10 @@ pognae.github.io/
   - 기존 202개 포스트 제목 템플릿 어구 교체 및 소설적/에세이적 개별 유니크 제목 개편 완료 (`scripts/fix_novel_titles.mjs`).
   - 정치인 및 정치적 이슈 포스트 7개 완전 삭제 정제 및 키워드 블랙리스트 대폭 확장 (`scripts/remove_political_posts.mjs`, `scripts/deep_political_scan.mjs`).
   - 관리자 전용 포스트 수정/삭제 대시보드 웹 페이지 구축 (`admin.html`, `scripts/admin_server.js`): 보안 인증 기반 웹 인터페이스에서 발행된 포스트 검색, 즉시 수정, 영구 삭제 및 저장소 연동 지원.
-  - 프로젝트 개발 규칙(`AGENTS.md` Rule 13, Rule 19)에 정치 콘텐츠 0% 발행 원칙 및 소설적 스토리텔링 제목 작성 강제 적용.
+- **2026-07-21**: Google AdSense 승인 심사 통과를 위한 종합 최적화 작업 완료
+  - 이용약관 및 법적 면책조항 페이지(`terms.md` -> `/terms.html`) 신규 구축 및 헤더 네비게이션(`_data/navigation.yml`), 푸터 메뉴(`_config.yml`) 링크 연결 완료.
+  - 비공개 포스트 404 수집 오류 원천 제거를 위해 `sitemap.xml` 재생성 로직(`scripts/generate-sitemap.mjs`)에 `published: false` 필터링 및 `/terms.html` 수록 추가, 정확히 공개된 41개 URL(정적페이지 5개 + 공개 AI 포스트 36개)로 동기화 완료.
+  - 미래 날짜(`2026-07-22`~`2026-07-25`) 포스트 파일명 및 `date:` 메타 태그 정정, 공개 포스트 36개 전체 4,000자 이상(4,200~4,550자) 고품질 확충 및 상투적 어구 금지 검증 완료.
 
 
 

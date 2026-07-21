@@ -16,6 +16,7 @@ const STATIC_PAGES = [
   { loc: "/", changefreq: "daily", priority: "1.0" },
   { loc: "/about.html", changefreq: "monthly", priority: "0.6" },
   { loc: "/privacy.html", changefreq: "monthly", priority: "0.5" },
+  { loc: "/terms.html", changefreq: "monthly", priority: "0.5" },
   { loc: "/contact.html", changefreq: "monthly", priority: "0.5" },
 ];
 
@@ -31,6 +32,13 @@ function escapeXml(value) {
 function parsePost(filename) {
   const m = filename.match(/^(\d{4})-(\d{2})-(\d{2})-(.+)\.md$/);
   if (!m) return null;
+  
+  // Check if post is published: false
+  const content = fs.readFileSync(path.join(POSTS_DIR, filename), "utf8");
+  if (content.includes("published: false")) {
+    return null;
+  }
+
   const [, year, month, day, slug] = m;
   return {
     loc: `/blog/${year}/${month}/${day}/${slug}/`,
