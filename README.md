@@ -70,7 +70,9 @@ pognae.github.io/
   - 구글 애드센스 게재 제한 방지를 위한 포스팅 프롬프트 및 로직 개편(`scripts/auto_post.js`): "알아두면 유용한 정보", "한눈에 보기", "완벽 정리", "주요 내용 및 실용 가이드" 등 상투적 템플릿 어구 전면 금지 및 감성 에세이/소설적 스토리텔링 제목 스타일 적용.
   - 기존 202개 포스트 제목 템플릿 어구 교체 및 소설적/에세이적 개별 유니크 제목 개편 완료 (`scripts/fix_novel_titles.mjs`).
   - 정치인 및 정치적 이슈 포스트 7개 완전 삭제 정제 및 키워드 블랙리스트 대폭 확장 (`scripts/remove_political_posts.mjs`, `scripts/deep_political_scan.mjs`).
+  - 관리자 전용 포스트 수정/삭제 대시보드 웹 페이지 구축 (`admin.html`, `scripts/admin_server.js`): 보안 인증 기반 웹 인터페이스에서 발행된 포스트 검색, 즉시 수정, 영구 삭제 및 저장소 연동 지원.
   - 프로젝트 개발 규칙(`AGENTS.md` Rule 13, Rule 19)에 정치 콘텐츠 0% 발행 원칙 및 소설적 스토리텔링 제목 작성 강제 적용.
+
 
 
 
