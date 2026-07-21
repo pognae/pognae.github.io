@@ -5,6 +5,7 @@ description: "인도와 잉글랜드의 축구 대결은 단순한 경기가 아
 date: 2026-07-17 01:21:35 +0900
 categories: [트렌드, 이슈]
 tags: [india vs england, 실시간검색어, 정보]
+published: false
 ---
 
 # 인도 VS 잉글랜드: 역사를 거스르는 그라운드의 전설들

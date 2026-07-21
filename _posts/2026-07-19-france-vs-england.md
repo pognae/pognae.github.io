@@ -5,6 +5,7 @@ description: "france vs england에 대해 쉽고 유용한 생활 정보, 필수
 date: 2026-07-19 05:52:23 +0900
 categories: [트렌드, 이슈]
 tags: [france vs england, 실시간검색어, 정보]
+published: false
 ---
 
 프랑스와 영국의 경기력은 어떻게 될까요?

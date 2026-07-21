@@ -5,6 +5,7 @@ description: "맨유와 렉섬의 경기는 많은 축구 팬들에게 관심을
 date: 2026-07-19 00:57:39 +0900
 categories: [트렌드, 이슈]
 tags: [man united vs wrexham, 실시간검색어, 정보]
+published: false
 ---
 
 # 맨유 vs 렉섬: 기대와 현실
