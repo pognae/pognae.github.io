@@ -4,5 +4,38 @@
   data-page-id="{{ page.id }}"
   data-page-url="{{ page.url | absolute_url }}"
   data-page-title="{{ page.title }}"
+  style="width: 100%; min-height: 540px;"
 ></div>
+
+<style>
+  #cusdis_thread {
+    min-height: 540px !important;
+    width: 100% !important;
+    margin-top: 1rem;
+    overflow: hidden;
+  }
+  #cusdis_thread iframe {
+    width: 100% !important;
+    min-height: 540px !important;
+    border: none !important;
+    overflow: hidden !important;
+  }
+</style>
+
 <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
+<script>
+  // Cusdis iframe 높이 자동 조절 (스크롤바 방지)
+  window.addEventListener('message', function (e) {
+    if (e.origin === 'https://cusdis.com' && e.data) {
+      try {
+        const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+        if (data.event === 'resize' && data.data) {
+          const iframe = document.querySelector('#cusdis_thread iframe');
+          if (iframe) {
+            iframe.style.height = Math.max(540, data.data + 40) + 'px';
+          }
+        }
+      } catch (err) {}
+    }
+  });
+</script>

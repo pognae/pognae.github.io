@@ -62,8 +62,15 @@ pognae.github.io/
   - 애드센스 정책 위반 및 오류 파일 제거 (`_posts/2026-07-10-뇌물.md`, `_posts/2026-07-11-.md`) 및 기존 포스트 다국어 오류 정제 완료
   - 사이트맵(`sitemap.xml`) 재생성 완료 및 자동 생성 키워드 개수를 Rule 11에 맞게 5개로 복원
   - 구글 검색 상위 노출을 위해 E-E-A-T 가이드라인을 프로젝트 규칙(`AGENTS.md`)에 추가. 독창적인 콘텐츠(자신만의 팁, 경험 등) 및 정확한 정보/출처 포함 의무화.
-- **2026-07-21**: Cusdis 댓글 시스템 복구 및 환경 제한 해제
+- **2026-07-21**: Cusdis 댓글 시스템 복구 및 UI/UX 디자인 개선
   - 테마 이전 후 누락되었던 Cusdis 댓글 위젯(`_includes/comments.html`, `_includes/comments-providers/cusdis.html`) 추가 및 `_config.yml` 설정(provider: cusdis, app_id) 복원 완료.
   - `non-production` 환경 조건문 해제로 모든 환경에서 댓글 입력창이 정상 출력되도록 수정 및 GitHub Actions `JEKYLL_ENV: production` 설정 적용.
+  - 포스트 하단 거대한 이전글/다음글 네비게이션 버튼을 슬림하고 세련된 카드 디자인으로 개선 (`_includes/post_pagination.html`, 규칙 14 준수).
+  - Cusdis 댓글 iframe의 높이 동적 자동 조절(Auto-resize) 및 스크롤바 제거로 깔끔한 디자인 구현.
+  - 구글 애드센스 게재 제한 방지를 위한 포스팅 프롬프트 및 로직 개편(`scripts/auto_post.js`): "알아두면 유용한 정보", "한눈에 보기", "완벽 정리" 등 상투적 AI 템플릿 어구 전면 금지 및 2자 이하 부실 키워드 필터링 적용.
+  - 기존 부실/저품질 포스트 43개 삭제 정제 및 193개 포스트 제목 템플릿 어구 정제 완료 (`scripts/cleanup_low_quality_posts.mjs`).
+  - 프로젝트 개발 규칙(`AGENTS.md` Rule 19)에 애드센스 정책 준수 및 상투적 템플릿 금지 항목 추가.
+
+
 
 

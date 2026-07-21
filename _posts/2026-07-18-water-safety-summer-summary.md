@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "물놀이 안전 총정리 — 한눈에 보기"
+title: "물놀이 안전 주요 내용 및 실용 가이드 — 주요 내용 및 실용 가이드"
 category: 건강
 description: "물놀이 안전 개념, 비교 포인트, 실무 팁을 표로 정리했습니다."
 keywords: "물놀이 안전, 익수 사고, 물놀이 안전, MonPoint, 몬포인트, 건강"

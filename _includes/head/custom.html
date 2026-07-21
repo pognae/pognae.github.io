@@ -82,5 +82,70 @@
       margin: 15px 0 0 0 !important;
     }
   }
+
+  /* 세련되고 슬림한 포스트 하단 이전글/다음글 네비게이션 */
+  .pagination--pager {
+    display: flex !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    margin: 2rem 0 !important;
+    padding: 0 !important;
+    border: none !important;
+  }
+
+  .pagination--pager__btn {
+    flex: 1;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 10px 14px !important;
+    border-radius: 8px !important;
+    border: 1px solid #e2e8f0 !important;
+    background-color: #f8fafc !important;
+    text-decoration: none !important;
+    color: #334155 !important;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02) !important;
+  }
+
+  .pagination--pager__btn:hover:not(.disabled) {
+    background-color: #ffffff !important;
+    border-color: #cbd5e1 !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06) !important;
+    transform: translateY(-1px);
+    text-decoration: none !important;
+  }
+
+  .pagination--pager__btn.disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    background-color: #f1f5f9 !important;
+  }
+
+  .pagination--pager__btn .pager-label {
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+    color: #64748b !important;
+    margin-bottom: 2px !important;
+  }
+
+  .pagination--pager__btn .pager-title {
+    font-size: 0.9rem !important;
+    font-weight: 500 !important;
+    color: #0f172a !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .pagination--pager__btn.next {
+    text-align: right !important;
+  }
+
+  /* 댓글 구역 디자인 튜닝 */
+  .page__reactions {
+    border-top: 1px solid #e2e8f0 !important;
+    padding-top: 1.5rem !important;
+    margin-top: 2.5rem !important;
+  }
 </style>
 <!-- end custom head snippets -->

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "원룸 여름 냉방 총정리 — 한눈에 보기"
+title: "원룸 여름 냉방 주요 내용 및 실용 가이드 — 주요 내용 및 실용 가이드"
 category: 생활
 description: "원룸 여름 냉방 개념, 비교 포인트, 실무 팁을 표로 정리했습니다."
 keywords: "원룸 냉방, 단열, 원룸 여름 냉방, MonPoint, 몬포인트, 생활"

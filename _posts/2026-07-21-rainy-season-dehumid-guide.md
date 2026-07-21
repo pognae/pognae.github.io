@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "장마철 습기 제거 완벽 가이드 (2026년 최신)"
+title: "장마철 습기 제거 주요 내용 및 실용 가이드 (2026년 최신)"
 category: 생활
-description: "장마철 습기 제거 핵심 정리, 체크리스트, FAQ를 MonPoint에서 쉽게 확인하세요."
+description: "장마철 습기 제거 주요 내용 및 실용 가이드, 체크리스트, FAQ를 MonPoint에서 쉽게 확인하세요."
 keywords: "장마, 습기, 제습, 장마철 습기 제거, MonPoint, 몬포인트, 생활"
 ---
 
