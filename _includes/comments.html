@@ -1,0 +1,13 @@
+{% if page.comments != false %}
+  <section class="page__reactions" style="margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--global-border-color, #eef2f5);">
+    <h4 class="page__meta-title" style="margin-bottom: 1rem; font-size: 1.25rem;">💬 댓글</h4>
+    <div id="cusdis_thread"
+      data-host="https://cusdis.com"
+      data-app-id="{{ site.comments.cusdis.app_id | default: 'db02f8b9-8563-4eda-9b25-892c45f40249' }}"
+      data-page-id="{{ page.id }}"
+      data-page-url="{{ page.url | absolute_url }}"
+      data-page-title="{{ page.title }}"
+    ></div>
+    <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
+  </section>
+{% endif %}

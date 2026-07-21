@@ -78,3 +78,9 @@ defaults:
       comments: true
       share: true
       related: true
+
+comments:
+  provider: "cusdis"
+  cusdis:
+    app_id: "db02f8b9-8563-4eda-9b25-892c45f40249"
+
