@@ -62,6 +62,8 @@ pognae.github.io/
   - 애드센스 정책 위반 및 오류 파일 제거 (`_posts/2026-07-10-뇌물.md`, `_posts/2026-07-11-.md`) 및 기존 포스트 다국어 오류 정제 완료
   - 사이트맵(`sitemap.xml`) 재생성 완료 및 자동 생성 키워드 개수를 Rule 11에 맞게 5개로 복원
   - 구글 검색 상위 노출을 위해 E-E-A-T 가이드라인을 프로젝트 규칙(`AGENTS.md`)에 추가. 독창적인 콘텐츠(자신만의 팁, 경험 등) 및 정확한 정보/출처 포함 의무화.
-- **2026-07-21**: Cusdis 댓글 시스템 복구
-  - 테마 이전 후 누락되었던 Cusdis 댓글 위젯(`_includes/comments.html`) 및 `_config.yml` 설정(provider: cusdis, app_id) 추가로 댓글 작성/조회 기능 복원 완료.
+- **2026-07-21**: Cusdis 댓글 시스템 복구 및 환경 제한 해제
+  - 테마 이전 후 누락되었던 Cusdis 댓글 위젯(`_includes/comments.html`, `_includes/comments-providers/cusdis.html`) 추가 및 `_config.yml` 설정(provider: cusdis, app_id) 복원 완료.
+  - `non-production` 환경 조건문 해제로 모든 환경에서 댓글 입력창이 정상 출력되도록 수정 및 GitHub Actions `JEKYLL_ENV: production` 설정 적용.
+
 
