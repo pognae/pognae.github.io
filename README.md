@@ -69,7 +69,9 @@ pognae.github.io/
   - Cusdis 댓글 iframe의 높이 동적 자동 조절(Auto-resize) 및 스크롤바 제거로 깔끔한 디자인 구현.
   - 구글 애드센스 게재 제한 방지를 위한 포스팅 프롬프트 및 로직 개편(`scripts/auto_post.js`): "알아두면 유용한 정보", "한눈에 보기", "완벽 정리" 등 상투적 AI 템플릿 어구 전면 금지 및 2자 이하 부실 키워드 필터링 적용.
   - 기존 부실/저품질 포스트 43개 삭제 정제 및 193개 포스트 제목 템플릿 어구 정제 완료 (`scripts/cleanup_low_quality_posts.mjs`).
-  - 프로젝트 개발 규칙(`AGENTS.md` Rule 19)에 애드센스 정책 준수 및 상투적 템플릿 금지 항목 추가.
+  - 정치인 및 정치적 이슈 포스트 7개 완전 삭제 정제 및 키워드 블랙리스트 대폭 확장 (`scripts/remove_political_posts.mjs`, `scripts/deep_political_scan.mjs`).
+  - 프로젝트 개발 규칙(`AGENTS.md` Rule 13, Rule 19)에 정치 콘텐츠 0% 발행 원칙 및 애드센스 정책 준수 강제 적용.
+
 
 
 
