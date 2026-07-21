@@ -101,6 +101,7 @@ robots: noindex, nofollow
         <span id="postCountBadge" class="badge bg-primary rounded-pill">0개 글</span>
       </div>
       <div>
+        <button onclick="openNewPostModal()" class="btn btn-primary btn-sm me-2"><i class="fa-solid fa-plus me-1"></i>새 글 작성</button>
         <button onclick="fetchPosts()" class="btn btn-outline-secondary btn-sm me-2"><i class="fa-solid fa-rotate me-1"></i>새로고침</button>
         <button onclick="logout()" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-right-from-bracket me-1"></i>로그아웃</button>
       </div>
@@ -158,15 +159,65 @@ robots: noindex, nofollow
     </div>
   </div>
 
+  <!-- 4. 새 포스트 작성 모달 -->
+  <div class="modal fade" id="newPostModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold"><i class="fa-solid fa-plus text-primary me-2"></i>새 포스트 작성</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">파일명 (영문, 하이픈 권장. 예: ai-trend-2026)</label>
+            <div class="input-group">
+              <span class="input-group-text" id="newPostDatePrefix"></span>
+              <input type="text" id="newPostSlug" class="form-control" placeholder="slug-name">
+              <span class="input-group-text">.md</span>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">마크다운 본문 (Frontmatter 포함)</label>
+            <textarea id="newPostContent" class="form-control editor-textarea"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+          <button type="button" onclick="createNewPost()" class="btn btn-primary fw-semibold"><i class="fa-solid fa-paper-plane me-1"></i>발행하기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     const REPO_OWNER = 'pognae';
     const REPO_NAME = 'pognae.github.io';
     let allPosts = [];
     let editModalObj = null;
+    let newPostModalObj = null;
+
+    function encodeBase64(str) {
+      const bytes = new TextEncoder().encode(str);
+      let binary = '';
+      for (let i = 0; i < bytes.byteLength; i++) {
+          binary += String.fromCharCode(bytes[i]);
+      }
+      return btoa(binary);
+    }
+
+    function decodeBase64(b64) {
+      const binary = atob(b64);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) {
+          bytes[i] = binary.charCodeAt(i);
+      }
+      return new TextDecoder().decode(bytes);
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
       editModalObj = new bootstrap.Modal(document.getElementById('editModal'));
+      newPostModalObj = new bootstrap.Modal(document.getElementById('newPostModal'));
       const savedToken = localStorage.getItem('mp_gh_token');
       if (savedToken) {
         document.getElementById('ghToken').value = savedToken;
@@ -203,7 +254,7 @@ robots: noindex, nofollow
       try {
         const response = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/_posts`, {
           headers: {
-            'Authorization': `token ${token}`,
+            'Authorization': `Bearer ${token}`,
             'Accept': 'application/vnd.github.v3+json'
           }
         });
@@ -278,12 +329,13 @@ robots: noindex, nofollow
 
       try {
         const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`, {
-          headers: { 'Authorization': `token ${token}` }
+          headers: { 'Authorization': `Bearer ${token}` }
         });
         const data = await res.json();
-        // UTF-8 디코딩
-        const content = decodeURIComponent(escape(atob(data.content)));
+        
+        const content = decodeBase64(data.content);
         document.getElementById('editContent').value = content;
+        document.getElementById('editSha').value = data.sha;
       } catch (err) {
         alert('파일 내용을 불러오지 못했습니다: ' + err.message);
       }
@@ -297,14 +349,13 @@ robots: noindex, nofollow
 
       if (!confirm(`'${path}' 포스트의 수정 내용을 GitHub에 저장하시겠습니까?`)) return;
 
-      // Base64 인코딩 (UTF-8)
-      const encodedContent = btoa(unescape(encodeURIComponent(content)));
+      const encodedContent = encodeBase64(content);
 
       try {
         const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`, {
           method: 'PUT',
           headers: {
-            'Authorization': `token ${token}`,
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
@@ -335,7 +386,7 @@ robots: noindex, nofollow
         const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`, {
           method: 'DELETE',
           headers: {
-            'Authorization': `token ${token}`,
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
@@ -358,6 +409,59 @@ robots: noindex, nofollow
 
     function escapeHtml(str) {
       return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+
+    function openNewPostModal() {
+      const today = new Date();
+      // KST 기준 날짜 맞추기
+      const offset = 9 * 60 * 60 * 1000;
+      const kstDate = new Date(today.getTime() + offset);
+      const datePrefix = kstDate.toISOString().split('T')[0] + '-';
+      
+      document.getElementById('newPostDatePrefix').innerText = datePrefix;
+      document.getElementById('newPostSlug').value = '';
+      document.getElementById('newPostContent').value = `---\nlayout: single\ntitle: "새 포스트 제목"\ndate: ${kstDate.toISOString().split('T')[0]} 10:00:00 +0900\ncategories: [AI]\ntags: [keyword]\n---\n\n본문을 입력하세요...`;
+      newPostModalObj.show();
+    }
+
+    async function createNewPost() {
+      const token = localStorage.getItem('mp_gh_token');
+      const prefix = document.getElementById('newPostDatePrefix').innerText;
+      let slug = document.getElementById('newPostSlug').value.trim();
+      if (!slug) slug = 'untitled';
+      
+      const fileName = prefix + slug + '.md';
+      const path = '_posts/' + fileName;
+      const content = document.getElementById('newPostContent').value;
+
+      if (!confirm(`'${fileName}' 포스트를 새로 발행하시겠습니까?`)) return;
+
+      const encodedContent = encodeBase64(content);
+
+      try {
+        const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            message: `admin: create new post ${fileName}`,
+            content: encodedContent
+          })
+        });
+
+        if (!res.ok) {
+          const errData = await res.json();
+          throw new Error(errData.message || '발행 실패');
+        }
+
+        alert('성공적으로 새 포스트가 발행되었습니다!');
+        newPostModalObj.hide();
+        fetchPosts();
+      } catch (err) {
+        alert('발행 실패: ' + err.message);
+      }
     }
   </script>
 </body>
