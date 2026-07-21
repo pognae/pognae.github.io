@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "물놀이 안전 기초 개념"
+title: "시원한 물놀이 뒤에 숨은 위험, 안전하게 여름을 보내기 위한 다짐"
 category: 건강
 description: "물놀이 안전 입문자를 위한 기본 용어와 흐름을 안내합니다."
 keywords: "물놀이 안전, 익수 사고, 물놀이 안전, MonPoint, 몬포인트, 건강"

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "원룸 여름 냉방 주요 내용 및 실용 가이드 — 주요 내용 및 실용 가이드"
+title: "어느 날 문득 접하게 된 studio cooling tips summary, 직접 겪어보고 느낀 변화와 생각들"
 category: 생활
 description: "원룸 여름 냉방 개념, 비교 포인트, 실무 팁을 표로 정리했습니다."
 keywords: "원룸 냉방, 단열, 원룸 여름 냉방, MonPoint, 몬포인트, 생활"

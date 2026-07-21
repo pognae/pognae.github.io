@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "여름 다이어트 주요 내용 및 실용 가이드 (2026년 최신)"
+title: "무작정 굶던 날들을 지나 내 몸을 살리는 식단을 만났을 때"
 category: 건강
 description: "여름 다이어트 주요 내용 및 실용 가이드, 체크리스트, FAQ를 MonPoint에서 쉽게 확인하세요."
 keywords: "여름 다이어트, 체중 감량, 여름 다이어트, MonPoint, 몬포인트, 건강"

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "sydney sweeney 주요 내용 및 실용 가이드! 주요 내용 및 실용 가이드"
+title: "처음엔 몰랐지만 알면 알수록 유용했던 sydney sweeney에 관한 1인칭 기록"
 date: 2026-07-11 11:11:50 +0900
 categories: [트렌드, 이슈]
 tags: [sydney sweeney, 실시간검색어, 정보]

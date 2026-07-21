@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "norway vs england 주요 내용 및 실용 가이드! 주요 내용 및 실용 가이드"
+title: "norway vs england에 대해 궁금해하던 지인에게 건넨 나의 솔직한 이야기"
 date: 2026-07-12 05:50:36 +0900
 categories: [트렌드, 이슈]
 tags: [norway vs england, 실시간검색어, 정보]

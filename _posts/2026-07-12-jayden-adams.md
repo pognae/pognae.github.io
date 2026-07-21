@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "jayden adams 주요 내용 및 실용 가이드! 주요 내용 및 실용 가이드"
+title: "jayden adams으로 고민하던 밤, 하나씩 풀어가며 찾아낸 명쾌한 해답"
 date: 2026-07-12 05:57:55 +0900
 categories: [트렌드, 이슈]
 tags: [jayden adams, 실시간검색어, 정보]

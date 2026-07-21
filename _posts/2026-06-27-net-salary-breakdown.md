@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "월급 실수령액 알아보기 — 공제 항목 주요 내용 및 실용 가이드"
+title: "소소한 일상 속에서 마주한 net salary breakdown의 가치와 놓치지 말아야 할 순간들"
 category: 금융
 description: "4대보험·소득세·지방소득세 공제와 연봉 대비 실수령 비율을 설명합니다."
 keywords: "실수령액, 월급 실수령액, 4대보험, 연봉 공제"

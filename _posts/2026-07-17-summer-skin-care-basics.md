@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "여름철 피부 관리 기초 개념"
+title: "따가운 햇볕 아래 그을린 피부를 달래며 알게 된 자외선 차단 이야기"
 category: 건강
 description: "여름철 피부 관리 입문자를 위한 기본 용어와 흐름을 안내합니다."
 keywords: "여름 피부, 자외선, 선크림, 여름철 피부 관리, MonPoint, 몬포인트, 건강"

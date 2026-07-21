@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "france vs england 주요 내용 및 실용 가이드! 주요 내용 및 실용 가이드"
+title: "복잡했던 france vs england을 차근차근 정리하며 알게 된 뜻밖의 노하우"
 description: "france vs england에 대해 쉽고 유용한 생활 정보, 필수 가이드, 꿀팁들을 모아 완벽하게 정리하여 알려드립니다."
 date: 2026-07-19 05:52:23 +0900
 categories: [트렌드, 이슈]
