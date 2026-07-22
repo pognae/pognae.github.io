@@ -71,10 +71,12 @@ pognae.github.io/
   - 기존 202개 포스트 제목 템플릿 어구 교체 및 소설적/에세이적 개별 유니크 제목 개편 완료 (`scripts/fix_novel_titles.mjs`).
   - 정치인 및 정치적 이슈 포스트 7개 완전 삭제 정제 및 키워드 블랙리스트 대폭 확장 (`scripts/remove_political_posts.mjs`, `scripts/deep_political_scan.mjs`).
   - 관리자 전용 포스트 수정/삭제 대시보드 웹 페이지 구축 (`admin.html`, `scripts/admin_server.js`): 보안 인증 기반 웹 인터페이스에서 발행된 포스트 검색, 즉시 수정, 영구 삭제 및 저장소 연동 지원.
-- **2026-07-21**: Google AdSense 승인 심사 통과를 위한 종합 최적화 작업 완료
-  - 이용약관 및 법적 면책조항 페이지(`terms.md` -> `/terms.html`) 신규 구축 및 헤더 네비게이션(`_data/navigation.yml`), 푸터 메뉴(`_config.yml`) 링크 연결 완료.
-  - 비공개 포스트 404 수집 오류 원천 제거를 위해 `sitemap.xml` 재생성 로직(`scripts/generate-sitemap.mjs`)에 `published: false` 필터링 및 `/terms.html` 수록 추가, 정확히 공개된 41개 URL(정적페이지 5개 + 공개 AI 포스트 36개)로 동기화 완료.
-  - 미래 날짜(`2026-07-22`~`2026-07-25`) 포스트 파일명 및 `date:` 메타 태그 정정, 공개 포스트 36개 전체 4,000자 이상(4,200~4,550자) 고품질 확충 및 상투적 어구 금지 검증 완료.
+- **2026-07-22**: Google AdSense 승인 최적화 포스트 정리 및 Admin AI 초안 생성 기능 구축 완료
+  - 구글 심사관 봇의 전문성(E-E-A-T) 평가 및 Low Value Content 판정 방지를 위해 기존 305개 비-AI 잡다한 포스트(연예/스포츠/이슈)를 `_posts-archive/`로 안전하게 이전 보관.
+  - `_posts/` 디렉토리에 100% 순수 AI 기술 전문 포스트 36개만 남기고 `sitemap.xml` 재생성 완료 (41개 Clean URL).
+  - 관리자 대시보드 (`admin.html`, `scripts/admin_server.js`) 내 **✨ AI 초안 자동 생성** 기능 추가 (NVIDIA NIM Llama-3.1 70B 모델 연동).
+  - 주제 입력 시 4,000자 이상의 고품질 AI 포스트 초안을 자동 생성하고, 에디터에서 관리자가 직접 수정/검토한 후 바로 발행(`_posts/YYYY-MM-DD-slug.md`)할 수 있는 통합 웹 인터페이스 구축.
+
 
 
 

@@ -168,6 +168,32 @@ robots: noindex, nofollow
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
+          <!-- AI 초안 자동 생성 카드 -->
+          <div class="card mb-3 border-primary bg-light">
+            <div class="card-body">
+              <h6 class="fw-bold text-primary mb-2"><i class="fa-solid fa-wand-magic-sparkles me-1"></i>AI 포스트 초안 자동 생성 (NVIDIA NIM Llama-3.1)</h6>
+              <div class="row g-2 align-items-end">
+                <div class="col-md-5">
+                  <label class="form-label small fw-semibold mb-1">주제 / 키워드</label>
+                  <input type="text" id="aiTopicInput" class="form-control form-control-sm" placeholder="예: Claude 3.5 Sonnet, RAG 기술">
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label small fw-semibold mb-1">NVIDIA API Key (선택)</label>
+                  <input type="password" id="nvidiaApiKeyInput" class="form-control form-control-sm" placeholder="nvapi-xxxx (로컬 서버 사용 시 생략 가능)">
+                </div>
+                <div class="col-md-3">
+                  <button type="button" id="generateDraftBtn" onclick="generateAiDraft()" class="btn btn-primary btn-sm w-100 fw-semibold">
+                    <i class="fa-solid fa-bolt me-1"></i>✨ AI 초안 생성
+                  </button>
+                </div>
+              </div>
+              <div id="aiLoadingStatus" class="d-none mt-2 text-primary small fw-semibold">
+                <div class="spinner-border spinner-border-sm me-1" role="status"></div>
+                <span id="aiLoadingText">NVIDIA NIM API로 4,000자 이상 고품질 AI 초안 작성 중... (약 20~30초 소요)</span>
+              </div>
+            </div>
+          </div>
+
           <div class="mb-3">
             <label class="form-label fw-semibold">파일명 (영문, 하이픈 권장. 예: ai-trend-2026)</label>
             <div class="input-group">
@@ -177,7 +203,7 @@ robots: noindex, nofollow
             </div>
           </div>
           <div class="mb-3">
-            <label class="form-label fw-semibold">마크다운 본문 (Frontmatter 포함)</label>
+            <label class="form-label fw-semibold">마크다운 본문 (Frontmatter 포함 — 자유롭게 수정하세요)</label>
             <textarea id="newPostContent" class="form-control editor-textarea"></textarea>
           </div>
         </div>
@@ -219,9 +245,13 @@ robots: noindex, nofollow
       editModalObj = new bootstrap.Modal(document.getElementById('editModal'));
       newPostModalObj = new bootstrap.Modal(document.getElementById('newPostModal'));
       const savedToken = localStorage.getItem('mp_gh_token');
+      const savedNvKey = localStorage.getItem('mp_nvidia_key');
       if (savedToken) {
         document.getElementById('ghToken').value = savedToken;
         authenticate();
+      }
+      if (savedNvKey) {
+        document.getElementById('nvidiaApiKeyInput').value = savedNvKey;
       }
     });
 
@@ -251,6 +281,22 @@ robots: noindex, nofollow
           <p class="mt-2 text-muted">포스트 목록 불러오는 중...</p>
         </div>`;
 
+      // 1. 로컬 개발 서버 시도
+      try {
+        const localRes = await fetch('/api/posts');
+        if (localRes.ok) {
+          const localFiles = await localRes.json();
+          allPosts = localFiles;
+          document.getElementById('postCountBadge').innerText = `${allPosts.length}개 글`;
+          document.getElementById('lastSyncTime').innerText = new Date().toLocaleTimeString();
+          renderPostList(allPosts);
+          return;
+        }
+      } catch (e) {
+        // 로컬 서버가 아닐 경우 GitHub API로 진행
+      }
+
+      // 2. GitHub API 사용
       try {
         const response = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/_posts`, {
           headers: {
@@ -327,6 +373,18 @@ robots: noindex, nofollow
       document.getElementById('editContent').value = '불러오는 중...';
       editModalObj.show();
 
+      // 1. 로컬 API 시도
+      try {
+        const fileName = path.replace('_posts/', '');
+        const localRes = await fetch(`/api/post/${encodeURIComponent(fileName)}`);
+        if (localRes.ok) {
+          const localData = await localRes.json();
+          document.getElementById('editContent').value = localData.content;
+          return;
+        }
+      } catch (e) {}
+
+      // 2. GitHub API 사용
       try {
         const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`, {
           headers: { 'Authorization': `Bearer ${token}` }
@@ -346,11 +404,27 @@ robots: noindex, nofollow
       const path = document.getElementById('editPath').value;
       const sha = document.getElementById('editSha').value;
       const content = document.getElementById('editContent').value;
+      const fileName = path.replace('_posts/', '');
 
-      if (!confirm(`'${path}' 포스트의 수정 내용을 GitHub에 저장하시겠습니까?`)) return;
+      if (!confirm(`'${path}' 포스트의 수정 내용을 저장하시겠습니까?`)) return;
 
+      // 1. 로컬 API 시도
+      try {
+        const localRes = await fetch(`/api/post/${encodeURIComponent(fileName)}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content: content })
+        });
+        if (localRes.ok) {
+          alert('성공적으로 로컬 저장소에 저장 및 사이트맵이 업데이트되었습니다!');
+          editModalObj.hide();
+          fetchPosts();
+          return;
+        }
+      } catch (e) {}
+
+      // 2. GitHub API 사용
       const encodedContent = encodeBase64(content);
-
       try {
         const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`, {
           method: 'PUT',
@@ -370,7 +444,7 @@ robots: noindex, nofollow
           throw new Error(errData.message || '저장 실패');
         }
 
-        alert('성공적으로 수정사항이 저장 및 저장소에 반영되었습니다!');
+        alert('성공적으로 수정사항이 GitHub 저장소에 반영되었습니다!');
         editModalObj.hide();
         fetchPosts();
       } catch (err) {
@@ -382,6 +456,19 @@ robots: noindex, nofollow
       const token = localStorage.getItem('mp_gh_token');
       if (!confirm(`정말로 포스트 '${fileName}'을(를) 영구 삭제하시겠습니까?`)) return;
 
+      const fileOnly = path.replace('_posts/', '');
+
+      // 1. 로컬 API 시도
+      try {
+        const localRes = await fetch(`/api/post/${encodeURIComponent(fileOnly)}`, { method: 'DELETE' });
+        if (localRes.ok) {
+          alert(`포스트 '${fileName}'이(가) 성공적으로 삭제되었습니다.`);
+          fetchPosts();
+          return;
+        }
+      } catch (e) {}
+
+      // 2. GitHub API 사용
       try {
         const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`, {
           method: 'DELETE',
@@ -413,15 +500,158 @@ robots: noindex, nofollow
 
     function openNewPostModal() {
       const today = new Date();
-      // KST 기준 날짜 맞추기
       const offset = 9 * 60 * 60 * 1000;
       const kstDate = new Date(today.getTime() + offset);
       const datePrefix = kstDate.toISOString().split('T')[0] + '-';
       
       document.getElementById('newPostDatePrefix').innerText = datePrefix;
       document.getElementById('newPostSlug').value = '';
-      document.getElementById('newPostContent').value = `---\nlayout: single\ntitle: "새 포스트 제목"\ndate: ${kstDate.toISOString().split('T')[0]} 10:00:00 +0900\ncategories: [AI]\ntags: [keyword]\n---\n\n본문을 입력하세요...`;
+      document.getElementById('aiTopicInput').value = '';
+      document.getElementById('newPostContent').value = `---\nlayout: single\ntitle: "새 AI 기술 포스트 제목"\ndate: ${kstDate.toISOString().split('T')[0]} 10:00:00 +0900\ncategories: [AI]\ntags: [AI기술]\n---\n\n위의 [✨ AI 초안 생성] 버튼을 누르시면 NVIDIA NIM Llama-3.1 모델이 4,000자 이상의 고품질 글을 자동으로 작성해 드립니다.`;
       newPostModalObj.show();
+    }
+
+    async function generateAiDraft() {
+      const topic = document.getElementById('aiTopicInput').value.trim();
+      if (!topic) {
+        alert('AI 초안 작성을 위한 주제/키워드를 입력해 주세요 (예: ChatGPT 4o, Claude 3.5 Sonnet, RAG 기술 등).');
+        return;
+      }
+
+      const userApiKey = document.getElementById('nvidiaApiKeyInput').value.trim();
+      if (userApiKey) {
+        localStorage.setItem('mp_nvidia_key', userApiKey);
+      }
+      const apiKey = userApiKey || localStorage.getItem('mp_nvidia_key') || '';
+
+      const btn = document.getElementById('generateDraftBtn');
+      const loadingStatus = document.getElementById('aiLoadingStatus');
+      btn.disabled = true;
+      loadingStatus.classList.remove('d-none');
+
+      try {
+        let result = null;
+
+        // 1. 로컬 서버 API 엔드포인트 시도
+        try {
+          const serverRes = await fetch('/api/generate-ai-draft', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ keyword: topic, apiKey: apiKey })
+          });
+          if (serverRes.ok) {
+            result = await serverRes.json();
+          }
+        } catch (e) {}
+
+        // 2. 브라우저에서 직접 NVIDIA NIM API 호출
+        if (!result) {
+          if (!apiKey) {
+            throw new Error('NVIDIA API Key가 필요합니다. NVIDIA API Key 입력란에 nvapi-xxxx 키를 입력하세요.');
+          }
+
+          const systemPrompt = `너는 AI(인공지능) 최신 기술 및 트렌드 전문 에디터이다.
+[작성 지침]
+1. 타겟 독자: AI를 배우려는 비전공자 및 비개발자 (어려운 소스 코드나 수식 대신 직관적인 비유와 실용적 예시 위주).
+2. 콘텐츠 방향: 최신 AI 기술, AI 도구 활용법, 트렌드 및 향후 동향 설명.
+3. 제목 규칙: 관련 기술명 및 핵심 주제명만 명확하게 작성 (예: "ChatGPT 4o", "Claude 3.5 Sonnet", "RAG 검색 증강 생성 기술").
+   * 상투적 템플릿 문구("알아두면 유용한 정보", "완벽 정리", "한눈에 보기", "핵심 정리", "총정리", "주요 내용 및 실용 가이드") 절대 금지.
+4. 분량 및 언어: 공백 포함 4,000자 이상의 풍부한 한글 마크다운 본문.
+5. 금지사항: 정치적 내용 0% (정치인, 지자체장, 정당 등 절대 제외).`;
+
+          const userPrompt = `주제 키워드: "${topic}"
+
+비전공자 및 비개발자 독자를 위한 최신 AI 기술/동향 안내 포스트를 작성해 주세요. 아래 [TITLE], [DESCRIPTION], [BODY] 태그 구성을 엄격히 준수하십시오.
+
+[TITLE]
+관련 AI 기술명 및 핵심 주제명만 명확하고 깔끔하게 작성 (60자 이내).
+(예: "ChatGPT 4o", "Claude 3.5 Sonnet", "RAG 검색 증강 생성 기술")
+
+[DESCRIPTION]
+구글 검색 요약(Meta Description)에 들어갈 120~150자 내외의 설명문.
+
+[BODY]
+공백 포함 4,000자 이상의 밀도 높은 마크다운 본문.
+1. 서론: AI 기술의 최신 동향과 일상/업무에서의 변화 도입.
+2. 본론:
+   - 비전공자도 쉽게 이해할 수 있는 개념과 직관적 비유(예: "RAG는 원하는 자료를 찾아주는 도서관 사서와 같습니다") 설명.
+   - 비개발자가 바로 써볼 수 있는 활용법 및 실용 팁.
+   - 마크다운 소제목(H2, H3) 사용.
+3. 결론: AI 시대 비전공자를 위한 요약 및 마무리.`;
+
+          const nimRes = await fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${apiKey}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              model: 'meta/llama-3.1-70b-instruct',
+              messages: [
+                { role: 'system', content: systemPrompt },
+                { role: 'user', content: userPrompt }
+              ],
+              temperature: 0.7,
+              max_tokens: 4000
+            })
+          });
+
+          if (!nimRes.ok) {
+            const errTxt = await nimRes.text();
+            throw new Error(`NVIDIA API 호출 실패 (${nimRes.status}): ${errTxt}`);
+          }
+
+          const nimJson = await nimRes.json();
+          const rawText = (nimJson.choices[0]?.message?.content || '').trim();
+
+          let title = topic;
+          let description = `${topic}에 대한 비전공자 맞춤 AI 기술 안내.`;
+          let body = rawText;
+
+          const titleMatch = rawText.match(/\[TITLE\]([\s\S]*?)(?=\[DESCRIPTION\]|\[BODY\]|$)/i);
+          const descMatch = rawText.match(/\[DESCRIPTION\]([\s\S]*?)(?=\[BODY\]|$)/i);
+          const bodyMatch = rawText.match(/\[BODY\]([\s\S]*?)$/i);
+
+          if (titleMatch && titleMatch[1].trim()) title = titleMatch[1].trim().replace(/^["']|["']$/g, '');
+          if (descMatch && descMatch[1].trim()) description = descMatch[1].trim();
+          if (bodyMatch && bodyMatch[1].trim()) body = bodyMatch[1].trim();
+
+          const today = new Date();
+          const kstDate = new Date(today.getTime() + (9 * 60 * 60 * 1000));
+          const dateStr = kstDate.toISOString().split('T')[0];
+
+          let slug = topic.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+          if (!slug) slug = 'ai-guide';
+          slug = `ai-${slug}`;
+
+          const fullMarkdown = `---
+layout: single
+title: "${title.replace(/"/g, '\\"')}"
+date: ${dateStr} 10:00:00 +0900
+description: "${description.replace(/"/g, '\\"')}"
+categories: [AI]
+tags: [${topic}]
+---
+
+${body}`;
+
+          result = {
+            title,
+            slug,
+            fullMarkdown
+          };
+        }
+
+        document.getElementById('newPostSlug').value = result.slug;
+        document.getElementById('newPostContent').value = result.fullMarkdown;
+        alert('✨ AI 초안 생성이 성공적으로 완료되었습니다!\n에디터에서 내용과 제목을 자유롭게 검토 및 수정한 후 [발행하기] 버튼을 눌러주세요.');
+
+      } catch (err) {
+        alert('AI 초안 생성 실패: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        loadingStatus.classList.add('d-none');
+      }
     }
 
     async function createNewPost() {
@@ -436,6 +666,22 @@ robots: noindex, nofollow
 
       if (!confirm(`'${fileName}' 포스트를 새로 발행하시겠습니까?`)) return;
 
+      // 1. 로컬 API 시도
+      try {
+        const localRes = await fetch(`/api/post/${encodeURIComponent(fileName)}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content: content })
+        });
+        if (localRes.ok) {
+          alert('성공적으로 로컬 저장소에 새 포스트가 발행되고 사이트맵이 갱신되었습니다!');
+          newPostModalObj.hide();
+          fetchPosts();
+          return;
+        }
+      } catch (e) {}
+
+      // 2. GitHub API 사용
       const encodedContent = encodeBase64(content);
 
       try {
@@ -456,7 +702,7 @@ robots: noindex, nofollow
           throw new Error(errData.message || '발행 실패');
         }
 
-        alert('성공적으로 새 포스트가 발행되었습니다!');
+        alert('성공적으로 새 포스트가 GitHub 저장소에 발행되었습니다!');
         newPostModalObj.hide();
         fetchPosts();
       } catch (err) {
