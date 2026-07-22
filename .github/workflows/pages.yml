@@ -3,7 +3,11 @@ name: Build and deploy site
 on:
   push:
     branches: [main]
-  # 자동 빌드/발행 스케줄 OFF (push 및 수동 workflow_dispatch만 적용)
+  schedule:
+    # 매일 09:00 KST (UTC 00:00) — 1차
+    - cron: "0 0 * * *"
+    # 매일 15:00 KST (UTC 06:00) — 2차 백업 (GitHub cron 지연·누락 대비)
+    - cron: "0 6 * * *"
   workflow_dispatch:
   repository_dispatch:
     types: [publish-blog]
