@@ -61,6 +61,8 @@ exclude:
   - AGENTS.md
   - MEMORY.md
   - _posts-pending
+  - _posts-pending-archive
+  - _posts-archive
   - _preview
   - scripts
   - node_modules

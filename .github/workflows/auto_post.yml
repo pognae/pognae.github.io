@@ -1,9 +1,7 @@
 name: Auto Post Realtime Keywords
 
 on:
-  schedule:
-    # 5시간마다 실행
-    # - cron: '0 */5 * * *'
+  # 자동 생성 스케줄 OFF (수동 실행 workflow_dispatch만 적용)
   workflow_dispatch: # 수동 실행 트리거
 
 jobs:

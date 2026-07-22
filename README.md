@@ -71,11 +71,12 @@ pognae.github.io/
   - 기존 202개 포스트 제목 템플릿 어구 교체 및 소설적/에세이적 개별 유니크 제목 개편 완료 (`scripts/fix_novel_titles.mjs`).
   - 정치인 및 정치적 이슈 포스트 7개 완전 삭제 정제 및 키워드 블랙리스트 대폭 확장 (`scripts/remove_political_posts.mjs`, `scripts/deep_political_scan.mjs`).
   - 관리자 전용 포스트 수정/삭제 대시보드 웹 페이지 구축 (`admin.html`, `scripts/admin_server.js`): 보안 인증 기반 웹 인터페이스에서 발행된 포스트 검색, 즉시 수정, 영구 삭제 및 저장소 연동 지원.
-- **2026-07-22**: Google AdSense 승인 최적화 포스트 정리 및 Admin AI 초안 생성 기능 구축 완료
-  - 구글 심사관 봇의 전문성(E-E-A-T) 평가 및 Low Value Content 판정 방지를 위해 기존 305개 비-AI 잡다한 포스트(연예/스포츠/이슈)를 `_posts-archive/`로 안전하게 이전 보관.
-  - `_posts/` 디렉토리에 100% 순수 AI 기술 전문 포스트 36개만 남기고 `sitemap.xml` 재생성 완료 (41개 Clean URL).
+- **2026-07-22**: Google AdSense 승인 최적화 포스트 정리, Admin AI 초안 생성 구축, 자동 생성 스케줄 OFF 및 비-AI 콘텐츠 비공개 처리 완료
+  - `.github/workflows/auto_post.yml` 및 `.github/workflows/pages.yml` 내 cron 자동 실행 스케줄 제거 (수동 실행 `workflow_dispatch`만 유지).
+  - `_posts-pending/` 내 1,216개 비-AI 예약 포스트 및 `_posts/` 내 9개 비-AI 포스트 전부 `_posts-pending-archive/`, `_posts-archive/`로 이전 비공개 처리.
+  - `_config.yml` `exclude:` 설정에 보관 폴더 추가하여 Jekyll 빌드 시 완벽 차단. `_posts/`에는 100% 순수 AI 기술 전문 포스트 36개만 엄격히 유지 및 `sitemap.xml` 재생성 완료 (41개 Clean URL).
   - 관리자 대시보드 (`admin.html`, `scripts/admin_server.js`) 내 **✨ AI 초안 자동 생성** 기능 추가 (NVIDIA NIM Llama-3.1 70B 모델 연동).
-  - 주제 입력 시 4,000자 이상의 고품질 AI 포스트 초안을 자동 생성하고, 에디터에서 관리자가 직접 수정/검토한 후 바로 발행(`_posts/YYYY-MM-DD-slug.md`)할 수 있는 통합 웹 인터페이스 구축.
+
 
 
 
