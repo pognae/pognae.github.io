@@ -148,4 +148,42 @@
     margin-top: 2.5rem !important;
   }
 </style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    function cleanTitleText(text) {
+      if (!text) return "";
+      return text.replace(/\*\*/g, "").replace(/\*/g, "").replace(/[`#_~]/g, "").trim().replace(/\s+/g, " ");
+    }
+
+    // Tab title
+    if (document.title.includes("*")) {
+      document.title = cleanTitleText(document.title);
+    }
+
+    // Page/Post title elements, list items, and paginator text
+    const selectors = [
+      "h1.page__title",
+      ".page__title",
+      ".archive__item-title a",
+      ".pager-title"
+    ];
+    selectors.forEach(function(sel) {
+      document.querySelectorAll(sel).forEach(function(el) {
+        if (el.textContent.includes("*")) {
+          if (el.children.length === 0) {
+            el.textContent = cleanTitleText(el.textContent);
+          } else {
+            for (var i = 0; i < el.childNodes.length; i++) {
+              var node = el.childNodes[i];
+              if (node.nodeType === Node.TEXT_NODE && node.textContent.includes("*")) {
+                node.textContent = cleanTitleText(node.textContent);
+              }
+            }
+          }
+        }
+      });
+    });
+  });
+</script>
 <!-- end custom head snippets -->

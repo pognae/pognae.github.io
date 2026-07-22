@@ -205,6 +205,10 @@ const server = http.createServer((req, res) => {
                 if (descMatch && descMatch[1].trim()) description = descMatch[1].trim();
                 if (bodyMatch && bodyMatch[1].trim()) body = bodyMatch[1].trim();
 
+                // Clean markdown and newlines from title/description
+                title = title.replace(/\*\*/g, '').replace(/\*/g, '').replace(/[`#_~]/g, '').replace(/[\r\n]+/g, ' ').trim().replace(/\s+/g, ' ');
+                description = description.replace(/\*\*/g, '').replace(/\*/g, '').replace(/[`#_~]/g, '').replace(/[\r\n]+/g, ' ').trim().replace(/\s+/g, ' ');
+
                 const today = new Date();
                 const kstDate = new Date(today.getTime() + (9 * 60 * 60 * 1000));
                 const dateStr = kstDate.toISOString().split('T')[0];

@@ -225,6 +225,10 @@ async function generateBlogPost(rawKeyword) {
             if (bMatch) body = bMatch[1].trim();
         }
 
+        // Clean markdown and newlines from title/description
+        title = title.replace(/\*\*/g, '').replace(/\*/g, '').replace(/[`#_~]/g, '').replace(/[\r\n]+/g, ' ').trim().replace(/\s+/g, ' ');
+        description = description.replace(/\*\*/g, '').replace(/\*/g, '').replace(/[`#_~]/g, '').replace(/[\r\n]+/g, ' ').trim().replace(/\s+/g, ' ');
+
         console.log('Soccer blog post generated successfully.');
         return { title, description, body };
     } catch (error) {

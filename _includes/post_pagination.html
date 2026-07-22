@@ -1,9 +1,10 @@
 {% if page.previous or page.next %}
 <nav class="pagination--pager" aria-label="포스트 탐색">
   {% if page.previous %}
-    <a href="{{ page.previous.url | relative_url }}" class="pagination--pager__btn prev" title="{{ page.previous.title | markdownify | strip_html }}">
+    {% assign prev_title = page.previous.title | remove: "**" | remove: "*" | strip %}
+    <a href="{{ page.previous.url | relative_url }}" class="pagination--pager__btn prev" title="{{ prev_title }}">
       <span class="pager-label">← 이전 글</span>
-      <span class="pager-title">{{ page.previous.title | strip_html | truncate: 32 }}</span>
+      <span class="pager-title">{{ prev_title | truncate: 32 }}</span>
     </a>
   {% else %}
     <div class="pagination--pager__btn prev disabled">
@@ -13,9 +14,10 @@
   {% endif %}
 
   {% if page.next %}
-    <a href="{{ page.next.url | relative_url }}" class="pagination--pager__btn next" title="{{ page.next.title | markdownify | strip_html }}">
+    {% assign next_title = page.next.title | remove: "**" | remove: "*" | strip %}
+    <a href="{{ page.next.url | relative_url }}" class="pagination--pager__btn next" title="{{ next_title }}">
       <span class="pager-label">다음 글 →</span>
-      <span class="pager-title">{{ page.next.title | strip_html | truncate: 32 }}</span>
+      <span class="pager-title">{{ next_title | truncate: 32 }}</span>
     </a>
   {% else %}
     <div class="pagination--pager__btn next disabled">
