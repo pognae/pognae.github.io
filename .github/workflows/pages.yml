@@ -78,11 +78,11 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add _posts/ _posts-pending/
+          git add _posts/ _posts-pending/ sitemap.xml
           if git diff --staged --quiet; then
-            echo "No post files to commit."
+            echo "No files to commit."
           else
-            git commit -m "chore: auto-publish scheduled blog posts [skip ci]"
+            git commit -m "chore: auto-publish scheduled blog posts and update sitemap [skip ci]"
             git push
           fi
 
