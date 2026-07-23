@@ -26,6 +26,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://monopoint.app/blog/2026/07/23/mls/</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://monopoint.app/blog/2026/07/23/교사/</loc>
     <lastmod>2026-07-23</lastmod>
     <changefreq>monthly</changefreq>
@@ -44,7 +50,25 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://monopoint.app/blog/2026/07/23/선관위/</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://monopoint.app/blog/2026/07/23/실종자/</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://monopoint.app/blog/2026/07/23/안귀령/</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://monopoint.app/blog/2026/07/23/엘에이-fc-대-솔트레이크/</loc>
     <lastmod>2026-07-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -69,6 +93,12 @@
   </url>
   <url>
     <loc>https://monopoint.app/blog/2026/07/23/중앙일보/</loc>
+    <lastmod>2026-07-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://monopoint.app/blog/2026/07/23/체조-선수/</loc>
     <lastmod>2026-07-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
