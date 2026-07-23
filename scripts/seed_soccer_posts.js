@@ -41,8 +41,8 @@ async function seed() {
         }
         
         if (i < soccerKeywords.length - 1) {
-            console.log('Waiting 15 seconds to prevent Rate Limits and TimeoutErrors...');
-            await new Promise(resolve => setTimeout(resolve, 15000));
+            console.log('Waiting 20 seconds to prevent Rate Limits and TimeoutErrors...');
+            await new Promise(resolve => setTimeout(resolve, 20000));
         }
     }
     

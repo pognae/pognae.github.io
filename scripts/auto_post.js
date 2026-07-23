@@ -190,21 +190,39 @@ async function generateBlogPost(rawKeyword) {
 4. 결론: 베테랑 해설자의 최종 전망 및 이 경기가 시즌 전체에 미칠 영향 요약.`;
 
     try {
-        const response = await axios.post(NIM_API_URL, {
-            model: MODEL,
-            messages: [
-                { role: "system", content: systemPrompt },
-                { role: "user", content: userPrompt }
-            ],
-            temperature: 0.7,
-            max_tokens: 4000,
-        }, {
-            headers: {
-                'Authorization': `Bearer ${NVIDIA_API_KEY}`,
-                'Content-Type': 'application/json'
-            },
-            timeout: 300000
-        });
+        let response;
+        let retries = 3;
+        let delay = 10000;
+        
+        for (let attempt = 1; attempt <= retries; attempt++) {
+            try {
+                console.log(`Sending API request to NIM... (Attempt ${attempt}/${retries})`);
+                response = await axios.post(NIM_API_URL, {
+                    model: MODEL,
+                    messages: [
+                        { role: "system", content: systemPrompt },
+                        { role: "user", content: userPrompt }
+                    ],
+                    temperature: 0.7,
+                    max_tokens: 2500,
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${NVIDIA_API_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    timeout: 90000
+                });
+                break;
+            } catch (err) {
+                console.error(`API call failed (Attempt ${attempt}):`, err.message);
+                if (attempt === retries) {
+                    throw err;
+                }
+                console.log(`Waiting ${delay / 1000}s before next attempt...`);
+                await new Promise(resolve => setTimeout(resolve, delay));
+                delay *= 1.5;
+            }
+        }
 
         const rawContent = response.data.choices[0].message.content.trim();
         const content = sanitizeContent(rawContent);
