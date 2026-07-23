@@ -25,4 +25,10 @@
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
+  <url>
+    <loc>https://monopoint.app/blog/2026/07/24/대전-하나시티즌의-역습-전술과-홈-경기-운영-방식-분석/</loc>
+    <lastmod>2026-07-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
 </urlset>
