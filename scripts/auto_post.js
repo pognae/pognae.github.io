@@ -9,7 +9,7 @@ if (!NVIDIA_API_KEY) {
 }
 
 const NIM_API_URL = 'https://integrate.api.nvidia.com/v1/chat/completions';
-const MODEL = 'mistralai/mistral-large-3-675b-instruct-2512';
+const MODEL = 'meta/llama-3.1-405b-instruct';
 
 function getCurrentDate() {
     const now = new Date();
