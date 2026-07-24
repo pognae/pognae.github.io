@@ -193,17 +193,32 @@ const server = http.createServer((req, res) => {
                 const jsonRes = await response.json();
                 const rawContent = (jsonRes.choices[0]?.message?.content || '').trim();
 
+                const cleanPostBody = (b) => {
+                    if (!b) return '';
+                    let c = b.replace(/^[ \t]*[=\-\*_]{3,}[ \t]*$/gm, '');
+                    c = c.replace(/^[ \t]*(?:\*\*|\[)?\s*(?:TITLE|DESCRIPTION|BODY)\s*(?:\*\*|\])?\s*:?[ \t]*$/gmi, '');
+                    c = c.replace(/^[ \t]*(?:\*\*|\[)?\s*(?:TITLE|DESCRIPTION|BODY)\s*(?:\*\*|\])?\s*:?[ \t]*/gmi, '');
+                    c = c.replace(/(?:\*\*|\[)\s*(?:TITLE|DESCRIPTION|BODY)\s*(?:\*\*|\])\s*:?/gmi, '');
+                    c = c.replace(/^[ \t]*(?:#+\s*|[\d+\.\-\*\s]*)*(?:\*\*|\[)?\s*도입부\s*(?:\*\*|\])?\s*:?[ \t]*/gmi, '');
+                    c = c.replace(/도입부/g, '');
+                    c = c.replace(/\*\*/g, '');
+                    c = c.replace(/\n{3,}/g, '\n\n');
+                    return c.trim();
+                };
+
                 let title = keyword;
                 let description = `${keyword}에 대한 비전공자 맞춤 AI 기술 안내.`;
                 let body = rawContent;
 
-                const titleMatch = rawContent.match(/\[TITLE\]([\s\S]*?)(?=\[DESCRIPTION\]|\[BODY\]|$)/i);
-                const descMatch = rawContent.match(/\[DESCRIPTION\]([\s\S]*?)(?=\[BODY\]|$)/i);
-                const bodyMatch = rawContent.match(/\[BODY\]([\s\S]*?)$/i);
+                const titleMatch = rawContent.match(/(?:\[TITLE\]|\*\*TITLE\*\*|TITLE:)\s*([\s\S]*?)(?=(?:\[DESCRIPTION\]|\*\*DESCRIPTION\*\*|DESCRIPTION:|\[BODY\]|\*\*BODY\*\*|BODY:)|$)/i);
+                const descMatch = rawContent.match(/(?:\[DESCRIPTION\]|\*\*DESCRIPTION\*\*|DESCRIPTION:)\s*([\s\S]*?)(?=(?:\[BODY\]|\*\*BODY\*\*|BODY:)|$)/i);
+                const bodyMatch = rawContent.match(/(?:\[BODY\]|\*\*BODY\*\*|BODY:)\s*([\s\S]*?)$/i);
 
                 if (titleMatch && titleMatch[1].trim()) title = titleMatch[1].trim().replace(/^["']|["']$/g, '');
                 if (descMatch && descMatch[1].trim()) description = descMatch[1].trim();
                 if (bodyMatch && bodyMatch[1].trim()) body = bodyMatch[1].trim();
+
+                body = cleanPostBody(body);
 
                 // Clean markdown and newlines from title/description
                 title = title.replace(/\*\*/g, '').replace(/\*/g, '').replace(/[`#_~]/g, '').replace(/[\r\n]+/g, ' ').trim().replace(/\s+/g, ' ');

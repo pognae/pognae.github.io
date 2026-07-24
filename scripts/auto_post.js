@@ -76,9 +76,40 @@ async function scrapeKeyword() {
     }
 }
 
+function cleanPostBody(body) {
+    if (!body) return '';
+
+    let cleaned = body;
+
+    // 1. Remove divider lines containing 3 or more '=', '-', '*', '_' (e.g. =====================================================)
+    cleaned = cleaned.replace(/^[ \t]*[=\-\*_]{3,}[ \t]*$/gm, '');
+
+    // 2. Remove standalone tag lines like [TITLE], **TITLE**, [DESCRIPTION], **DESCRIPTION**, [BODY], **BODY**, BODY:, etc.
+    cleaned = cleaned.replace(/^[ \t]*(?:\*\*|\[)?\s*(?:TITLE|DESCRIPTION|BODY)\s*(?:\*\*|\])?\s*:?[ \t]*$/gmi, '');
+
+    // 3. Remove inline tag prefixes at the start of lines (e.g. "**BODY** 본문..." or "[BODY]: 본문...")
+    cleaned = cleaned.replace(/^[ \t]*(?:\*\*|\[)?\s*(?:TITLE|DESCRIPTION|BODY)\s*(?:\*\*|\])?\s*:?[ \t]*/gmi, '');
+
+    // 4. Remove any stray **TITLE**, **DESCRIPTION**, **BODY**, [TITLE], [DESCRIPTION], [BODY] remaining anywhere
+    cleaned = cleaned.replace(/(?:\*\*|\[)\s*(?:TITLE|DESCRIPTION|BODY)\s*(?:\*\*|\])\s*:?/gmi, '');
+
+    // 5. Remove "도입부" section headers or line prefixes (e.g. "## 도입부:", "1. 도입부:", "**도입부**", "도입부:")
+    cleaned = cleaned.replace(/^[ \t]*(?:#+\s*|[\d+\.\-\*\s]*)*(?:\*\*|\[)?\s*도입부\s*(?:\*\*|\])?\s*:?[ \t]*/gmi, '');
+    cleaned = cleaned.replace(/도입부/g, '');
+
+    // 6. Remove all "**" markdown bold syntax
+    cleaned = cleaned.replace(/\*\*/g, '');
+
+    // 7. Clean up multiple empty lines (3 or more consecutive newlines -> 2 newlines)
+    cleaned = cleaned.replace(/\n{3,}/g, '\n\n');
+
+    // 8. Trim leading/trailing blank lines
+    return cleaned.trim();
+}
+
 function sanitizeContent(text) {
     if (!text) return text;
-    return text;
+    return cleanPostBody(text);
 }
 
 function isDuplicatePost(keyword) {
@@ -171,6 +202,7 @@ async function generateBlogPost(rawKeyword) {
     const userPrompt = `주제: "${keyword}"
 
 위 축구 주제에 대하여 30년 차 베테랑 축구 해설가의 시각에서 통찰력 있는 4,000자 이상의 경기 전술/칼럼 포스트를 작성해 주세요. 아래 [TITLE], [DESCRIPTION], [BODY] 태그 형식을 정확히 준수하십시오.
+(주의: 본문에는 [TITLE], [DESCRIPTION], [BODY], **TITLE**, **DESCRIPTION**, **BODY**, "도입부", "**", 구분선(===) 등의 태그, 단어, 기호를 절대로 포함하지 마십시오.)
 
 [TITLE]
 축구 경기명/팀명/선수명 및 핵심 주제 명칭 위주로 깔끔하게 구성한 제목 (60자 이내, 마크다운 기호 금지).
@@ -180,8 +212,8 @@ async function generateBlogPost(rawKeyword) {
 검색엔진 메타 디스크립션용 120~150자 축구 칼럼 요약문 (마크다운 기호 금지).
 
 [BODY]
-마크다운 형식의 4,000자 이상 본문.
-1. 도입부: 해당 경기/선수 주제의 전술적 의미와 축구계 흐름 속 비중 소개. (AI 특유의 상투적 오프닝 탈피)
+마크다운 형식의 4,000자 이상 본문. ("도입부"라는 소제목 문구 절대 사용 금지)
+1. 서론/경기 배경: 해당 경기/선수 주제의 전술적 의미와 축구계 흐름 속 비중 소개. (AI 특유의 상투적 오프닝 탈피)
 2. 전술적 분석 (H2, H3 헤딩 활용):
    - 팀들의 최근 전술 트렌드, 포메이션 유기적 변화
    - 양 팀의 메인 빌드업 패턴 및 수비 블록 위치 설정 분석
@@ -231,9 +263,9 @@ async function generateBlogPost(rawKeyword) {
         let description = `${keyword} 관련 팀 전력 분석, 관전 포인트 및 핵심 요소를 종합 안내해 드립니다.`;
         let body = content;
 
-        const titleMatch = content.match(/\[TITLE\]\s*(.*?)\s*\[DESCRIPTION\]/s);
-        const descMatch = content.match(/\[DESCRIPTION\]\s*(.*?)\s*\[BODY\]/s);
-        const bodyMatch = content.match(/\[BODY\]\s*(.*)/s);
+        const titleMatch = content.match(/(?:\[TITLE\]|\*\*TITLE\*\*|TITLE:)\s*([\s\S]*?)(?=(?:\[DESCRIPTION\]|\*\*DESCRIPTION\*\*|DESCRIPTION:|\[BODY\]|\*\*BODY\*\*|BODY:)|$)/i);
+        const descMatch = content.match(/(?:\[DESCRIPTION\]|\*\*DESCRIPTION\*\*|DESCRIPTION:)\s*([\s\S]*?)(?=(?:\[BODY\]|\*\*BODY\*\*|BODY:)|$)/i);
+        const bodyMatch = content.match(/(?:\[BODY\]|\*\*BODY\*\*|BODY:)\s*([\s\S]*?)$/i);
 
         if (titleMatch && descMatch && bodyMatch) {
             title = titleMatch[1].trim().replace(/^"|"$/g, '').replace(/^'|'$/g, '');
@@ -241,9 +273,9 @@ async function generateBlogPost(rawKeyword) {
             body = bodyMatch[1].trim();
         } else {
             console.log('Structured parser failed. Trying regex fallbacks...');
-            const tMatch = content.match(/\[TITLE\]\s*(.*)/i);
-            const dMatch = content.match(/\[DESCRIPTION\]\s*(.*)/i);
-            const bMatch = content.match(/\[BODY\]\s*(.*)/i);
+            const tMatch = content.match(/(?:\[TITLE\]|\*\*TITLE\*\*|TITLE:)\s*(.*)/i);
+            const dMatch = content.match(/(?:\[DESCRIPTION\]|\*\*DESCRIPTION\*\*|DESCRIPTION:)\s*(.*)/i);
+            const bMatch = content.match(/(?:\[BODY\]|\*\*BODY\*\*|BODY:)\s*([\s\S]*)/i);
             
             if (tMatch) title = tMatch[1].split('\n')[0].trim().replace(/^"|"$/g, '').replace(/^'|'$/g, '');
             if (dMatch) description = dMatch[1].split('\n')[0].trim().replace(/^"|"$/g, '').replace(/^'|'$/g, '');
@@ -254,6 +286,9 @@ async function generateBlogPost(rawKeyword) {
         title = title.replace(/\*\*/g, '').replace(/\*/g, '').replace(/[`#_~]/g, '').replace(/[\r\n]+/g, ' ').trim().replace(/\s+/g, ' ');
         description = description.replace(/\*\*/g, '').replace(/\*/g, '').replace(/[`#_~]/g, '').replace(/[\r\n]+/g, ' ').trim().replace(/\s+/g, ' ');
 
+        // Clean body thoroughly to remove any tag leftovers or divider lines (===)
+        body = cleanPostBody(body);
+
         console.log('Soccer blog post generated successfully.');
         return { title, description, body };
     } catch (error) {
@@ -263,7 +298,8 @@ async function generateBlogPost(rawKeyword) {
 }
 
 async function savePost(keyword, postData, dateInfo) {
-    const { title, description, body } = postData;
+    let { title, description, body } = postData;
+    body = cleanPostBody(body);
     
     const slugKeyword = keyword.replace(/[^a-zA-Z0-9가-힣\s]/g, '').trim().replace(/\s+/g, '-');
     if (!slugKeyword) {
