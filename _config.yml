@@ -1,6 +1,6 @@
 title: MonoPoint
 name: MonoPoint
-description: K리그, 해외축구, 경기 분석 및 축구 관련 최신 소식과 핵심 정보를 전달하는 전문 축구 블로그
+description: 최신 연예, 경제 소식과 핵심 정보를 전달하는 전문 블로그
 logo: /icons/icon.svg
 lang: ko-KR
 timezone: Asia/Seoul
@@ -15,7 +15,7 @@ minimal_mistakes_skin: "air" # 깔끔하고 가독성 좋은 'air' 스킨 적용
 author:
   name   : "MonoPoint"
   avatar : "/icons/icon.svg"
-  bio    : "K리그, 해외축구 경기 분석, 관전 포인트 및 주요 축구 소식을 명확하고 깊이 있게 전달합니다."
+  bio    : "유익한 정보를 빠르게 전달합니다."
   links:
     - label: "Home"
       icon: "fas fa-fw fa-home"
