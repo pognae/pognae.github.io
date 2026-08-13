@@ -241,6 +241,16 @@ robots: noindex, nofollow
       return new TextDecoder().decode(bytes);
     }
 
+    // HTTP 헤더 값에는 ISO-8859-1(Latin-1) 범위를 벗어나는 문자를 넣을 수 없다.
+    // 토큰/API 키에 한글·공백·개행 등 잘못된 문자가 섞여 있으면 fetch 가 실패하므로 정리한다.
+    function sanitizeHeaderValue(value) {
+      return (value || '').replace(/[^\x20-\x7E]/g, '').trim();
+    }
+
+    function getGhToken() {
+      return sanitizeHeaderValue(localStorage.getItem('mp_gh_token'));
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       editModalObj = new bootstrap.Modal(document.getElementById('editModal'));
       newPostModalObj = new bootstrap.Modal(document.getElementById('newPostModal'));
@@ -256,12 +266,17 @@ robots: noindex, nofollow
     });
 
     function authenticate() {
-      const token = document.getElementById('ghToken').value.trim();
+      const rawToken = document.getElementById('ghToken').value.trim();
+      const token = sanitizeHeaderValue(rawToken);
       if (!token) {
         alert('GitHub Token을 입력해 주세요.');
         return;
       }
+      if (token !== rawToken) {
+        alert('토큰에 사용할 수 없는 문자(한글·공백·특수문자 등)가 포함되어 있어 자동으로 제거했습니다. 올바른 토큰인지 확인해 주세요.');
+      }
       localStorage.setItem('mp_gh_token', token);
+      document.getElementById('ghToken').value = token;
       document.getElementById('authSection').classList.add('d-none');
       document.getElementById('mainSection').classList.remove('d-none');
       fetchPosts();
@@ -273,7 +288,7 @@ robots: noindex, nofollow
     }
 
     async function fetchPosts() {
-      const token = localStorage.getItem('mp_gh_token');
+      const token = getGhToken();
       const container = document.getElementById('postListContainer');
       container.innerHTML = `
         <div class="text-center py-5">
@@ -366,7 +381,7 @@ robots: noindex, nofollow
     }
 
     async function openEditModal(path, sha) {
-      const token = localStorage.getItem('mp_gh_token');
+      const token = getGhToken();
       document.getElementById('editFileName').value = path;
       document.getElementById('editSha').value = sha;
       document.getElementById('editPath').value = path;
@@ -400,7 +415,7 @@ robots: noindex, nofollow
     }
 
     async function savePostChanges() {
-      const token = localStorage.getItem('mp_gh_token');
+      const token = getGhToken();
       const path = document.getElementById('editPath').value;
       const sha = document.getElementById('editSha').value;
       const content = document.getElementById('editContent').value;
@@ -453,7 +468,7 @@ robots: noindex, nofollow
     }
 
     async function deletePost(path, sha, fileName) {
-      const token = localStorage.getItem('mp_gh_token');
+      const token = getGhToken();
       if (!confirm(`정말로 포스트 '${fileName}'을(를) 영구 삭제하시겠습니까?`)) return;
 
       const fileOnly = path.replace('_posts/', '');
@@ -518,11 +533,11 @@ robots: noindex, nofollow
         return;
       }
 
-      const userApiKey = document.getElementById('nvidiaApiKeyInput').value.trim();
+      const userApiKey = sanitizeHeaderValue(document.getElementById('nvidiaApiKeyInput').value.trim());
       if (userApiKey) {
         localStorage.setItem('mp_nvidia_key', userApiKey);
       }
-      const apiKey = userApiKey || localStorage.getItem('mp_nvidia_key') || '';
+      const apiKey = userApiKey || sanitizeHeaderValue(localStorage.getItem('mp_nvidia_key')) || '';
 
       const btn = document.getElementById('generateDraftBtn');
       const loadingStatus = document.getElementById('aiLoadingStatus');
@@ -670,7 +685,7 @@ ${body}`;
     }
 
     async function createNewPost() {
-      const token = localStorage.getItem('mp_gh_token');
+      const token = getGhToken();
       const prefix = document.getElementById('newPostDatePrefix').innerText;
       let slug = document.getElementById('newPostSlug').value.trim();
       if (!slug) slug = 'untitled';
