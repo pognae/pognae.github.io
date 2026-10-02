@@ -96,7 +96,8 @@ defaults:
 repository: "pognae/pognae.github.io"
 
 comments:
-  provider: "giscus"
+  # "custom"이면 테마가 댓글 스크립트를 따로 넣지 않고 _includes/comments.html이 Waline/giscus를 고릅니다.
+  provider: "custom"
   giscus:
     repo_id: "R_kgDOJxntLw"
     category_name: "Announcements"
