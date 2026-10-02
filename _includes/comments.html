@@ -1,6 +1,7 @@
 {% if page.comments != false and site.comments.provider %}
   <section class="page__reactions" style="margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--global-border-color, #eef2f5);">
-    <h4 class="page__meta-title" style="margin-bottom: 1rem; font-size: 1.25rem;">💬 댓글</h4>
-    {% include comments-providers/cusdis.html %}
+    <h4 class="page__meta-title" style="margin-bottom: 1rem; font-size: 1.25rem;">댓글</h4>
+    <p style="font-size: 0.85rem; color: #6b7280; margin-bottom: 1rem;">GitHub 계정으로 로그인하면 댓글과 공감을 남길 수 있습니다.</p>
+    {% include comments-providers/giscus.html %}
   </section>
 {% endif %}

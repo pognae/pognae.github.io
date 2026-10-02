@@ -93,8 +93,12 @@ defaults:
       share: true
       related: true
 
+repository: "pognae/pognae.github.io"
+
 comments:
-  provider: "cusdis"
-  cusdis:
-    app_id: "db02f8b9-8563-4eda-9b25-892c45f40249"
+  provider: "giscus"
+  giscus:
+    repo_id: "R_kgDOJxntLw"
+    category_name: "Announcements"
+    category_id: "DIC_kwDOJxntL84DG3Pr"
 
