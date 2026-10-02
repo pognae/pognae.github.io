@@ -1,8 +1,9 @@
 title: MonoPoint
 name: MonoPoint
-description: 최신 연예, 경제 소식과 핵심 정보를 전달하는 전문 블로그
+description: 주식 주문부터 ETF, 절세 계좌, 가계 관리까지 재테크·투자 기초를 공식 자료와 계산 예시로 풀어 쓰는 블로그
 logo: /icons/icon.svg
 lang: ko-KR
+locale: ko-KR
 timezone: Asia/Seoul
 future: true
 url: "https://monopoint.app"
@@ -15,7 +16,7 @@ minimal_mistakes_skin: "air" # 깔끔하고 가독성 좋은 'air' 스킨 적용
 author:
   name   : "MonoPoint"
   avatar : "/icons/icon.svg"
-  bio    : "유익한 정보를 빠르게 전달합니다."
+  bio    : "처음 투자하는 사람이 헷갈리는 제도와 숫자를 공식 자료 기준으로 정리합니다."
   links:
     - label: "Home"
       icon: "fas fa-fw fa-home"
@@ -25,6 +26,8 @@ footer:
   links:
     - label: "소개"
       url: "/about.html"
+    - label: "카테고리"
+      url: "/categories/"
     - label: "개인정보처리방침"
       url: "/privacy.html"
     - label: "이용약관"
@@ -65,6 +68,11 @@ exclude:
   - _posts-archive
   - _preview
   - scripts
+  - scratch*.js
+  - adsense_dump.html
+  - admin.html
+  - package.json
+  - package-lock.json
   - node_modules
   - vendor
   - vendor/bundle
@@ -78,6 +86,7 @@ defaults:
     values:
       layout: single
       author_profile: true
+      show_date: true
       read_time: false
       comments: true
       share: true

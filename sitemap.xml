@@ -6,6 +6,11 @@
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://monopoint.app/categories/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://monopoint.app/about.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -26,98 +31,146 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://monopoint.app/blog/2026/08/14/분할매수-기법/</loc>
-    <lastmod>2026-08-14</lastmod>
+    <loc>https://monopoint.app/blog/2026/10/02/investment-fraud-warning-signs/</loc>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://monopoint.app/blog/2026/08/14/송강,-유재석-만난다…전역-후-첫-예능-출격/</loc>
-    <lastmod>2026-08-14</lastmod>
+    <loc>https://monopoint.app/blog/2026/09/30/real-return-inflation/</loc>
+    <lastmod>2026-09-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://monopoint.app/blog/2026/08/14/주식투바의-기술적-기법/</loc>
-    <lastmod>2026-08-14</lastmod>
+    <loc>https://monopoint.app/blog/2026/09/29/dollar-investment-methods/</loc>
+    <lastmod>2026-09-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://monopoint.app/blog/2026/08/13/SK하이닉스(000660)-주가-흐름과-시장-전망에-관한-심층분석/</loc>
-    <lastmod>2026-08-13</lastmod>
+    <loc>https://monopoint.app/blog/2026/09/28/first-brokerage-account-checklist/</loc>
+    <lastmod>2026-09-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://monopoint.app/blog/2026/08/13/합숙-맞선2-안도윤-분석/</loc>
-    <lastmod>2026-08-13</lastmod>
+    <loc>https://monopoint.app/blog/2026/09/27/credit-score-management/</loc>
+    <lastmod>2026-09-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://monopoint.app/blog/2026/07/24/FC-서울-린가드-영입-이후의-전술적-영향과-변화-분석/</loc>
-    <lastmod>2026-07-24</lastmod>
+    <loc>https://monopoint.app/blog/2026/09/26/currency-risk-overseas-stocks/</loc>
+    <lastmod>2026-09-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://monopoint.app/blog/2026/07/24/대전-하나시티즌의-역습-전술과-홈-경기-운영-방식-분석/</loc>
-    <lastmod>2026-07-24</lastmod>
+    <loc>https://monopoint.app/blog/2026/09/25/cma-parking-account/</loc>
+    <lastmod>2026-09-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://monopoint.app/blog/2026/07/24/대한민국-축구-국가대표팀-새로운-빌드업-전술-분석/</loc>
-    <lastmod>2026-07-24</lastmod>
+    <loc>https://monopoint.app/blog/2026/09/24/emergency-fund/</loc>
+    <lastmod>2026-09-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://monopoint.app/blog/2026/07/24/맨체스터-시티-펩-과르디올라의-인버티드-풀백-전술-트렌드/</loc>
-    <lastmod>2026-07-24</lastmod>
+    <loc>https://monopoint.app/blog/2026/09/23/stop-loss-trading-journal/</loc>
+    <lastmod>2026-09-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://monopoint.app/blog/2026/07/24/바르셀로나-한지-플릭-감독의-게겐프레싱-적용과-전술-분석/</loc>
-    <lastmod>2026-07-24</lastmod>
+    <loc>https://monopoint.app/blog/2026/09/22/bond-price-and-interest-rate/</loc>
+    <lastmod>2026-09-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://monopoint.app/blog/2026/07/24/바이에른-뮌헨-김민재의-센터백-전술적-위치와-수비-전술-분석/</loc>
-    <lastmod>2026-07-24</lastmod>
+    <loc>https://monopoint.app/blog/2026/09/21/deposit-insurance-limit/</loc>
+    <lastmod>2026-09-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://monopoint.app/blog/2026/07/24/아스널-FC-아르테타-감독의-하이-프레싱전방-압박-전술-구조/</loc>
-    <lastmod>2026-07-24</lastmod>
+    <loc>https://monopoint.app/blog/2026/09/20/monthly-budget-50-30-20/</loc>
+    <lastmod>2026-09-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://monopoint.app/blog/2026/07/24/토트넘-홋스퍼-손흥민의-새로운-윙포워드-역할-분석/</loc>
-    <lastmod>2026-07-24</lastmod>
+    <loc>https://monopoint.app/blog/2026/09/19/dividend-investing-basics/</loc>
+    <lastmod>2026-09-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://monopoint.app/blog/2026/07/24/파리-생제르맹-이강인의-하프스페이스-공략-전술-분석/</loc>
-    <lastmod>2026-07-24</lastmod>
+    <loc>https://monopoint.app/blog/2026/09/18/index-fund-vs-active-fund/</loc>
+    <lastmod>2026-09-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://monopoint.app/blog/2026/07/24/하프스페이스Halfspace-장악이-현대-전술에서-갖는-중요성-분석/</loc>
-    <lastmod>2026-07-24</lastmod>
+    <loc>https://monopoint.app/blog/2026/09/17/overseas-stock-capital-gains-tax/</loc>
+    <lastmod>2026-09-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://monopoint.app/blog/2026/07/24/현대-축구에서의-5초-룰5Second-Rule과-즉각-압박-전술-트렌드/</loc>
-    <lastmod>2026-07-24</lastmod>
+    <loc>https://monopoint.app/blog/2026/09/16/technical-analysis-basics/</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://monopoint.app/blog/2026/09/15/asset-allocation-rebalancing/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://monopoint.app/blog/2026/09/14/pension-savings-irp-tax-credit/</loc>
+    <lastmod>2026-09-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://monopoint.app/blog/2026/09/13/dollar-cost-averaging/</loc>
+    <lastmod>2026-09-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://monopoint.app/blog/2026/09/12/compound-interest-rule-of-72/</loc>
+    <lastmod>2026-09-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://monopoint.app/blog/2026/09/11/isa-account-guide/</loc>
+    <lastmod>2026-09-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://monopoint.app/blog/2026/09/10/per-pbr-roe/</loc>
+    <lastmod>2026-09-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://monopoint.app/blog/2026/09/09/etf-selection-checklist/</loc>
+    <lastmod>2026-09-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://monopoint.app/blog/2026/09/08/stock-order-types/</loc>
+    <lastmod>2026-09-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>

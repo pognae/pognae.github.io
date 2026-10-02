@@ -1,11 +1,9 @@
 main:
   - title: "Home"
     url: /
+  - title: "카테고리"
+    url: /categories/
   - title: "소개"
     url: /about.html
-  - title: "개인정보처리방침"
-    url: /privacy.html
-  - title: "이용약관"
-    url: /terms.html
   - title: "문의"
     url: /contact.html

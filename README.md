@@ -1,6 +1,16 @@
-# MonoPoint (축구 전문 블로그)
+# MonoPoint (재테크·투자 기초 블로그)
 
-K리그, 해외축구 경기 분석, 관전 포인트 및 주요 축구 소식을 깊이 있고 전문성 있게 전달하는 스포츠 전문 블로그입니다.
+주식 주문, ETF·자산배분, ISA·연금저축 같은 절세 계좌, 예산·비상금 관리까지 재테크 기초를 공식 자료와 계산 예시로 설명하는 블로그입니다.
+
+## 글 작성 규칙 (im-not-ai)
+
+모든 글은 [im-not-ai](https://github.com/epoko77-ai/im-not-ai)의 humanize-korean 규칙(`quick-rules.md`)으로 AI 문체 티를 걷어낸 뒤 발행합니다.
+
+```bash
+git clone https://github.com/epoko77-ai/im-not-ai ../im-not-ai   # 저장소 옆에 한 번만
+python scripts/humanize_check.py scan  _posts/<글>.md                 # 점수·탐지 패턴·외국 문자·상투어 점검
+python scripts/humanize_check.py gate  <초안>.md _posts/<글>.md        # 윤문 전후 변경률·수치 보존 검증
+```
 
 ## 업데이트 내역
 - **2026-07-03**: 계산기 기능 추가 (총 45종) - 금융, 날짜/시간, 건강, 생활, 단위 변환 등.
@@ -52,6 +62,13 @@ K리그, 해외축구 경기 분석, 관전 포인트 및 주요 축구 소식�
 - **2026-07-24 (10차 - 자동 생성 본문 태그, 구분선, **, 도입부 표기 정제 강화)**:
   - AI 자동 글 생성 시 본문(`body`) 내에 `[TITLE]`, `[DESCRIPTION]`, `[BODY]`, `**TITLE**`, `**BODY**` 등 섹션 태그 및 `=====================================================` 형태의 구분선뿐만 아니라, `**` (볼드 기호) 및 `도입부`(소제목 문구) 단어가 전혀 포함되지 않도록 `cleanPostBody` 정제 로직 및 AI 생성 프롬프트를 전면 개편했습니다 (`scripts/auto_post.js`, `scripts/admin_server.js`, `admin.html`).
   - 생성 프롬프트의 소제목 가이드를 '서론/경기 배경'으로 변경하고 "도입부" 문구 및 "**" 사용 금지 지침을 명시하여, 향후 자동 발행 시 해당 표기들이 본문에 들어가지 않도록 조치했습니다.
+- **2026-10-02 (애드센스 '가치가 별로 없는 콘텐츠' 거절 대응 — 재테크 블로그로 재편)**:
+  - 기존 공개 글 16편(반복 문장·외국 문자 혼입·사실 오류가 있던 축구 글, 프롬프트 문구가 노출된 주식 글, front matter 없는 글)을 모두 `_posts-archive/`로 옮겨 비공개 처리했습니다.
+  - 주제를 재테크·투자 기초 하나로 통일하고, im-not-ai 규칙으로 윤문한 새 글 24편을 발행, 4편을 `_posts-pending/`에 예약했습니다.
+  - `about.md`, `contact.md`, `privacy.md`(Google Analytics·Cusdis·Firebase 실제 사용 내역 반영), `terms.md`(투자권유 아님 고지)를 새 주제에 맞게 다시 썼고 `/categories/` 페이지를 추가했습니다.
+  - 공개 배포되던 `scratch*.js`, `adsense_dump.html`(타 사이트 페이지 사본), `admin.html`을 Jekyll 빌드에서 제외했습니다.
+  - `generate-sitemap.mjs`가 front matter 없는 파일을 사이트맵에 넣어 404를 만들던 문제를 고쳤습니다.
+  - `scripts/humanize_check.py` 추가 (im-not-ai 측정·검증 스크립트 래퍼).
 
 
 

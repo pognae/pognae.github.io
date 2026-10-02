@@ -14,6 +14,7 @@ const BASE = "https://monopoint.app";
 
 const STATIC_PAGES = [
   { loc: "/", changefreq: "daily", priority: "1.0" },
+  { loc: "/categories/", changefreq: "weekly", priority: "0.7" },
   { loc: "/about.html", changefreq: "monthly", priority: "0.6" },
   { loc: "/privacy.html", changefreq: "monthly", priority: "0.5" },
   { loc: "/terms.html", changefreq: "monthly", priority: "0.5" },
@@ -35,7 +36,8 @@ function parsePost(filename) {
   
   // Check if post is published: false
   const content = fs.readFileSync(path.join(POSTS_DIR, filename), "utf8");
-  if (content.includes("published: false")) {
+  // Jekyll은 front matter가 없는 파일을 글로 만들지 않으므로 사이트맵에 넣으면 404가 된다.
+  if (!/^---\r?\n/.test(content) || content.includes("published: false")) {
     return null;
   }
 

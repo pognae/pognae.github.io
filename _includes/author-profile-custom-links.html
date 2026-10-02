@@ -36,11 +36,11 @@
         });
       }).catch((error) => {
         console.error("Firebase 트랜잭션 오류:", error);
-        document.getElementById('visitor-count').innerText = "설정 필요";
+        document.querySelector('.visitor-counter-li')?.remove();
       });
     } catch (e) {
       console.log("Firebase가 아직 초기화되지 않았습니다.");
-      document.getElementById('visitor-count').innerText = "설정 필요";
+      document.querySelector('.visitor-counter-li')?.remove();
     }
   </script>
 </li>
