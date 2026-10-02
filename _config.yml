@@ -4,6 +4,7 @@ description: 주식 주문부터 ETF, 절세 계좌, 가계 관리까지 재테�
 logo: /icons/icon.svg
 lang: ko-KR
 locale: ko-KR
+date_format: "%Y년 %m월 %d일"
 timezone: Asia/Seoul
 future: true
 url: "https://monopoint.app"
