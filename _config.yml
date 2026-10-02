@@ -101,4 +101,7 @@ comments:
     repo_id: "R_kgDOJxntLw"
     category_name: "Announcements"
     category_id: "DIC_kwDOJxntL84DG3Pr"
+  # Waline 서버 주소(Vercel 배포 URL)를 넣으면 로그인 없는 Waline 댓글로 바뀌고, 비워 두면 giscus를 씁니다.
+  waline:
+    server_url: ""
 
