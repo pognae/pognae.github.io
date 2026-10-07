@@ -35,8 +35,14 @@ robots: noindex, nofollow
           <label class="form-label" for="login-pw">비밀번호</label>
           <input class="form-control" id="login-pw" type="password" autocomplete="current-password" required>
         </div>
+        <div class="mb-3 d-none" id="token-group">
+          <label class="form-label" for="login-token">GitHub 토큰 <span class="text-muted small">(이 기기에서 처음 한 번만)</span></label>
+          <input class="form-control" id="login-token" type="password" autocomplete="off" placeholder="github_pat_...">
+          <div class="form-text">pognae.github.io 저장소 전용 fine-grained 토큰(Contents·Actions: Read and write). 비밀번호로 암호화해 이 브라우저에만 저장합니다.</div>
+        </div>
         <button class="btn btn-primary w-100" type="submit">로그인</button>
         <div id="login-error" class="text-danger small mt-2"></div>
+        <button type="button" class="btn btn-link btn-sm px-0 mt-2" id="btn-reset-token">이 기기의 토큰 다시 등록</button>
       </form>
     </div>
   </section>
@@ -123,8 +129,18 @@ robots: noindex, nofollow
   <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
   <script>
   (function () {
-    const API = {{ site.admin_api | default: "https://monopoint-admin.vercel.app" | jsonify }};
-    const TOKEN_KEY = "mp_admin_token";
+    const REPO = "pognae/pognae.github.io";
+    const BRANCH = "main";
+    const FOLDERS = { posts: "_posts", pending: "_posts-pending", queue: "_admin-queue" };
+    const CATEGORIES = ["생활 재테크", "투자 기초", "절세·계좌", "ETF·자산배분"];
+    // 아이디·비밀번호 확인용 PBKDF2 해시(평문은 어디에도 두지 않는다). GitHub 토큰은 이 비밀번호로 암호화해 기기마다 저장한다.
+    const LOGIN = { salt: "rEYnbhn++Sqhy8V57LZXLA==", hash: "DT/0L2ja8S+Ot1zXZvOxsEfWxVuqS6RsMjY9yFb4JqI=", iterations: 310000 };
+    const VAULT_KEY = "mp_admin_vault";
+    const SESSION_KEY = "mp_admin_session";
+    // pognae.github.io/scripts/publish-due-posts.mjs와 같은 기준
+    const HUMANIZE_REQUIRED_FROM = "2026-10-07";
+    const HUMANIZE_EXEMPT = new Set(["2026-10-09-gold-investment-methods.md", "2026-10-13-ipo-subscription-basics.md", "2026-10-16-savings-vs-deposit-interest.md"]);
+    const MANAGED_KEYS = ["title", "description", "date", "categories", "tags", "humanize", "admin_source", "admin_queued_at"];
     const $ = (id) => document.getElementById(id);
     const editor = new bootstrap.Modal($("editor"));
     let items = [];
@@ -134,49 +150,313 @@ robots: noindex, nofollow
     localStorage.removeItem("mp_gh_token");
 
     const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const enc = new TextEncoder();
+    const b64 = (buf) => btoa(String.fromCharCode(...new Uint8Array(buf)));
+    const unb64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
+    const utf8ToB64 = (text) => {
+      const bytes = enc.encode(text);
+      let bin = "";
+      for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+      return btoa(bin);
+    };
+    const b64ToUtf8 = (s) => new TextDecoder().decode(unb64(s.replace(/\s/g, "")));
+
+    async function pbkdf2(secret, salt, iterations, usage) {
+      const base = await crypto.subtle.importKey("raw", enc.encode(secret), "PBKDF2", false, ["deriveBits", "deriveKey"]);
+      const params = { name: "PBKDF2", salt, iterations, hash: "SHA-256" };
+      if (usage === "bits") return crypto.subtle.deriveBits(params, base, 256);
+      return crypto.subtle.deriveKey(params, base, { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]);
+    }
+
+    async function checkLogin(id, password) {
+      const bits = await pbkdf2(`${id}:${password}`, unb64(LOGIN.salt), LOGIN.iterations, "bits");
+      return b64(bits) === LOGIN.hash;
+    }
+
+    async function sealToken(token, password) {
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      const iv = crypto.getRandomValues(new Uint8Array(12));
+      const key = await pbkdf2(password, salt, 310000, "key");
+      const ct = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, enc.encode(token));
+      localStorage.setItem(VAULT_KEY, JSON.stringify({ salt: b64(salt), iv: b64(iv), ct: b64(ct) }));
+    }
+
+    async function openToken(password) {
+      const vault = JSON.parse(localStorage.getItem(VAULT_KEY) || "null");
+      if (!vault) return null;
+      const key = await pbkdf2(password, unb64(vault.salt), 310000, "key");
+      const pt = await crypto.subtle.decrypt({ name: "AES-GCM", iv: unb64(vault.iv) }, key, unb64(vault.ct));
+      return new TextDecoder().decode(pt);
+    }
+
+    async function github(path, init = {}, token = sessionStorage.getItem(SESSION_KEY)) {
+      if (!token) {
+        logout();
+        throw new Error("다시 로그인하세요");
+      }
+      const res = await fetch("https://api.github.com" + path, {
+        ...init,
+        cache: "no-store",
+        headers: {
+          Authorization: "Bearer " + token,
+          Accept: "application/vnd.github+json",
+          "X-GitHub-Api-Version": "2022-11-28",
+          ...(init.body ? { "Content-Type": "application/json" } : {}),
+        },
+      });
+      if (res.status === 404) return null;
+      const data = res.status === 204 ? {} : await res.json().catch(() => ({}));
+      if (res.status === 401) throw new Error("GitHub 토큰이 만료됐거나 잘못됐습니다. '이 기기의 토큰 다시 등록'을 눌러 주세요");
+      if (!res.ok) throw new Error(`GitHub 오류(${res.status}): ${data.message || ""}`);
+      return data;
+    }
+
+    const contentsUrl = (path) => `/repos/${REPO}/contents/${path.split("/").map(encodeURIComponent).join("/")}`;
+
+    async function getFile(path) {
+      const data = await github(`${contentsUrl(path)}?ref=${BRANCH}&t=${Date.now()}`);
+      return data ? { sha: data.sha, text: b64ToUtf8(data.content) } : null;
+    }
+
+    async function putFile(path, text, message) {
+      const current = await getFile(path);
+      return github(contentsUrl(path), {
+        method: "PUT",
+        body: JSON.stringify({ message, branch: BRANCH, content: utf8ToB64(text), ...(current ? { sha: current.sha } : {}) }),
+      });
+    }
+
+    async function deleteFile(path, message) {
+      const current = await getFile(path);
+      if (current) await github(contentsUrl(path), { method: "DELETE", body: JSON.stringify({ message, branch: BRANCH, sha: current.sha }) });
+    }
+
+    async function listFolders() {
+      const [owner, name] = REPO.split("/");
+      const trees = Object.entries(FOLDERS).map(([k, v]) => `${k}: object(expression: "${BRANCH}:${v}") { ...T }`).join("\n");
+      const query = `query($owner: String!, $name: String!) { repository(owner: $owner, name: $name) { ${trees} } }
+        fragment T on Tree { entries { name object { ... on Blob { text } } } }`;
+      const data = await github("/graphql", { method: "POST", body: JSON.stringify({ query, variables: { owner, name } }) });
+      if (data.errors) throw new Error("GitHub GraphQL 오류: " + data.errors[0].message);
+      const out = {};
+      for (const key of Object.keys(FOLDERS)) {
+        out[key] = (data.data.repository[key]?.entries || []).map((e) => ({ name: e.name, text: e.object?.text ?? "" }));
+      }
+      return out;
+    }
+
+    function split(text) {
+      const normalized = text.replace(/\r\n/g, "\n");
+      const m = normalized.match(/^---\n([\s\S]*?)\n---\n?/);
+      return m ? { front: m[1], body: normalized.slice(m[0].length) } : { front: "", body: normalized };
+    }
+    const fmValue = (front, key) => ((front.match(new RegExp(`^${key}:[ \\t]*(.*)$`, "m")) || [])[1] || "").trim();
+    function unquote(s) {
+      if (/^"(.*)"$/.test(s)) {
+        try { return JSON.parse(s); } catch { return s.slice(1, -1); }
+      }
+      return s.replace(/^'(.*)'$/, "$1");
+    }
+    function fmList(s) {
+      const inner = s.replace(/^\[(.*)\]$/, "$1").trim();
+      return inner ? inner.split(",").map((x) => unquote(x.trim())).filter(Boolean) : [];
+    }
+
+    async function bodySha256(text) {
+      const body = text.replace(/\r\n/g, "\n").replace(/^---\n[\s\S]*?\n---\n/, "").trim() + "\n";
+      const digest = await crypto.subtle.digest("SHA-256", enc.encode(body));
+      return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, "0")).join("");
+    }
+
+    async function humanizeState(name, text, front) {
+      const block = front.match(/^humanize:\n((?: {2}.*\n?)+)/m);
+      const legacy = name < HUMANIZE_REQUIRED_FROM || HUMANIZE_EXEMPT.has(name);
+      if (!block) return legacy ? "legacy" : "missing";
+      const sha = (block[1].match(/^ {2}body_sha256:\s*"?([^"\n]+)"?/m) || [])[1];
+      return sha === (await bodySha256(text)) ? "stamped" : "mismatch";
+    }
+
+    async function parsePost(name, text) {
+      const { front, body } = split(text);
+      return {
+        name,
+        title: unquote(fmValue(front, "title")),
+        description: unquote(fmValue(front, "description")),
+        date: fmValue(front, "date"),
+        categories: fmList(fmValue(front, "categories")),
+        tags: fmList(fmValue(front, "tags")),
+        humanize: { state: await humanizeState(name, text, front) },
+        body: body.replace(/^\n+/, ""),
+      };
+    }
+
+    const q = (s) => JSON.stringify(String(s));
+    const yamlList = (xs) => `[${xs.map((x) => (/^[\p{L}\p{N}·._ -]+$/u.test(x) && x.trim() === x ? x : q(x))).join(", ")}]`;
+
+    /** 기존 front matter의 다른 키(toc 등)는 두고 관리 대상 키만 다시 쓴다. */
+    function buildPost(sourceText, fields, sourcePath) {
+      const title = String(fields.title || "").trim();
+      const body = String(fields.body || "").replace(/\r\n/g, "\n").trim();
+      if (!title) throw new Error("제목을 입력하세요");
+      if (body.length < 200) throw new Error("본문이 너무 짧습니다(200자 이상)");
+      if (!CATEGORIES.includes(fields.category)) throw new Error("카테고리를 선택하세요");
+      const m = String(fields.date || "").match(/^(\d{4}-\d{2}-\d{2})[ T](\d{2}:\d{2})$/);
+      if (!m) throw new Error("발행 일시 형식이 잘못됐습니다");
+      const tags = String(fields.tags || "").split(",").map((t) => t.trim()).filter(Boolean).slice(0, 10);
+      const kept = [];
+      let skipping = false;
+      for (const line of sourceText ? split(sourceText).front.split("\n") : ["toc: true", 'toc_label: "목차"']) {
+        const key = line.match(/^([A-Za-z_][\w-]*):/);
+        if (key) skipping = MANAGED_KEYS.includes(key[1]);
+        else if (!/^\s|^-/.test(line)) skipping = false;
+        if (!skipping && line.trim()) kept.push(line);
+      }
+      const front = [
+        `title: ${q(title)}`,
+        `description: ${q(String(fields.description || "").trim())}`,
+        `date: ${m[1]} ${m[2]}:00 +0900`,
+        `categories: ${yamlList([fields.category])}`,
+        `tags: ${yamlList(tags)}`,
+        ...kept,
+        ...(sourcePath ? [`admin_source: ${q(sourcePath)}`] : []),
+        `admin_queued_at: ${q(new Date().toISOString())}`,
+      ].join("\n");
+      return { date: m[1], text: `---\n${front}\n---\n\n${body}\n` };
+    }
+
+    const PATH_RE = new RegExp(`^(${Object.values(FOLDERS).join("|")})/(\\d{4}-\\d{2}-\\d{2})-([a-z0-9-]+)\\.md$`);
+    function checkPath(path) {
+      const m = String(path || "").match(PATH_RE);
+      if (!m) throw new Error("잘못된 글 경로입니다: " + path);
+      return { folder: m[1], slug: m[3], name: `${m[2]}-${m[3]}.md` };
+    }
+    const adminSource = (text) => (split(text).front.match(/^admin_source:\s*"?([^"\n]+)"?/m) || [])[1] || null;
+
+    async function listPosts() {
+      const folders = await listFolders();
+      const errors = new Map(folders.queue.filter((f) => f.name.endsWith(".error.txt")).map((f) => [f.name.replace(/\.error\.txt$/, ".md"), f.text.trim()]));
+      const queued = new Map();
+      const list = [];
+      for (const f of folders.queue.filter((f) => f.name.endsWith(".md"))) {
+        const source = adminSource(f.text);
+        if (source) queued.set(source, f.name);
+        list.push({ ...(await parsePost(f.name, f.text)), body: undefined, path: `${FOLDERS.queue}/${f.name}`, folder: "queue", error: errors.get(f.name) || null });
+      }
+      for (const key of ["posts", "pending"]) {
+        for (const f of folders[key].filter((f) => f.name.endsWith(".md"))) {
+          const path = `${FOLDERS[key]}/${f.name}`;
+          list.push({ ...(await parsePost(f.name, f.text)), body: undefined, path, folder: key, queuedAs: queued.get(path) || null });
+        }
+      }
+      return list.sort((a, b) => String(b.date).localeCompare(String(a.date)));
+    }
+
+    async function getPost(path) {
+      const { name } = checkPath(path);
+      const file = await getFile(path);
+      if (!file) throw new Error("글을 찾을 수 없습니다");
+      return { path, ...(await parsePost(name, file.text)) };
+    }
+
+    async function savePost(fields) {
+      let sourceText = null;
+      let originalPath = null;
+      let slug;
+      if (fields.source) {
+        const src = checkPath(fields.source);
+        const file = await getFile(fields.source);
+        if (!file) throw new Error("원본 글을 찾을 수 없습니다");
+        sourceText = file.text;
+        slug = src.slug;
+        originalPath = src.folder === FOLDERS.queue ? adminSource(file.text) : fields.source;
+      } else {
+        slug = String(fields.slug || "").toLowerCase().trim();
+        if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(slug) || slug.length > 80) throw new Error("주소 이름은 영문 소문자·숫자·하이픈으로 입력하세요");
+      }
+      const { date, text } = buildPost(sourceText, fields, originalPath);
+      const name = `${date}-${slug}.md`;
+      const queuePath = `${FOLDERS.queue}/${name}`;
+      if (!fields.source) {
+        for (const folder of Object.values(FOLDERS)) {
+          if (await getFile(`${folder}/${name}`)) throw new Error(`같은 이름의 글이 이미 있습니다: ${folder}/${name}`);
+        }
+      }
+      await putFile(queuePath, text, `admin: queue ${name} for im-not-ai + sepia`);
+      await deleteFile(queuePath.replace(/\.md$/, ".error.txt"), `admin: clear error ${name}`);
+      if (fields.source && fields.source.startsWith(FOLDERS.queue + "/") && fields.source !== queuePath) {
+        await deleteFile(fields.source, `admin: replace queued ${fields.source}`);
+        await deleteFile(fields.source.replace(/\.md$/, ".error.txt"), `admin: clear error ${fields.source}`);
+      }
+    }
+
+    /** 지우지 않고 _posts-archive로 옮긴다. 처리 대기 중인 글은 큐에서만 뺀다. */
+    async function archivePost(path) {
+      const { folder, name } = checkPath(path);
+      const file = await getFile(path);
+      if (!file) throw new Error("글을 찾을 수 없습니다");
+      if (folder !== FOLDERS.queue) await putFile(`_posts-archive/${name}`, file.text, `admin: archive ${name}`);
+      await deleteFile(path, `admin: remove ${path}`);
+      if (folder === FOLDERS.queue) await deleteFile(path.replace(/\.md$/, ".error.txt"), `admin: clear error ${name}`);
+    }
 
     async function api(path, options = {}) {
-      const token = sessionStorage.getItem(TOKEN_KEY);
-      const res = await fetch(API + path, {
-        ...options,
-        headers: { "Content-Type": "application/json", ...(token ? { Authorization: "Bearer " + token } : {}) },
-      });
-      const data = await res.json().catch(() => ({}));
-      if (res.status === 401 && path !== "/api/login") {
-        logout();
-        throw new Error(data.error || "다시 로그인하세요");
-      }
-      if (!res.ok) throw new Error(data.error || "요청 실패 (" + res.status + ")");
-      return data;
+      const url = new URL(path, location.origin);
+      const target = url.searchParams.get("path");
+      const method = options.method || "GET";
+      if (url.pathname === "/api/posts") return { items: await listPosts() };
+      if (url.pathname === "/api/retry") return github(`/repos/${REPO}/actions/workflows/humanize.yml/dispatches`, { method: "POST", body: JSON.stringify({ ref: BRANCH }) });
+      if (url.pathname === "/api/post" && method === "GET") return getPost(target);
+      if (url.pathname === "/api/post" && method === "PUT") return savePost(JSON.parse(options.body));
+      if (url.pathname === "/api/post" && method === "DELETE") return archivePost(target);
+      throw new Error("알 수 없는 요청");
     }
 
     function show(loggedIn) {
       $("login").classList.toggle("d-none", loggedIn);
       $("app").classList.toggle("d-none", !loggedIn);
+      $("token-group").classList.toggle("d-none", !!localStorage.getItem(VAULT_KEY));
       if (loggedIn) load();
     }
 
     function logout() {
-      sessionStorage.removeItem(TOKEN_KEY);
+      sessionStorage.removeItem(SESSION_KEY);
       show(false);
     }
 
+    $("btn-reset-token").addEventListener("click", () => {
+      if (!confirm("이 브라우저에 저장된 토큰을 지우고 새로 등록할까요?")) return;
+      localStorage.removeItem(VAULT_KEY);
+      show(false);
+    });
+
     $("login-form").addEventListener("submit", async (e) => {
       e.preventDefault();
-      $("login-error").textContent = "";
+      $("login-error").textContent = "확인 중…";
+      const id = $("login-id").value.trim();
+      const password = $("login-pw").value;
       try {
-        const { token } = await api("/api/login", {
-          method: "POST",
-          body: JSON.stringify({ id: $("login-id").value.trim(), password: $("login-pw").value }),
-        });
-        sessionStorage.setItem(TOKEN_KEY, token);
+        if (!(await checkLogin(id, password))) throw new Error("아이디 또는 비밀번호가 올바르지 않습니다");
+        let token;
+        if (localStorage.getItem(VAULT_KEY)) {
+          token = await openToken(password).catch(() => {
+            throw new Error("저장된 토큰을 열 수 없습니다. '이 기기의 토큰 다시 등록'을 눌러 주세요");
+          });
+        } else {
+          token = $("login-token").value.trim();
+          if (!token) throw new Error("이 기기에서 처음 로그인할 때는 GitHub 토큰이 필요합니다");
+          const repo = await github(`/repos/${REPO}`, {}, token);
+          if (!repo?.permissions?.push) throw new Error("이 토큰에는 저장소 쓰기 권한이 없습니다");
+          await sealToken(token, password);
+          $("login-token").value = "";
+        }
+        sessionStorage.setItem(SESSION_KEY, token);
         $("login-pw").value = "";
+        $("login-error").textContent = "";
         show(true);
       } catch (err) {
         $("login-error").textContent = err.message;
       }
     });
-
     function badge(item) {
       const h = item.humanize?.state;
       if (item.folder === "queue") {
@@ -332,7 +612,7 @@ robots: noindex, nofollow
       }
     });
 
-    show(!!sessionStorage.getItem(TOKEN_KEY));
+    show(!!sessionStorage.getItem(SESSION_KEY));
   })();
   </script>
 </body>
