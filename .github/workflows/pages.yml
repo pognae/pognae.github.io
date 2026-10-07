@@ -3,6 +3,8 @@ name: Build and deploy site
 on:
   push:
     branches: [main]
+    # 큐에만 글이 들어온 커밋은 humanize.yml이 처리한 뒤 배포를 요청한다.
+    paths-ignore: ["_admin-queue/**"]
   schedule:
     # 매일 09:00 KST (UTC 00:00) — 1차
     - cron: "0 0 * * *"

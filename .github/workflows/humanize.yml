@@ -1,0 +1,62 @@
+name: Humanize admin posts (im-not-ai + sepia)
+
+on:
+  push:
+    branches: [main]
+    paths: ["_admin-queue/**"]
+  workflow_dispatch:
+
+concurrency:
+  group: humanize
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  humanize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch im-not-ai and sepia
+        run: |
+          git clone --depth 1 https://github.com/epoko77-ai/im-not-ai ../im-not-ai
+          git clone --depth 1 https://github.com/Nanako0129/sepia ../sepia
+
+      - name: Run im-not-ai → sepia → stamp
+        env:
+          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+          NIM_MODEL: ${{ vars.NIM_MODEL }}
+        run: python scripts/auto_humanize.py
+
+      - name: Commit results
+        id: commit
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A _admin-queue _humanize-reports _posts _posts-pending
+          if git diff --staged --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            git commit -m "chore: humanize admin posts (im-not-ai + sepia)"
+            git pull --rebase
+            git push
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # GITHUB_TOKEN으로 푸시한 커밋은 다른 워크플로를 깨우지 않으므로 배포를 직접 요청한다.
+      - name: Trigger site deploy
+        if: always() && steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --ref main

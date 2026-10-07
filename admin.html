@@ -8,737 +8,332 @@ robots: noindex, nofollow
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MonoPoint 관리자 대시보드 — 포스트 수정·삭제</title>
+  <title>MonoPoint 관리자</title>
   <meta name="robots" content="noindex, nofollow">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
   <style>
-    :root {
-      --primary-color: #2563eb;
-      --bg-color: #f8fafc;
-      --card-bg: #ffffff;
-      --text-color: #1e293b;
-      --border-color: #e2e8f0;
-    }
-    body {
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      padding-bottom: 3rem;
-    }
-    .auth-container {
-      max-width: 420px;
-      margin: 80px auto;
-      padding: 2.5rem;
-      background: var(--card-bg);
-      border-radius: 16px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-      border: 1px solid var(--border-color);
-    }
-    .admin-header {
-      background: #ffffff;
-      border-bottom: 1px solid var(--border-color);
-      padding: 1rem 2rem;
-      margin-bottom: 2rem;
-    }
-    .post-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 1.25rem;
-      margin-bottom: 1rem;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-    .post-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.04);
-    }
-    .post-title {
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: #0f172a;
-      margin-bottom: 0.5rem;
-    }
-    .post-meta {
-      font-size: 0.85rem;
-      color: #64748b;
-    }
-    .badge-date {
-      background-color: #e2e8f0;
-      color: #334155;
-    }
-    .editor-textarea {
-      font-family: monospace;
-      font-size: 0.9rem;
-      min-height: 400px;
-    }
+    body { background: #f6f7f9; }
+    .login-card { max-width: 380px; margin: 12vh auto; }
+    .post-title { font-weight: 600; }
+    .post-meta { font-size: .8rem; color: #6b7280; }
+    .error-box { white-space: pre-wrap; font-size: .8rem; }
+    #f-body { font-family: ui-monospace, Consolas, monospace; font-size: .9rem; min-height: 50vh; }
+    #preview { min-height: 50vh; background: #fff; border: 1px solid #dee2e6; border-radius: .375rem; padding: 1rem; overflow: auto; }
+    #preview img { max-width: 100%; }
   </style>
 </head>
 <body>
-
-  <!-- 1. 인증 화면 (보안 패스워드 & GitHub Token 저장) -->
-  <div id="authSection" class="auth-container">
-    <div class="text-center mb-4">
-      <i class="fa-solid fa-user-shield text-primary fs-1 mb-2"></i>
-      <h3 class="fw-bold">MonoPoint 관리자</h3>
-      <p class="text-muted small">포스트 관리 권한 인증이 필요합니다.</p>
-    </div>
-    <div class="mb-3">
-      <label class="form-label fw-semibold">GitHub Personal Access Token (PAT)</label>
-      <input type="password" id="ghToken" class="form-control" placeholder="ghp_xxxxxxxxxxxx">
-      <div class="form-text">GitHub 저장소 권한이 있는 Token을 입력하면 브라우저에서 직접 포스트 수정/삭제가 가능합니다.</div>
-    </div>
-    <button onclick="authenticate()" class="btn btn-primary w-100 fw-semibold py-2">
-      <i class="fa-solid fa-lock-open me-2"></i>대시보드 접속
-    </button>
-  </div>
-
-  <!-- 2. 관리자 메인 대시보드 화면 -->
-  <div id="mainSection" class="d-none">
-    <header class="admin-header d-flex justify-content-between align-items-center">
-      <div class="d-flex align-items-center gap-3">
-        <h4 class="mb-0 fw-bold"><i class="fa-solid fa-blog text-primary me-2"></i>MonoPoint 글 관리</h4>
-        <span id="postCountBadge" class="badge bg-primary rounded-pill">0개 글</span>
-      </div>
-      <div>
-        <button onclick="openNewPostModal()" class="btn btn-primary btn-sm me-2"><i class="fa-solid fa-plus me-1"></i>새 글 작성</button>
-        <button onclick="fetchPosts()" class="btn btn-outline-secondary btn-sm me-2"><i class="fa-solid fa-rotate me-1"></i>새로고침</button>
-        <button onclick="logout()" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-right-from-bracket me-1"></i>로그아웃</button>
-      </div>
-    </header>
-
-    <div class="container">
-      <!-- 검색 & 필터 Bar -->
-      <div class="row mb-4">
-        <div class="col-md-8">
-          <div class="input-group">
-            <span class="input-group-text bg-white border-end-0"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
-            <input type="text" id="searchInput" oninput="filterPosts()" class="form-control border-start-0" placeholder="포스트 제목 또는 파일명 검색...">
-          </div>
+  <section id="login" class="login-card card shadow-sm d-none">
+    <div class="card-body p-4">
+      <h1 class="h5 mb-3">MonoPoint 관리자</h1>
+      <form id="login-form">
+        <div class="mb-2">
+          <label class="form-label" for="login-id">아이디</label>
+          <input class="form-control" id="login-id" autocomplete="username" required>
         </div>
-        <div class="col-md-4 text-end">
-          <small class="text-muted">마지막 동기화: <span id="lastSyncTime">-</span></small>
+        <div class="mb-3">
+          <label class="form-label" for="login-pw">비밀번호</label>
+          <input class="form-control" id="login-pw" type="password" autocomplete="current-password" required>
         </div>
-      </div>
-
-      <!-- 포스트 목록 리스트 -->
-      <div id="postListContainer">
-        <div class="text-center py-5">
-          <div class="spinner-border text-primary" role="status"></div>
-          <p class="mt-2 text-muted">GitHub 저장소에서 포스트 목록을 불러오는 중...</p>
-        </div>
-      </div>
+        <button class="btn btn-primary w-100" type="submit">로그인</button>
+        <div id="login-error" class="text-danger small mt-2"></div>
+      </form>
     </div>
-  </div>
+  </section>
 
-  <!-- 3. 포스트 수정 모달 -->
-  <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-      <div class="modal-content">
+  <main id="app" class="container py-4 d-none">
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+      <h1 class="h4 mb-0 me-auto">MonoPoint 글 관리</h1>
+      <button class="btn btn-primary" id="btn-new">새 글</button>
+      <button class="btn btn-outline-secondary" id="btn-refresh">새로고침</button>
+      <button class="btn btn-outline-secondary" id="btn-retry" title="처리 실패한 글을 다시 im-not-ai·sepia에 보냅니다">다시 처리</button>
+      <button class="btn btn-outline-danger" id="btn-logout">로그아웃</button>
+    </div>
+    <div class="alert alert-light border small">
+      저장한 글은 바로 공개되지 않습니다. im-not-ai 윤문과 sepia 교정을 자동으로 거친 뒤 통과 도장을 받아야 발행되고,
+      보통 몇 분 걸립니다. 공개된 글을 고치면 새 버전이 통과할 때까지 기존 버전이 그대로 보입니다.
+    </div>
+    <ul class="nav nav-pills mb-3" id="filters">
+      <li class="nav-item"><button class="nav-link active" data-filter="all">전체</button></li>
+      <li class="nav-item"><button class="nav-link" data-filter="posts">공개</button></li>
+      <li class="nav-item"><button class="nav-link" data-filter="pending">예약</button></li>
+      <li class="nav-item"><button class="nav-link" data-filter="queue">처리 중·실패</button></li>
+    </ul>
+    <div id="list-status" class="text-muted small mb-2"></div>
+    <div class="list-group" id="list"></div>
+  </main>
+
+  <div class="modal fade" id="editor" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+      <form class="modal-content" id="editor-form">
         <div class="modal-header">
-          <h5 class="modal-title fw-bold"><i class="fa-solid fa-pen-to-square text-primary me-2"></i>포스트 수정</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h2 class="modal-title h5" id="editor-title">새 글</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
-          <input type="hidden" id="editSha">
-          <input type="hidden" id="editPath">
-          <div class="mb-3">
-            <label class="form-label fw-semibold">파일명 (Path)</label>
-            <input type="text" id="editFileName" class="form-control" readonly>
+          <div class="row g-2 mb-2">
+            <div class="col-12">
+              <label class="form-label" for="f-title">제목</label>
+              <input class="form-control" id="f-title" required maxlength="120">
+            </div>
+            <div class="col-12">
+              <label class="form-label" for="f-description">요약 설명 <span class="text-muted small">(검색 결과와 미리보기에 쓰입니다)</span></label>
+              <input class="form-control" id="f-description" maxlength="200">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label" for="f-category">카테고리</label>
+              <select class="form-select" id="f-category" required>
+                <option>생활 재테크</option><option>투자 기초</option><option>절세·계좌</option><option>ETF·자산배분</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label" for="f-date">발행 일시 (한국 시간)</label>
+              <input class="form-control" id="f-date" type="datetime-local" required>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label" for="f-tags">태그 <span class="text-muted small">(쉼표로 구분)</span></label>
+              <input class="form-control" id="f-tags">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label" for="f-slug">주소 이름 <span class="text-muted small">(영문)</span></label>
+              <input class="form-control" id="f-slug" pattern="[a-z0-9-]+" placeholder="emergency-fund-basics">
+            </div>
           </div>
-          <div class="mb-3">
-            <label class="form-label fw-semibold">마크다운 본문 (Frontmatter 포함)</label>
-            <textarea id="editContent" class="form-control editor-textarea"></textarea>
+          <ul class="nav nav-tabs mt-3" role="tablist">
+            <li class="nav-item"><button type="button" class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-write">본문 (마크다운)</button></li>
+            <li class="nav-item"><button type="button" class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-preview" id="btn-preview">미리보기</button></li>
+          </ul>
+          <div class="tab-content pt-2">
+            <div class="tab-pane fade show active" id="tab-write"><textarea class="form-control" id="f-body" required></textarea></div>
+            <div class="tab-pane fade" id="tab-preview"><div id="preview"></div></div>
           </div>
+          <div class="post-meta mt-2" id="f-count"></div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-          <button type="button" onclick="savePostChanges()" class="btn btn-success fw-semibold"><i class="fa-solid fa-floppy-disk me-1"></i>수정사항 저장</button>
+          <span class="text-danger small me-auto" id="editor-error"></span>
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
+          <button type="submit" class="btn btn-primary" id="btn-save">저장하고 검수 보내기</button>
         </div>
-      </div>
+      </form>
     </div>
   </div>
 
-  <!-- 4. 새 포스트 작성 모달 -->
-  <div class="modal fade" id="newPostModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title fw-bold"><i class="fa-solid fa-plus text-primary me-2"></i>새 포스트 작성</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <!-- AI 초안 자동 생성 카드 -->
-          <div class="card mb-3 border-primary bg-light">
-            <div class="card-body">
-              <h6 class="fw-bold text-primary mb-2"><i class="fa-solid fa-wand-magic-sparkles me-1"></i>AI 포스트 초안 자동 생성 (NVIDIA NIM Llama-3.1)</h6>
-              <div class="row g-2 align-items-end">
-                <div class="col-md-5">
-                  <label class="form-label small fw-semibold mb-1">주제 / 키워드</label>
-                  <input type="text" id="aiTopicInput" class="form-control form-control-sm" placeholder="예: Claude 3.5 Sonnet, RAG 기술">
-                </div>
-                <div class="col-md-4">
-                  <label class="form-label small fw-semibold mb-1">NVIDIA API Key (선택)</label>
-                  <input type="password" id="nvidiaApiKeyInput" class="form-control form-control-sm" placeholder="nvapi-xxxx (로컬 서버 사용 시 생략 가능)">
-                </div>
-                <div class="col-md-3">
-                  <button type="button" id="generateDraftBtn" onclick="generateAiDraft()" class="btn btn-primary btn-sm w-100 fw-semibold">
-                    <i class="fa-solid fa-bolt me-1"></i>✨ AI 초안 생성
-                  </button>
-                </div>
-              </div>
-              <div id="aiLoadingStatus" class="d-none mt-2 text-primary small fw-semibold">
-                <div class="spinner-border spinner-border-sm me-1" role="status"></div>
-                <span id="aiLoadingText">NVIDIA NIM API로 4,000자 이상 고품질 AI 초안 작성 중... (약 20~30초 소요)</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label fw-semibold">파일명 (영문, 하이픈 권장. 예: ai-trend-2026)</label>
-            <div class="input-group">
-              <span class="input-group-text" id="newPostDatePrefix"></span>
-              <input type="text" id="newPostSlug" class="form-control" placeholder="slug-name">
-              <span class="input-group-text">.md</span>
-            </div>
-          </div>
-          <div class="mb-3">
-            <label class="form-label fw-semibold">마크다운 본문 (Frontmatter 포함 — 자유롭게 수정하세요)</label>
-            <textarea id="newPostContent" class="form-control editor-textarea"></textarea>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-          <button type="button" onclick="createNewPost()" class="btn btn-primary fw-semibold"><i class="fa-solid fa-paper-plane me-1"></i>발행하기</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
   <script>
-    const REPO_OWNER = 'pognae';
-    const REPO_NAME = 'pognae.github.io';
-    let allPosts = [];
-    let editModalObj = null;
-    let newPostModalObj = null;
+  (function () {
+    const API = {{ site.admin_api | default: "https://monopoint-admin.vercel.app" | jsonify }};
+    const TOKEN_KEY = "mp_admin_token";
+    const $ = (id) => document.getElementById(id);
+    const editor = new bootstrap.Modal($("editor"));
+    let items = [];
+    let filter = "all";
+    let editing = null;
 
-    function encodeBase64(str) {
-      const bytes = new TextEncoder().encode(str);
-      let binary = '';
-      for (let i = 0; i < bytes.byteLength; i++) {
-          binary += String.fromCharCode(bytes[i]);
+    localStorage.removeItem("mp_gh_token");
+
+    const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+    async function api(path, options = {}) {
+      const token = sessionStorage.getItem(TOKEN_KEY);
+      const res = await fetch(API + path, {
+        ...options,
+        headers: { "Content-Type": "application/json", ...(token ? { Authorization: "Bearer " + token } : {}) },
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.status === 401 && path !== "/api/login") {
+        logout();
+        throw new Error(data.error || "다시 로그인하세요");
       }
-      return btoa(binary);
+      if (!res.ok) throw new Error(data.error || "요청 실패 (" + res.status + ")");
+      return data;
     }
 
-    function decodeBase64(b64) {
-      const binary = atob(b64);
-      const bytes = new Uint8Array(binary.length);
-      for (let i = 0; i < binary.length; i++) {
-          bytes[i] = binary.charCodeAt(i);
-      }
-      return new TextDecoder().decode(bytes);
-    }
-
-    // HTTP 헤더 값에는 ISO-8859-1(Latin-1) 범위를 벗어나는 문자를 넣을 수 없다.
-    // 토큰/API 키에 한글·공백·개행 등 잘못된 문자가 섞여 있으면 fetch 가 실패하므로 정리한다.
-    function sanitizeHeaderValue(value) {
-      return (value || '').replace(/[^\x20-\x7E]/g, '').trim();
-    }
-
-    function getGhToken() {
-      return sanitizeHeaderValue(localStorage.getItem('mp_gh_token'));
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      editModalObj = new bootstrap.Modal(document.getElementById('editModal'));
-      newPostModalObj = new bootstrap.Modal(document.getElementById('newPostModal'));
-      const savedToken = localStorage.getItem('mp_gh_token');
-      const savedNvKey = localStorage.getItem('mp_nvidia_key');
-      if (savedToken) {
-        document.getElementById('ghToken').value = savedToken;
-        authenticate();
-      }
-      if (savedNvKey) {
-        document.getElementById('nvidiaApiKeyInput').value = savedNvKey;
-      }
-    });
-
-    function authenticate() {
-      const rawToken = document.getElementById('ghToken').value.trim();
-      const token = sanitizeHeaderValue(rawToken);
-      if (!token) {
-        alert('GitHub Token을 입력해 주세요.');
-        return;
-      }
-      if (token !== rawToken) {
-        alert('토큰에 사용할 수 없는 문자(한글·공백·특수문자 등)가 포함되어 있어 자동으로 제거했습니다. 올바른 토큰인지 확인해 주세요.');
-      }
-      localStorage.setItem('mp_gh_token', token);
-      document.getElementById('ghToken').value = token;
-      document.getElementById('authSection').classList.add('d-none');
-      document.getElementById('mainSection').classList.remove('d-none');
-      fetchPosts();
+    function show(loggedIn) {
+      $("login").classList.toggle("d-none", loggedIn);
+      $("app").classList.toggle("d-none", !loggedIn);
+      if (loggedIn) load();
     }
 
     function logout() {
-      localStorage.removeItem('mp_gh_token');
-      location.reload();
+      sessionStorage.removeItem(TOKEN_KEY);
+      show(false);
     }
 
-    async function fetchPosts() {
-      const token = getGhToken();
-      const container = document.getElementById('postListContainer');
-      container.innerHTML = `
-        <div class="text-center py-5">
-          <div class="spinner-border text-primary" role="status"></div>
-          <p class="mt-2 text-muted">포스트 목록 불러오는 중...</p>
-        </div>`;
-
-      // 1. 로컬 개발 서버 시도
+    $("login-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      $("login-error").textContent = "";
       try {
-        const localRes = await fetch('/api/posts');
-        if (localRes.ok) {
-          const localFiles = await localRes.json();
-          allPosts = localFiles;
-          document.getElementById('postCountBadge').innerText = `${allPosts.length}개 글`;
-          document.getElementById('lastSyncTime').innerText = new Date().toLocaleTimeString();
-          renderPostList(allPosts);
-          return;
-        }
-      } catch (e) {
-        // 로컬 서버가 아닐 경우 GitHub API로 진행
-      }
-
-      // 2. GitHub API 사용
-      try {
-        const response = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/_posts`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Accept': 'application/vnd.github.v3+json'
-          }
+        const { token } = await api("/api/login", {
+          method: "POST",
+          body: JSON.stringify({ id: $("login-id").value.trim(), password: $("login-pw").value }),
         });
-
-        if (!response.ok) {
-          throw new Error(`GitHub API 호출 실패 (${response.status}) — Token 권한을 확인하세요.`);
-        }
-
-        const files = await response.json();
-        allPosts = files.filter(f => f.name.endsWith('.md')).reverse();
-
-        document.getElementById('postCountBadge').innerText = `${allPosts.length}개 글`;
-        document.getElementById('lastSyncTime').innerText = new Date().toLocaleTimeString();
-
-        renderPostList(allPosts);
+        sessionStorage.setItem(TOKEN_KEY, token);
+        $("login-pw").value = "";
+        show(true);
       } catch (err) {
-        container.innerHTML = `<div class="alert alert-danger" role="alert"><i class="fa-solid fa-triangle-exclamation me-2"></i>${err.message}</div>`;
+        $("login-error").textContent = err.message;
       }
+    });
+
+    function badge(item) {
+      const h = item.humanize?.state;
+      if (item.folder === "queue") {
+        return item.error
+          ? '<span class="badge text-bg-danger">처리 실패</span>'
+          : '<span class="badge text-bg-warning">im-not-ai·sepia 처리 중</span>';
+      }
+      const where = item.folder === "posts" ? "공개" : "예약";
+      if (h === "stamped") return `<span class="badge text-bg-${item.folder === "posts" ? "success" : "primary"}">${where} · 검수 통과</span>`;
+      if (h === "legacy") return `<span class="badge text-bg-secondary">${where} · 기존 글</span>`;
+      return `<span class="badge text-bg-danger">발행 막힘 (${h === "mismatch" ? "도장 뒤 본문 변경" : "검수 도장 없음"})</span>`;
     }
 
-    function renderPostList(posts) {
-      const container = document.getElementById('postListContainer');
-      if (posts.length === 0) {
-        container.innerHTML = '<div class="text-center py-5 text-muted">검색 조건에 해당하는 포스트가 없습니다.</div>';
-        return;
-      }
-
-      let html = '';
-      posts.forEach(p => {
-        const dateMatch = p.name.match(/^(\d{4}-\d{2}-\d{2})/);
-        const dateStr = dateMatch ? dateMatch[1] : '날짜 미상';
-
-        html += `
-          <div class="post-card d-flex justify-content-between align-items-center">
-            <div>
-              <div class="post-title">${escapeHtml(p.name)}</div>
-              <div class="post-meta">
-                <span class="badge badge-date me-2">${dateStr}</span>
-                <span class="text-muted"><i class="fa-regular fa-file-code me-1"></i>${p.size} bytes</span>
-              </div>
+    function render() {
+      const shown = items.filter((i) => filter === "all" || i.folder === filter);
+      $("list-status").textContent = `${shown.length}개`;
+      $("list").innerHTML = shown.map((item, idx) => `
+        <div class="list-group-item">
+          <div class="d-flex flex-wrap gap-2 align-items-start">
+            <div class="me-auto">
+              <div class="post-title">${esc(item.title || "(제목 없음)")}</div>
+              <div class="post-meta">${esc(item.date)} · ${esc(item.categories.join(", "))} · ${esc(item.path)}</div>
             </div>
-            <div class="d-flex gap-2">
-              <button onclick="openEditModal('${p.path}', '${p.sha}')" class="btn btn-outline-primary btn-sm fw-semibold">
-                <i class="fa-solid fa-pen me-1"></i>수정
-              </button>
-              <button onclick="deletePost('${p.path}', '${p.sha}', '${escapeHtml(p.name)}')" class="btn btn-outline-danger btn-sm fw-semibold">
-                <i class="fa-solid fa-trash me-1"></i>삭제
-              </button>
+            <div class="text-end">
+              ${badge(item)}
+              ${item.queuedAs ? '<span class="badge text-bg-warning">수정본 처리 중</span>' : ""}
             </div>
-          </div>`;
-      });
-      container.innerHTML = html;
+            <div class="btn-group btn-group-sm">
+              <button class="btn btn-outline-primary" data-edit="${esc(item.path)}">수정</button>
+              <button class="btn btn-outline-danger" data-archive="${esc(item.path)}">${item.folder === "queue" ? "취소" : "보관"}</button>
+            </div>
+          </div>
+          ${item.error ? `<div class="error-box text-danger mt-2">${esc(item.error)}</div>` : ""}
+        </div>`).join("") || '<div class="text-muted p-3">글이 없습니다.</div>';
     }
 
-    function filterPosts() {
-      const query = document.getElementById('searchInput').value.toLowerCase().trim();
-      if (!query) {
-        renderPostList(allPosts);
-        return;
-      }
-      const filtered = allPosts.filter(p => p.name.toLowerCase().includes(query));
-      renderPostList(filtered);
-    }
-
-    async function openEditModal(path, sha) {
-      const token = getGhToken();
-      document.getElementById('editFileName').value = path;
-      document.getElementById('editSha').value = sha;
-      document.getElementById('editPath').value = path;
-      document.getElementById('editContent').value = '불러오는 중...';
-      editModalObj.show();
-
-      // 1. 로컬 API 시도
+    async function load() {
+      $("list-status").textContent = "불러오는 중…";
       try {
-        const fileName = path.replace('_posts/', '');
-        const localRes = await fetch(`/api/post/${encodeURIComponent(fileName)}`);
-        if (localRes.ok) {
-          const localData = await localRes.json();
-          document.getElementById('editContent').value = localData.content;
-          return;
-        }
-      } catch (e) {}
-
-      // 2. GitHub API 사용
-      try {
-        const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        const data = await res.json();
-        
-        const content = decodeBase64(data.content);
-        document.getElementById('editContent').value = content;
-        document.getElementById('editSha').value = data.sha;
+        items = (await api("/api/posts")).items;
+        render();
       } catch (err) {
-        alert('파일 내용을 불러오지 못했습니다: ' + err.message);
+        $("list-status").textContent = err.message;
       }
     }
 
-    async function savePostChanges() {
-      const token = getGhToken();
-      const path = document.getElementById('editPath').value;
-      const sha = document.getElementById('editSha').value;
-      const content = document.getElementById('editContent').value;
-      const fileName = path.replace('_posts/', '');
+    document.querySelectorAll("#filters [data-filter]").forEach((btn) => btn.addEventListener("click", () => {
+      document.querySelectorAll("#filters .nav-link").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      filter = btn.dataset.filter;
+      render();
+    }));
 
-      if (!confirm(`'${path}' 포스트의 수정 내용을 저장하시겠습니까?`)) return;
-
-      // 1. 로컬 API 시도
-      try {
-        const localRes = await fetch(`/api/post/${encodeURIComponent(fileName)}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ content: content })
-        });
-        if (localRes.ok) {
-          alert('성공적으로 로컬 저장소에 저장 및 사이트맵이 업데이트되었습니다!');
-          editModalObj.hide();
-          fetchPosts();
-          return;
-        }
-      } catch (e) {}
-
-      // 2. GitHub API 사용
-      const encodedContent = encodeBase64(content);
-      try {
-        const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`, {
-          method: 'PUT',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            message: `admin: update post ${path}`,
-            content: encodedContent,
-            sha: sha
-          })
-        });
-
-        if (!res.ok) {
-          const errData = await res.json();
-          throw new Error(errData.message || '저장 실패');
-        }
-
-        alert('성공적으로 수정사항이 GitHub 저장소에 반영되었습니다!');
-        editModalObj.hide();
-        fetchPosts();
-      } catch (err) {
-        alert('수정 실패: ' + err.message);
-      }
+    function toLocalInput(date) {
+      const m = String(date || "").match(/^(\d{4}-\d{2}-\d{2})(?:[ T](\d{2}:\d{2}))?/);
+      return m ? `${m[1]}T${m[2] || "09:00"}` : "";
     }
 
-    async function deletePost(path, sha, fileName) {
-      const token = getGhToken();
-      if (!confirm(`정말로 포스트 '${fileName}'을(를) 영구 삭제하시겠습니까?`)) return;
-
-      const fileOnly = path.replace('_posts/', '');
-
-      // 1. 로컬 API 시도
-      try {
-        const localRes = await fetch(`/api/post/${encodeURIComponent(fileOnly)}`, { method: 'DELETE' });
-        if (localRes.ok) {
-          alert(`포스트 '${fileName}'이(가) 성공적으로 삭제되었습니다.`);
-          fetchPosts();
-          return;
-        }
-      } catch (e) {}
-
-      // 2. GitHub API 사용
-      try {
-        const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`, {
-          method: 'DELETE',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            message: `admin: delete post ${path}`,
-            sha: sha
-          })
-        });
-
-        if (!res.ok) {
-          const errData = await res.json();
-          throw new Error(errData.message || '삭제 실패');
-        }
-
-        alert(`포스트 '${fileName}'이(가) 성공적으로 삭제되었습니다.`);
-        fetchPosts();
-      } catch (err) {
-        alert('삭제 실패: ' + err.message);
-      }
+    function nextSlot() {
+      const kst = new Date(Date.now() + 9 * 3600 * 1000 + 3600 * 1000);
+      return kst.toISOString().slice(0, 13) + ":00";
     }
 
-    function escapeHtml(str) {
-      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    function updateCount() {
+      $("f-count").textContent = `본문 ${Array.from($("f-body").value).length.toLocaleString()}자`;
     }
 
-    function openNewPostModal() {
-      const today = new Date();
-      const offset = 9 * 60 * 60 * 1000;
-      const kstDate = new Date(today.getTime() + offset);
-      const datePrefix = kstDate.toISOString().split('T')[0] + '-';
-      
-      document.getElementById('newPostDatePrefix').innerText = datePrefix;
-      document.getElementById('newPostSlug').value = '';
-      document.getElementById('aiTopicInput').value = '';
-      document.getElementById('newPostContent').value = `---\nlayout: single\ntitle: "새 AI 기술 포스트 제목"\ndate: ${kstDate.toISOString().split('T')[0]} 10:00:00 +0900\ncategories: [AI]\ntags: [AI기술]\n---\n\n위의 [✨ AI 초안 생성] 버튼을 누르시면 NVIDIA NIM Llama-3.1 모델이 4,000자 이상의 고품질 글을 자동으로 작성해 드립니다.`;
-      newPostModalObj.show();
+    function openEditor(post) {
+      editing = post;
+      $("editor-error").textContent = "";
+      $("editor-title").textContent = post ? "글 수정" : "새 글";
+      $("f-title").value = post?.title || "";
+      $("f-description").value = post?.description || "";
+      $("f-category").value = post?.categories?.[0] || "생활 재테크";
+      $("f-date").value = post ? toLocalInput(post.date) : nextSlot();
+      $("f-tags").value = (post?.tags || []).join(", ");
+      $("f-slug").value = post ? post.name.replace(/^\d{4}-\d{2}-\d{2}-|\.md$/g, "") : "";
+      $("f-slug").readOnly = !!post;
+      $("f-slug").required = !post;
+      $("f-body").value = post?.body || "";
+      updateCount();
+      bootstrap.Tab.getOrCreateInstance(document.querySelector('[data-bs-target="#tab-write"]')).show();
+      editor.show();
     }
 
-    async function generateAiDraft() {
-      const topic = document.getElementById('aiTopicInput').value.trim();
-      if (!topic) {
-        alert('AI 초안 작성을 위한 주제/키워드를 입력해 주세요 (예: ChatGPT 4o, Claude 3.5 Sonnet, RAG 기술 등).');
-        return;
-      }
+    $("f-body").addEventListener("input", updateCount);
+    $("btn-preview").addEventListener("click", () => {
+      $("preview").innerHTML = DOMPurify.sanitize(marked.parse($("f-body").value));
+    });
 
-      const userApiKey = sanitizeHeaderValue(document.getElementById('nvidiaApiKeyInput').value.trim());
-      if (userApiKey) {
-        localStorage.setItem('mp_nvidia_key', userApiKey);
-      }
-      const apiKey = userApiKey || sanitizeHeaderValue(localStorage.getItem('mp_nvidia_key')) || '';
-
-      const btn = document.getElementById('generateDraftBtn');
-      const loadingStatus = document.getElementById('aiLoadingStatus');
-      btn.disabled = true;
-      loadingStatus.classList.remove('d-none');
-
-      try {
-        let result = null;
-
-        // 1. 로컬 서버 API 엔드포인트 시도
+    $("list").addEventListener("click", async (e) => {
+      const edit = e.target.closest("[data-edit]");
+      const archive = e.target.closest("[data-archive]");
+      if (edit) {
+        edit.disabled = true;
         try {
-          const serverRes = await fetch('/api/generate-ai-draft', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ keyword: topic, apiKey: apiKey })
-          });
-          if (serverRes.ok) {
-            result = await serverRes.json();
-          }
-        } catch (e) {}
-
-        // 2. 브라우저에서 직접 NVIDIA NIM API 호출
-        if (!result) {
-          if (!apiKey) {
-            throw new Error('NVIDIA API Key가 필요합니다. NVIDIA API Key 입력란에 nvapi-xxxx 키를 입력하세요.');
-          }
-
-          const systemPrompt = `너는 AI(인공지능) 최신 기술 및 트렌드 전문 에디터이다.
-[작성 지침]
-1. 타겟 독자: AI를 배우려는 비전공자 및 비개발자 (어려운 소스 코드나 수식 대신 직관적인 비유와 실용적 예시 위주).
-2. 콘텐츠 방향: 최신 AI 기술, AI 도구 활용법, 트렌드 및 향후 동향 설명.
-3. 제목 규칙: 관련 기술명 및 핵심 주제명만 명확하게 작성 (예: "ChatGPT 4o", "Claude 3.5 Sonnet", "RAG 검색 증강 생성 기술").
-   * 상투적 템플릿 문구("알아두면 유용한 정보", "완벽 정리", "한눈에 보기", "핵심 정리", "총정리", "주요 내용 및 실용 가이드") 절대 금지.
-4. 분량 및 언어: 공백 포함 4,000자 이상의 풍부한 한글 마크다운 본문.
-5. 금지사항: 정치적 내용 0% (정치인, 지자체장, 정당 등 절대 제외).`;
-
-          const userPrompt = `주제 키워드: "${topic}"
-
-비전공자 및 비개발자 독자를 위한 최신 AI 기술/동향 안내 포스트를 작성해 주세요. 아래 [TITLE], [DESCRIPTION], [BODY] 태그 구성을 엄격히 준수하십시오.
-
-[TITLE]
-관련 AI 기술명 및 핵심 주제명만 명확하고 깔끔하게 작성 (60자 이내).
-(예: "ChatGPT 4o", "Claude 3.5 Sonnet", "RAG 검색 증강 생성 기술")
-
-[DESCRIPTION]
-구글 검색 요약(Meta Description)에 들어갈 120~150자 내외의 설명문.
-
-[BODY]
-공백 포함 4,000자 이상의 밀도 높은 마크다운 본문.
-1. 서론: AI 기술의 최신 동향과 일상/업무에서의 변화 도입.
-2. 본론:
-   - 비전공자도 쉽게 이해할 수 있는 개념과 직관적 비유(예: "RAG는 원하는 자료를 찾아주는 도서관 사서와 같습니다") 설명.
-   - 비개발자가 바로 써볼 수 있는 활용법 및 실용 팁.
-   - 마크다운 소제목(H2, H3) 사용.
-3. 결론: AI 시대 비전공자를 위한 요약 및 마무리.`;
-
-          const nimRes = await fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${apiKey}`,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              model: 'meta/llama-3.1-70b-instruct',
-              messages: [
-                { role: 'system', content: systemPrompt },
-                { role: 'user', content: userPrompt }
-              ],
-              temperature: 0.7,
-              max_tokens: 4000
-            })
-          });
-
-          if (!nimRes.ok) {
-            const errTxt = await nimRes.text();
-            throw new Error(`NVIDIA API 호출 실패 (${nimRes.status}): ${errTxt}`);
-          }
-
-          const nimJson = await nimRes.json();
-          const rawText = (nimJson.choices[0]?.message?.content || '').trim();
-
-          const cleanPostBody = (b) => {
-            if (!b) return '';
-            let c = b.replace(/^[ \t]*[=\-\*_]{3,}[ \t]*$/gm, '');
-            c = c.replace(/^[ \t]*(?:\*\*|\[)?\s*(?:TITLE|DESCRIPTION|BODY)\s*(?:\*\*|\])?\s*:?[ \t]*$/gmi, '');
-            c = c.replace(/^[ \t]*(?:\*\*|\[)?\s*(?:TITLE|DESCRIPTION|BODY)\s*(?:\*\*|\])?\s*:?[ \t]*/gmi, '');
-            c = c.replace(/(?:\*\*|\[)\s*(?:TITLE|DESCRIPTION|BODY)\s*(?:\*\*|\])\s*:?/gmi, '');
-            c = c.replace(/^[ \t]*(?:#+\s*|[\d+\.\-\*\s]*)*(?:\*\*|\[)?\s*도입부\s*(?:\*\*|\])?\s*:?[ \t]*/gmi, '');
-            c = c.replace(/도입부/g, '');
-            c = c.replace(/\*\*/g, '');
-            c = c.replace(/\n{3,}/g, '\n\n');
-            return c.trim();
-          };
-
-          let title = topic;
-          let description = `${topic}에 대한 비전공자 맞춤 AI 기술 안내.`;
-          let body = rawText;
-
-          const titleMatch = rawText.match(/(?:\[TITLE\]|\*\*TITLE\*\*|TITLE:)\s*([\s\S]*?)(?=(?:\[DESCRIPTION\]|\*\*DESCRIPTION\*\*|DESCRIPTION:|\[BODY\]|\*\*BODY\*\*|BODY:)|$)/i);
-          const descMatch = rawText.match(/(?:\[DESCRIPTION\]|\*\*DESCRIPTION\*\*|DESCRIPTION:)\s*([\s\S]*?)(?=(?:\[BODY\]|\*\*BODY\*\*|BODY:)|$)/i);
-          const bodyMatch = rawText.match(/(?:\[BODY\]|\*\*BODY\*\*|BODY:)\s*([\s\S]*?)$/i);
-
-          if (titleMatch && titleMatch[1].trim()) title = titleMatch[1].trim().replace(/^["']|["']$/g, '');
-          if (descMatch && descMatch[1].trim()) description = descMatch[1].trim();
-          if (bodyMatch && bodyMatch[1].trim()) body = bodyMatch[1].trim();
-
-          body = cleanPostBody(body);
-
-          const today = new Date();
-          const kstDate = new Date(today.getTime() + (9 * 60 * 60 * 1000));
-          const dateStr = kstDate.toISOString().split('T')[0];
-
-          let slug = topic.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-          if (!slug) slug = 'ai-guide';
-          slug = `ai-${slug}`;
-
-          const fullMarkdown = `---
-layout: single
-title: "${title.replace(/"/g, '\\"')}"
-date: ${dateStr} 10:00:00 +0900
-description: "${description.replace(/"/g, '\\"')}"
-categories: [AI]
-tags: [${topic}]
----
-
-${body}`;
-
-          result = {
-            title,
-            slug,
-            fullMarkdown
-          };
+          openEditor(await api("/api/post?path=" + encodeURIComponent(edit.dataset.edit)));
+        } catch (err) {
+          alert(err.message);
+        } finally {
+          edit.disabled = false;
         }
-
-        document.getElementById('newPostSlug').value = result.slug;
-        document.getElementById('newPostContent').value = result.fullMarkdown;
-        alert('✨ AI 초안 생성이 성공적으로 완료되었습니다!\n에디터에서 내용과 제목을 자유롭게 검토 및 수정한 후 [발행하기] 버튼을 눌러주세요.');
-
-      } catch (err) {
-        alert('AI 초안 생성 실패: ' + err.message);
-      } finally {
-        btn.disabled = false;
-        loadingStatus.classList.add('d-none');
       }
-    }
-
-    async function createNewPost() {
-      const token = getGhToken();
-      const prefix = document.getElementById('newPostDatePrefix').innerText;
-      let slug = document.getElementById('newPostSlug').value.trim();
-      if (!slug) slug = 'untitled';
-      
-      const fileName = prefix + slug + '.md';
-      const path = '_posts/' + fileName;
-      const content = document.getElementById('newPostContent').value;
-
-      if (!confirm(`'${fileName}' 포스트를 새로 발행하시겠습니까?`)) return;
-
-      // 1. 로컬 API 시도
-      try {
-        const localRes = await fetch(`/api/post/${encodeURIComponent(fileName)}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ content: content })
-        });
-        if (localRes.ok) {
-          alert('성공적으로 로컬 저장소에 새 포스트가 발행되고 사이트맵이 갱신되었습니다!');
-          newPostModalObj.hide();
-          fetchPosts();
-          return;
+      if (archive) {
+        const path = archive.dataset.archive;
+        const queue = path.startsWith("_admin-queue/");
+        if (!confirm(queue ? "처리 대기 중인 저장본을 취소할까요?" : "이 글을 내리고 _posts-archive로 보관할까요?")) return;
+        try {
+          await api("/api/post?path=" + encodeURIComponent(path), { method: "DELETE" });
+          load();
+        } catch (err) {
+          alert(err.message);
         }
-      } catch (e) {}
+      }
+    });
 
-      // 2. GitHub API 사용
-      const encodedContent = encodeBase64(content);
-
+    $("editor-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      $("btn-save").disabled = true;
+      $("editor-error").textContent = "";
       try {
-        const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`, {
-          method: 'PUT',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          },
+        await api("/api/post", {
+          method: "PUT",
           body: JSON.stringify({
-            message: `admin: create new post ${fileName}`,
-            content: encodedContent
-          })
+            source: editing?.path || null,
+            slug: $("f-slug").value.trim(),
+            title: $("f-title").value,
+            description: $("f-description").value,
+            category: $("f-category").value,
+            date: $("f-date").value,
+            tags: $("f-tags").value,
+            body: $("f-body").value,
+          }),
         });
-
-        if (!res.ok) {
-          const errData = await res.json();
-          throw new Error(errData.message || '발행 실패');
-        }
-
-        alert('성공적으로 새 포스트가 GitHub 저장소에 발행되었습니다!');
-        newPostModalObj.hide();
-        fetchPosts();
+        editor.hide();
+        load();
       } catch (err) {
-        alert('발행 실패: ' + err.message);
+        $("editor-error").textContent = err.message;
+      } finally {
+        $("btn-save").disabled = false;
       }
-    }
+    });
+
+    $("btn-new").addEventListener("click", () => openEditor(null));
+    $("btn-refresh").addEventListener("click", load);
+    $("btn-logout").addEventListener("click", logout);
+    $("btn-retry").addEventListener("click", async () => {
+      try {
+        await api("/api/retry", { method: "POST" });
+        alert("다시 처리를 요청했습니다. 몇 분 뒤 새로고침하세요.");
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+
+    show(!!sessionStorage.getItem(TOKEN_KEY));
+  })();
   </script>
 </body>
 </html>

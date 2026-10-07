@@ -71,7 +71,8 @@ exclude:
   - scripts
   - scratch*.js
   - adsense_dump.html
-  - admin.html
+  - _admin-queue
+  - _humanize-reports
   - package.json
   - package-lock.json
   - node_modules
@@ -94,6 +95,9 @@ defaults:
       related: true
 
 repository: "pognae/pognae.github.io"
+
+# /admin 화면이 호출하는 로그인·저장 API (pognae/monopoint-admin, Vercel)
+admin_api: "https://monopoint-admin.vercel.app"
 
 comments:
   # "custom"이면 테마가 댓글 스크립트를 따로 넣지 않고 _includes/comments.html이 Waline/giscus를 고릅니다.

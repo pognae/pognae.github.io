@@ -7,6 +7,7 @@
  */
 import fs from "fs";
 import path from "path";
+import { humanizeStatus, isDue } from "./publish-due-posts.mjs";
 
 const ROOT = process.cwd();
 const PENDING = path.join(ROOT, "_posts-pending");
@@ -36,7 +37,14 @@ function dueTodayIn(dir) {
 }
 
 const today = todayKST();
-const duePending = dueTodayIn(PENDING);
+// 같은 날 15:00 예약 글은 09:00 실행 때 아직 발행 대상이 아니므로 발행 시각이 지난 것만 센다.
+// 도장이 없어 막힌 글(humanize 미처리)은 의도된 보류이므로 따로 경고만 한다.
+const blocked = fs.existsSync(PENDING)
+  ? fs.readdirSync(PENDING).filter((f) => f.endsWith(".md") && !humanizeStatus(path.join(PENDING, f)).ok)
+  : [];
+const duePending = dueTodayIn(PENDING).filter(
+  (f) => isDue(path.join(PENDING, f), today) && !blocked.includes(f)
+);
 const duePosts = dueTodayIn(POSTS);
 const dueTotal = duePending.length + duePosts.length;
 const pendingTotal = countMd(PENDING);
@@ -127,6 +135,9 @@ if (!isCI && duePending.length > 0) {
     `WARN: 오늘 글 ${duePending.length}편이 아직 _posts-pending에 있습니다. ` +
       "GitHub Actions cron 또는 수동 트리거가 필요합니다."
   );
+}
+for (const f of blocked) {
+  warnings.push(`WARN: im-not-ai·sepia 도장이 없거나 본문이 바뀌어 발행 보류: ${f} (${humanizeStatus(path.join(PENDING, f)).reason})`);
 }
 if (!isCI && dueTotal === 0) {
   warnings.push(`INFO: 오늘(${today}) 예정된 글이 없습니다.`);
