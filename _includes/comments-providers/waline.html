@@ -1,4 +1,10 @@
 <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css">
+<style>
+  /* Waline 기본 카운터는 단어 수를 세고 한글을 0으로 계산하므로 숨기고 아래 글자 수 카운터로 대체합니다. */
+  #waline .wl-text-number { display: none; }
+  #waline .mp-char-count { font-size: 0.75em; color: #6b7280; margin-right: 0.5em; }
+  #waline .mp-char-count.is-full { color: #dc2626; }
+</style>
 <div id="waline"></div>
 <script type="module">
   import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
@@ -12,7 +18,7 @@
     login: 'disable',
     meta: ['nick', 'mail'],
     requiredMeta: ['nick'],
-    wordLimit: [2, 1000],
+    wordLimit: 0,
     pageSize: 10,
     reaction: false,
     pageview: false,
@@ -61,4 +67,35 @@
       reactionTitle: '이 글 어땠나요?',
     },
   });
+
+  const MAX_CHARS = 1000;
+  const root = document.getElementById('waline');
+
+  const updatePanel = (panel) => {
+    const textarea = panel.querySelector('textarea.wl-editor');
+    const info = panel.querySelector('.wl-footer .wl-info');
+    if (!textarea || !info) return;
+
+    if (textarea.maxLength !== MAX_CHARS) textarea.maxLength = MAX_CHARS;
+    let counter = info.querySelector('.mp-char-count');
+    if (!counter) {
+      counter = document.createElement('span');
+      counter.className = 'mp-char-count';
+      info.prepend(counter);
+    }
+    // 이모지·한글을 한 글자로 세려고 코드포인트 기준으로 셉니다.
+    const count = Array.from(textarea.value).length;
+    const text = `${count} / ${MAX_CHARS}자`;
+    if (counter.textContent !== text) {
+      counter.textContent = text;
+      counter.classList.toggle('is-full', count >= MAX_CHARS);
+    }
+  };
+
+  const attachCounter = () => root.querySelectorAll('.wl-panel').forEach(updatePanel);
+
+  root.addEventListener('input', attachCounter);
+  new MutationObserver(attachCounter).observe(root, { childList: true, subtree: true });
+  // 등록 후 비우기, 이모지 삽입처럼 input 이벤트 없이 값이 바뀌는 경우를 반영합니다.
+  setInterval(attachCounter, 1000);
 </script>
