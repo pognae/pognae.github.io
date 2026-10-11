@@ -14,7 +14,7 @@ const ROOT = process.cwd();
 const PENDING = path.join(ROOT, "_posts-pending");
 const POSTS = path.join(ROOT, "_posts");
 
-// 이 날짜 이후 파일명을 가진 글은 im-not-ai + sepia 처리 도장(humanize 블록)이 있어야 발행된다.
+// 이 날짜 이후 파일명을 가진 글은 im-not-ai 도장(humanize 블록)이 있어야 발행된다.
 const HUMANIZE_REQUIRED_FROM = "2026-10-07";
 // 도장 제도 이전에 작성된 예약 글
 const HUMANIZE_EXEMPT = new Set([
@@ -40,8 +40,8 @@ export function humanizeStatus(filePath) {
   if (legacy && !block) return { required: false, ok: true };
   if (!block) return { required: true, ok: false, reason: "humanize 도장 없음" };
   const field = (name) => (block[1].match(new RegExp(`^ {2}${name}:\\s*"?([^"\\n]+)"?`, "m")) || [])[1];
-  if (!field("im_not_ai") || !field("sepia")) {
-    return { required: true, ok: false, reason: "im_not_ai/sepia 기록 누락" };
+  if (!field("im_not_ai")) {
+    return { required: true, ok: false, reason: "im_not_ai 기록 누락" };
   }
   if (field("body_sha256") !== bodySha256(text)) {
     return { required: true, ok: false, reason: "도장 이후 본문이 바뀜(body_sha256 불일치)" };

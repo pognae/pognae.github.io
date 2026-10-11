@@ -1,6 +1,6 @@
-title: MonoPoint
-name: MonoPoint
-description: 주식 주문부터 ETF, 절세 계좌, 가계 관리까지 재테크·투자 기초를 공식 자료와 계산 예시로 풀어 쓰는 블로그
+title: 자취노트
+name: 자취노트
+description: 월세 계약, 이사, 관리비와 공과금, 장보기와 집 수리를 처음 자취하는 사람을 위해 정리하는 생활 안내
 logo: /icons/icon.svg
 lang: ko-KR
 locale: ko-KR
@@ -15,9 +15,9 @@ theme: minimal-mistakes-jekyll
 minimal_mistakes_skin: "air" # 깔끔하고 가독성 좋은 'air' 스킨 적용
 
 author:
-  name   : "MonoPoint"
+  name   : "자취노트"
   avatar : "/icons/icon.svg"
-  bio    : "처음 투자하는 사람이 헷갈리는 제도와 숫자를 공식 자료 기준으로 정리합니다."
+  bio    : "처음 혼자 사는 사람이 계약·이사·살림에서 빠뜨리기 쉬운 항목을 정리합니다."
   links:
     - label: "Home"
       icon: "fas fa-fw fa-home"

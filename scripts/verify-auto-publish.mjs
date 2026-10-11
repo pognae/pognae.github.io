@@ -137,7 +137,7 @@ if (!isCI && duePending.length > 0) {
   );
 }
 for (const f of blocked) {
-  warnings.push(`WARN: im-not-ai·sepia 도장이 없거나 본문이 바뀌어 발행 보류: ${f} (${humanizeStatus(path.join(PENDING, f)).reason})`);
+  warnings.push(`WARN: im-not-ai 도장이 없거나 본문이 바뀌어 발행 보류: ${f} (${humanizeStatus(path.join(PENDING, f)).reason})`);
 }
 if (!isCI && dueTotal === 0) {
   warnings.push(`INFO: 오늘(${today}) 예정된 글이 없습니다.`);

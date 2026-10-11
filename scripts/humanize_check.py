@@ -6,9 +6,9 @@
       front matter를 떼고 정량 점수·route_hint·탐지 패턴을 출력한다.
   python scripts/humanize_check.py gate  <draft.md> <final.md>
       윤문 전(draft)과 후(final)를 verify_gates.py로 비교한다(변경률·대구·수치 보존).
-  python scripts/humanize_check.py stamp <post.md> <sepia-report.md>
-      im-not-ai lint가 깨끗하고 sepia refactor 보고서가 있으면 front matter에
-      humanize 도장(두 도구 버전 + 본문 sha256)을 찍는다. 도장이 없거나 본문 해시가
+  python scripts/humanize_check.py stamp <post.md> [sepia-report.md]
+      im-not-ai lint가 깨끗하면 front matter에 humanize 도장(im-not-ai 버전 + 본문 sha256)을
+      찍는다. sepia 보고서를 넘기면 sepia 버전도 함께 적는다. 도장이 없거나 본문 해시가
       다르면 publish-due-posts.mjs가 발행하지 않는다.
 
 im-not-ai 위치는 IM_NOT_AI_DIR 환경변수, 없으면 이 저장소와 같은 폴더의 im-not-ai/를 쓴다.
@@ -69,11 +69,14 @@ def sepia_version() -> str:
     return m.group(1) if m else "unknown"
 
 
-def stamp(post: Path, report: Path) -> int:
-    if not (SEPIA / "skills" / "sepia" / "SKILL.md").exists():
-        sys.exit(f"sepia를 찾을 수 없습니다: {SEPIA}")
-    if not report.exists() or "Deferred:" not in report.read_text(encoding="utf-8"):
-        sys.exit(f"sepia refactor 보고서가 없거나 Deferred: 줄이 없습니다: {report}")
+def stamp(post: Path, report: Path | None = None) -> int:
+    sepia_line = ""
+    if report is not None:
+        if not (SEPIA / "skills" / "sepia" / "SKILL.md").exists():
+            sys.exit(f"sepia를 찾을 수 없습니다: {SEPIA}")
+        if not report.exists() or "Deferred:" not in report.read_text(encoding="utf-8"):
+            sys.exit(f"sepia refactor 보고서가 없거나 Deferred: 줄이 없습니다: {report}")
+        sepia_line = f"  sepia: \"{sepia_version()}\"\n"
     result = lint(body_of(post))
     if result["foreign_script"] or result["stock_phrases"] or result["bold_count"] > 3:
         sys.exit(f"im-not-ai lint 미통과: {json.dumps(result, ensure_ascii=False)}")
@@ -83,10 +86,11 @@ def stamp(post: Path, report: Path) -> int:
     if not m:
         sys.exit(f"front matter가 없습니다: {post}")
     front = re.sub(r"^humanize:\n(?:  .*\n)*", "", m.group(0)[4:-4] + "\n", flags=re.M).rstrip("\n")
-    block = (f"humanize:\n  im_not_ai: \"{git_head(SKILL)}\"\n  sepia: \"{sepia_version()}\"\n"
+    block = (f"humanize:\n  im_not_ai: \"{git_head(SKILL)}\"\n{sepia_line}"
              f"  body_sha256: \"{body_sha256(post)}\"")
     post.write_bytes(f"---\n{front}\n{block}\n---\n{text[m.end():]}".encode("utf-8"))
-    print(f"stamped {post.name}: im-not-ai {git_head(SKILL)}, sepia {sepia_version()}")
+    extra = f", sepia {sepia_version()}" if sepia_line else ""
+    print(f"stamped {post.name}: im-not-ai {git_head(SKILL)}{extra}")
     return 0
 
 
@@ -135,6 +139,8 @@ def main() -> int:
         return scan(Path(sys.argv[2]))
     if len(sys.argv) == 4 and sys.argv[1] == "gate":
         return gate(Path(sys.argv[2]), Path(sys.argv[3]))
+    if len(sys.argv) == 3 and sys.argv[1] == "stamp":
+        return stamp(Path(sys.argv[2]), None)
     if len(sys.argv) == 4 and sys.argv[1] == "stamp":
         return stamp(Path(sys.argv[2]), Path(sys.argv[3]))
     print(__doc__)

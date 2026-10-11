@@ -89,7 +89,7 @@ robots: noindex, nofollow
             <div class="col-md-3">
               <label class="form-label" for="f-category">카테고리</label>
               <select class="form-select" id="f-category" required>
-                <option>생활 재테크</option><option>투자 기초</option><option>절세·계좌</option><option>ETF·자산배분</option>
+                <option>계약·보증금</option><option>이사·살림</option><option>공과금·생활비</option><option>장보기·살림기술</option><option>안전·수선</option>
               </select>
             </div>
             <div class="col-md-3">
@@ -132,7 +132,7 @@ robots: noindex, nofollow
     const REPO = "pognae/pognae.github.io";
     const BRANCH = "main";
     const FOLDERS = { posts: "_posts", pending: "_posts-pending", queue: "_admin-queue" };
-    const CATEGORIES = ["생활 재테크", "투자 기초", "절세·계좌", "ETF·자산배분"];
+    const CATEGORIES = ["계약·보증금", "이사·살림", "공과금·생활비", "장보기·살림기술", "안전·수선"];
     // 아이디·비밀번호 확인용 PBKDF2 해시(평문은 어디에도 두지 않는다). GitHub 토큰은 이 비밀번호로 암호화해 기기마다 저장한다.
     const LOGIN = { salt: "rEYnbhn++Sqhy8V57LZXLA==", hash: "DT/0L2ja8S+Ot1zXZvOxsEfWxVuqS6RsMjY9yFb4JqI=", iterations: 310000 };
     const VAULT_KEY = "mp_admin_vault";
@@ -530,7 +530,7 @@ robots: noindex, nofollow
       $("editor-title").textContent = post ? "글 수정" : "새 글";
       $("f-title").value = post?.title || "";
       $("f-description").value = post?.description || "";
-      $("f-category").value = post?.categories?.[0] || "생활 재테크";
+      $("f-category").value = post?.categories?.[0] || "계약·보증금";
       $("f-date").value = post ? toLocalInput(post.date) : nextSlot();
       $("f-tags").value = (post?.tags || []).join(", ");
       $("f-slug").value = post ? post.name.replace(/^\d{4}-\d{2}-\d{2}-|\.md$/g, "") : "";

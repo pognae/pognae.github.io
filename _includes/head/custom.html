@@ -1,4 +1,13 @@
 <!-- start custom head snippets -->
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem("jn-theme");
+      var theme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    } catch (e) {}
+  })();
+</script>
 <!-- 구글 애드센스 자동 광고 -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5461344534519122"
   crossorigin="anonymous"></script>
@@ -147,10 +156,137 @@
     padding-top: 1.5rem !important;
     margin-top: 2.5rem !important;
   }
+  html[data-theme="dark"] body,
+  html[data-theme="dark"] .masthead,
+  html[data-theme="dark"] .page,
+  html[data-theme="dark"] .archive,
+  html[data-theme="dark"] .sidebar,
+  html[data-theme="dark"] .page__footer {
+    background: #141210;
+    color: #f3efe7;
+  }
+  html[data-theme="dark"] .masthead,
+  html[data-theme="dark"] .page__footer,
+  html[data-theme="dark"] .sidebar {
+    border-color: #3a342c;
+  }
+  html[data-theme="dark"] a { color: #7dd3c7; }
+  html[data-theme="dark"] .greedy-nav a,
+  html[data-theme="dark"] .site-title { color: #f3efe7; }
+  html[data-theme="dark"] .page__content,
+  html[data-theme="dark"] .archive__item-title a,
+  html[data-theme="dark"] h1, html[data-theme="dark"] h2, html[data-theme="dark"] h3 {
+    color: #f3efe7;
+  }
+  html[data-theme="dark"] .notice,
+  html[data-theme="dark"] .nav__list,
+  html[data-theme="dark"] pre,
+  html[data-theme="dark"] code {
+    background: #221f1c;
+    color: #f3efe7;
+    border-color: #3a342c;
+  }
+
+  .jn-theme-btn {
+    margin-left: .75rem;
+    border: 1px solid #d6d3d1;
+    background: #fff;
+    color: #1c1917;
+    border-radius: 999px;
+    padding: .25rem .7rem;
+    font-size: .8rem;
+    cursor: pointer;
+  }
+  html[data-theme="dark"] .jn-theme-btn {
+    background: #221f1c;
+    color: #f3efe7;
+    border-color: #3a342c;
+  }
+
+  .jn-hub { max-width: 1080px; margin: 0 auto; }
+  .jn-hero { padding: 1.5rem 0 1rem; }
+  .jn-hero h1 { font-size: 1.8rem; margin-bottom: .4rem; letter-spacing: -0.02em; }
+  .jn-hero p { color: #57534e; margin-top: 0; }
+  html[data-theme="dark"] .jn-hero p { color: #d6d3d1; }
+  #jn-q {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #d6d3d1;
+    border-radius: 12px;
+    padding: .9rem 1rem;
+    font-size: 1rem;
+    background: #fff;
+    color: #1c1917;
+  }
+  html[data-theme="dark"] #jn-q { background: #221f1c; color: #f3efe7; border-color: #3a342c; }
+  .jn-sec { margin: 1.6rem 0; }
+  .jn-sec h2 { font-size: 1.15rem; margin-bottom: .7rem; }
+  .jn-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: .7rem; }
+  .jn-card {
+    display: block;
+    background: #fff;
+    border: 1px solid #e7e5e4;
+    border-radius: 12px;
+    padding: .9rem 1rem;
+    text-decoration: none;
+    color: inherit;
+  }
+  .jn-card strong { display: block; margin-bottom: .35rem; line-height: 1.4; }
+  .jn-card span { display: block; color: #57534e; font-size: .88rem; line-height: 1.45; }
+  html[data-theme="dark"] .jn-card { background: #221f1c; border-color: #3a342c; }
+  html[data-theme="dark"] .jn-card span { color: #d6d3d1; }
+  .jn-card:hover { border-color: #0f766e; }
+  .jn-empty { display: none; color: #78716c; }
+
+  .jn-tool label { display: block; margin: .8rem 0 .25rem; font-weight: 600; }
+  .jn-tool input, .jn-tool select {
+    width: 100%;
+    max-width: 420px;
+    box-sizing: border-box;
+    padding: .55rem .7rem;
+    border: 1px solid #d6d3d1;
+    border-radius: 8px;
+    background: #fff;
+    color: #1c1917;
+  }
+  html[data-theme="dark"] .jn-tool input,
+  html[data-theme="dark"] .jn-tool select { background: #221f1c; color: #f3efe7; border-color: #3a342c; }
+  .jn-result {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 12px;
+    background: #f5f5f4;
+    border: 1px solid #e7e5e4;
+  }
+  html[data-theme="dark"] .jn-result { background: #221f1c; border-color: #3a342c; }
+  .jn-check { display: flex; gap: .5rem; align-items: flex-start; margin: .45rem 0; }
+  .jn-check input { width: auto; margin-top: .25rem; }
+  .jn-note { color: #57534e; font-size: .9rem; }
+  html[data-theme="dark"] .jn-note { color: #d6d3d1; }
 </style>
 
 <script>
   document.addEventListener("DOMContentLoaded", function() {
+    var nav = document.querySelector(".greedy-nav");
+    if (nav && !document.querySelector(".jn-theme-btn")) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "jn-theme-btn";
+      var paint = function () {
+        var dark = document.documentElement.getAttribute("data-theme") === "dark";
+        btn.textContent = dark ? "라이트" : "다크";
+        btn.setAttribute("aria-label", dark ? "라이트 모드로 전환" : "다크 모드로 전환");
+      };
+      paint();
+      btn.addEventListener("click", function () {
+        var next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", next);
+        try { localStorage.setItem("jn-theme", next); } catch (e) {}
+        paint();
+      });
+      nav.appendChild(btn);
+    }
+
     function cleanTitleText(text) {
       if (!text) return "";
       return text.replace(/\*\*/g, "").replace(/\*/g, "").replace(/[`#_~]/g, "").trim().replace(/\s+/g, " ");

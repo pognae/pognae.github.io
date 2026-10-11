@@ -1,6 +1,63 @@
 ---
-layout: home
-title: " "
-description: "모노포인트(MonoPoint)는 주식 주문 방법, ETF 고르는 법, ISA·연금저축 같은 절세 계좌, 예산과 비상금 관리까지 재테크·투자 기초를 공식 자료와 계산 예시로 설명하는 블로그입니다."
-author_profile: true
+layout: hub
+title: "자취노트"
+description: "월세 계약, 이사, 관리비와 공과금, 장보기와 집 수리를 카드와 계산기로 찾는 자취 생활 안내입니다."
+author_profile: false
 ---
+
+<section class="jn-hero">
+  <h1>어떤 자취 정보가 필요하세요?</h1>
+  <p>계약부터 분리배출까지. 글을 찾거나, 아래 도구에서 수수료와 체크리스트를 바로 계산해 보세요.</p>
+  <input id="jn-q" type="search" placeholder="예: 등기부등본, 곰팡이, 관리비" aria-label="글 검색">
+  <p class="jn-empty" id="jn-empty">해당하는 글이 없습니다. 다른 단어로 찾아 보세요.</p>
+</section>
+
+{% assign groups = "계약·보증금,이사·살림,공과금·생활비,장보기·살림기술,안전·수선" | split: "," %}
+{% for name in groups %}
+<section class="jn-sec">
+  <h2>{{ name }}</h2>
+  <div class="jn-grid">
+    {% for post in site.categories[name] %}
+    <a class="jn-card" href="{{ post.url | relative_url }}">
+      <strong>{{ post.title }}</strong>
+      <span>{{ post.description }}</span>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endfor %}
+
+<section class="jn-sec" id="jn-tools">
+  <h2>도구</h2>
+  <div class="jn-grid">
+    <a class="jn-card" href="{{ '/tools/broker-fee/' | relative_url }}"><strong>중개수수료</strong><span>매매·전세·월세 상한. 시행규칙 별표 기준, 부가세는 따로 볼 수 있습니다.</span></a>
+    <a class="jn-card" href="{{ '/tools/move-checklist/' | relative_url }}"><strong>이사·입주 체크리스트</strong><span>계약 다음 날부터 전입신고까지. 체크는 이 기기에만 남습니다.</span></a>
+    <a class="jn-card" href="{{ '/tools/waste-sort/' | relative_url }}"><strong>분리배출 찾기</strong><span>품목을 검색하면 버리는 방법. 구청 안내가 다르면 그쪽이 우선입니다.</span></a>
+    <a class="jn-card" href="{{ '/tools/budget-split/' | relative_url }}"><strong>생활비 나누기</strong><span>월세, 관리비, 식비를 넣어 한 달 합계와 비율을 봅니다.</span></a>
+    <a class="jn-card" href="{{ '/tools/contract-check/' | relative_url }}"><strong>계약 전 확인 목록</strong><span>등기, 특약, 시설. 체크는 이 기기에만 저장됩니다.</span></a>
+  </div>
+</section>
+
+<script>
+  (function () {
+    var input = document.getElementById("jn-q");
+    var empty = document.getElementById("jn-empty");
+    if (!input) return;
+    input.addEventListener("input", function () {
+      var q = input.value.trim().toLowerCase();
+      var shown = 0;
+      document.querySelectorAll(".jn-sec").forEach(function (sec) {
+        if (sec.id === "jn-tools") return;
+        var n = 0;
+        sec.querySelectorAll(".jn-card").forEach(function (card) {
+          var hit = !q || card.textContent.toLowerCase().indexOf(q) !== -1;
+          card.style.display = hit ? "" : "none";
+          if (hit) n += 1;
+        });
+        sec.style.display = n ? "" : "none";
+        shown += n;
+      });
+      empty.style.display = q && shown === 0 ? "block" : "none";
+    });
+  })();
+</script>
