@@ -1,4 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="MonoPoint">
-  <rect width="512" height="512" rx="96" fill="#0f766e"/>
-  <text x="256" y="320" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="200" font-weight="800" fill="#ffffff">MP</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="자취노트">
+  <rect width="64" height="64" rx="14" fill="#2563eb"/>
+  <path fill="#fff" d="M32 14 55 32h-7v20H16V32H9z"/>
+  <path fill="#2563eb" d="M26 40h12v12H26z"/>
 </svg>
