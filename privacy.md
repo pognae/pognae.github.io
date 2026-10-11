@@ -3,7 +3,7 @@ layout: single
 title: "개인정보처리방침"
 description: "자취노트가 수집하는 정보, 브라우저에만 남는 도구 기록, 쿠키와 광고·분석 도구 사용을 안내합니다."
 permalink: /privacy.html
-author_profile: true
+author_profile: false
 ---
 
 **시행일: 2026년 10월 11일**

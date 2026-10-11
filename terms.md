@@ -3,7 +3,7 @@ layout: single
 title: "이용약관 및 법적 고지"
 description: "자취노트 글과 도구의 성격, 계약·이사 판단에 대한 책임, 저작권과 광고에 관한 이용 조건입니다."
 permalink: /terms.html
-author_profile: true
+author_profile: false
 ---
 
 **시행일: 2026년 10월 11일**

@@ -3,7 +3,7 @@ layout: single
 title: "소개"
 description: "자취노트가 어떤 글을 쓰고, 숫자와 제도를 어떻게 확인하며, 틀린 내용을 어떻게 고치는지 정리했습니다."
 permalink: /about.html
-author_profile: true
+author_profile: false
 ---
 
 ## 자취노트는 어떤 곳인가요

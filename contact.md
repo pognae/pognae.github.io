@@ -3,7 +3,7 @@ layout: single
 title: "문의하기"
 description: "자취노트 글의 오류 제보, 제도 변경 알림, 다뤄 줬으면 하는 주제를 받는 곳입니다."
 permalink: /contact.html
-author_profile: true
+author_profile: false
 ---
 
 글의 오류 제보, 바뀐 제도 알림, 다뤄 줬으면 하는 살림 주제를 환영합니다.
