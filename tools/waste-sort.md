@@ -6,11 +6,22 @@ permalink: /tools/waste-sort/
 author_profile: false
 ---
 
-<div class="jn-tool">
-  <p class="jn-note">환경부 분리배출 공통 안내를 기준으로 정리했습니다. 음식물 제외 품목, 투명 페트 별도 수거, 폐건전지함 위치는 구청·주민센터 안내가 우선합니다.</p>
-  <label for="q">품목</label>
-  <input id="q" placeholder="예: 페트병, 배터리, 양파">
-  <div id="out"></div>
+<div class="jn-work">
+  <section class="jn-panel">
+    <h2>입력</h2>
+    <div class="jn-tool">
+      <p class="jn-note">환경부 분리배출 공통 안내를 기준으로 정리했습니다. 음식물 제외 품목, 투명 페트 별도 수거, 폐건전지함 위치는 구청·주민센터 안내가 우선합니다.</p>
+      <label for="q">품목</label>
+      <input id="q" placeholder="예: 페트병, 배터리, 양파">
+    </div>
+  </section>
+  <section class="jn-panel jn-preview-wrap">
+    <div class="jn-preview-bar">
+      <h2>미리보기</h2>
+      <button type="button" class="jn-pdf" data-jn-pdf="분리배출.pdf">PDF 저장</button>
+    </div>
+    <div class="jn-paper-scroll"><article class="jn-paper" id="jn-sheet"></article></div>
+  </section>
 </div>
 <script>
 (function () {
@@ -28,23 +39,16 @@ author_profile: false
     ["아이스팩", "내용물을 터뜨리지 않고 종량제 봉투에 넣는 곳이 많습니다. 별도 수거가 있는 구청도 있으니 안내를 확인하세요."]
   ];
   var q = document.getElementById("q");
-  var out = document.getElementById("out");
   function paint() {
     var s = q.value.trim();
-    out.innerHTML = "";
-    rows.forEach(function (row) {
-      if (s && row[0].indexOf(s) === -1 && row[1].indexOf(s) === -1) return;
-      var box = document.createElement("div");
-      box.className = "jn-result";
-      box.innerHTML = "<strong>" + row[0] + "</strong><br>" + row[1];
-      out.appendChild(box);
+    var matched = rows.filter(function (row) {
+      return !s || row[0].indexOf(s) !== -1 || row[1].indexOf(s) !== -1;
     });
-    if (!out.children.length) {
-      var empty = document.createElement("p");
-      empty.className = "jn-note";
-      empty.textContent = "목록에 없습니다. 구청 분리배출 검색이나 주민센터에 문의하세요.";
-      out.appendChild(empty);
-    }
+    var body = matched.map(function (row) {
+      return [row[0], jnEsc(row[1])];
+    });
+    if (!body.length) body = [["검색", jnEsc("목록에 없습니다. 구청 분리배출 검색이나 주민센터에 문의하세요.")]];
+    jnPaper("분리배출", body, "환경부 공통 안내를 기준으로 한 참고입니다. 구청 안내가 다르면 구청이 우선합니다. 검색어는 서버로 보내지 않았습니다.");
   }
   q.addEventListener("input", paint);
   paint();

@@ -6,8 +6,20 @@ permalink: /tools/contract-check/
 author_profile: false
 ---
 
-<div class="jn-tool" id="list"></div>
-<p class="jn-note">이 목록은 법률 자문이 아닙니다. 등기 열람은 <a href="https://www.iros.go.kr">인터넷등기소</a>에서 하고, 해석이 어려우면 계약 전에 법률구조공단(132)이나 사는 지역 주거 상담을 이용하세요. 체크는 이 기기에만 남습니다.</p>
+<div class="jn-work">
+  <section class="jn-panel">
+    <h2>입력</h2>
+    <div class="jn-tool" id="list"></div>
+    <p class="jn-note">이 목록은 법률 자문이 아닙니다. 등기 열람은 <a href="https://www.iros.go.kr">인터넷등기소</a>에서 하고, 해석이 어려우면 계약 전에 법률구조공단(132)이나 사는 지역 주거 상담을 이용하세요. 체크는 이 기기에만 남습니다.</p>
+  </section>
+  <section class="jn-panel jn-preview-wrap">
+    <div class="jn-preview-bar">
+      <h2>미리보기</h2>
+      <button type="button" class="jn-pdf" data-jn-pdf="계약-전-확인.pdf">PDF 저장</button>
+    </div>
+    <div class="jn-paper-scroll"><article class="jn-paper" id="jn-sheet"></article></div>
+  </section>
+</div>
 <script>
 (function () {
   var items = [
@@ -34,10 +46,18 @@ author_profile: false
     box.addEventListener("change", function () {
       saved[id] = box.checked;
       try { localStorage.setItem(key, JSON.stringify(saved)); } catch (e) {}
+      paint();
     });
     label.appendChild(box);
     label.appendChild(document.createTextNode(text));
     root.appendChild(label);
   });
+  function paint() {
+    var rows = items.map(function (text, i) {
+      return [saved["c" + i] ? "확인" : "미확인", jnEsc(text)];
+    });
+    jnPaper("계약 전 확인 목록", rows, "법률 자문이 아닙니다. 등기와 특약은 계약 전에 다시 확인하고, 체크는 이 브라우저에만 남습니다.");
+  }
+  paint();
 })();
 </script>

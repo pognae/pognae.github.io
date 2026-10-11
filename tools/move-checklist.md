@@ -6,8 +6,20 @@ permalink: /tools/move-checklist/
 author_profile: false
 ---
 
-<div class="jn-tool" id="list"></div>
-<p class="jn-note">저장 위치는 이 기기의 브라우저입니다. 서버로 전송되지 않으며, 브라우저 데이터를 지우면 체크도 사라집니다.</p>
+<div class="jn-work">
+  <section class="jn-panel">
+    <h2>입력</h2>
+    <div class="jn-tool" id="list"></div>
+    <p class="jn-note">저장 위치는 이 기기의 브라우저입니다. 서버로 전송되지 않으며, 브라우저 데이터를 지우면 체크도 사라집니다.</p>
+  </section>
+  <section class="jn-panel jn-preview-wrap">
+    <div class="jn-preview-bar">
+      <h2>미리보기</h2>
+      <button type="button" class="jn-pdf" data-jn-pdf="이사-입주-체크리스트.pdf">PDF 저장</button>
+    </div>
+    <div class="jn-paper-scroll"><article class="jn-paper" id="jn-sheet"></article></div>
+  </section>
+</div>
 <script>
 (function () {
   var items = [
@@ -34,10 +46,18 @@ author_profile: false
     box.addEventListener("change", function () {
       saved[id] = box.checked;
       try { localStorage.setItem(key, JSON.stringify(saved)); } catch (e) {}
+      paint();
     });
     label.appendChild(box);
     label.appendChild(document.createTextNode(text));
     root.appendChild(label);
   });
+  function paint() {
+    var rows = items.map(function (text, i) {
+      return [saved["m" + i] ? "했음" : "안 함", jnEsc(text)];
+    });
+    jnPaper("이사·입주 체크리스트", rows, "체크는 이 브라우저에만 있습니다. 인쇄한 종이만 따로 보관하면 됩니다.");
+  }
+  paint();
 })();
 </script>

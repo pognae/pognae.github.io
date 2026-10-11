@@ -6,7 +6,7 @@ permalink: /tools/
 author_profile: false
 ---
 
-계산과 체크는 이 브라우저 안에서만 이루어집니다. 금액과 체크 상태는 서버로 보내지 않습니다.
+계산과 체크는 이 브라우저 안에서만 이루어집니다. 오른쪽 미리보기를 PDF로 저장할 수 있고, 금액과 체크 상태는 서버로 보내지 않습니다.
 
 <div class="jn-grid">
   <a class="jn-card" href="/tools/broker-fee/"><strong>중개수수료</strong><span>매매·전세·월세 상한요율과 한도액.</span></a>

@@ -539,6 +539,104 @@
   .jn-check { display: flex; gap: .5rem; align-items: flex-start; margin: .45rem 0 1rem; font-size: 13px; color: #43536a; }
   .jn-check input { width: auto; min-height: 0; margin: .25rem 0 0; }
   .jn-note { color: #526176; font-size: 13px; line-height: 1.7; }
+  .page:has(.jn-work) {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+  .jn-work {
+    display: grid;
+    grid-template-columns: minmax(280px, 0.86fr) minmax(320px, 1.14fr);
+    gap: 20px;
+    align-items: start;
+  }
+  .jn-panel {
+    background: #fff;
+    border: 1px solid #dfe5ee;
+    border-radius: 14px;
+    padding: 18px 20px 20px;
+  }
+  .jn-panel > h2, .jn-preview-bar h2 {
+    margin: 0;
+    font-size: 17px !important;
+    font-weight: 650 !important;
+    letter-spacing: -0.03em;
+    color: #172033;
+  }
+  .jn-preview-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .jn-pdf {
+    border: 0;
+    border-radius: 8px;
+    background: #2563eb;
+    color: #fff;
+    min-height: 42px;
+    padding: 10px 16px;
+    font: 650 13px/1.4 Pretendard, "Malgun Gothic", sans-serif;
+    cursor: pointer;
+  }
+  .jn-pdf:disabled { opacity: 0.6; cursor: wait; }
+  .jn-paper-scroll {
+    background: #edf1f7;
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .jn-preview-wrap { position: sticky; top: 84px; }
+  .jn-paper {
+    background: #fff;
+    color: #172033;
+    box-sizing: border-box;
+    min-height: 480px;
+    padding: 28px 26px 32px;
+    box-shadow: 0 6px 18px #232a4812;
+    font-family: "Malgun Gothic", "Apple SD Gothic Neo", Pretendard, sans-serif;
+    font-size: 13px;
+    line-height: 1.65;
+  }
+  .jn-paper h3 {
+    margin: 0 0 4px;
+    font-size: 22px !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.04em;
+    color: #172033 !important;
+  }
+  .jn-paper-sub, .jn-paper-foot { color: #526176; font-size: 12px; }
+  .jn-paper-sub { margin: 0 0 16px; }
+  .jn-paper-foot { margin: 16px 0 0; }
+  .jn-paper table { width: 100%; border-collapse: collapse; }
+  .jn-paper th, .jn-paper td {
+    border-bottom: 1px solid #e6ebf3;
+    text-align: left;
+    padding: 8px 6px;
+    vertical-align: top;
+    font-weight: 500;
+  }
+  .jn-paper th { width: 34%; color: #526176; font-size: 12px; }
+  .jn-paper td.jn-mark { width: 28px; font-size: 15px; }
+  .jn-work .jn-tool input, .jn-work .jn-tool select { max-width: none; }
+  html[data-theme="dark"] .jn-panel { background: #171d2b; border-color: #2a3348; }
+  html[data-theme="dark"] .jn-panel > h2, html[data-theme="dark"] .jn-preview-bar h2 { color: #e7ecf5; }
+  html[data-theme="dark"] .jn-paper-scroll { background: #0f1420; }
+  @media (max-width: 900px) {
+    .jn-work { grid-template-columns: 1fr; }
+    .jn-preview-wrap { position: static; }
+  }
+  @media print {
+    body * { visibility: hidden !important; }
+    #jn-sheet, #jn-sheet * { visibility: visible !important; }
+    #jn-sheet {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      box-shadow: none;
+    }
+  }
   html[data-theme="dark"] .jn-note,
   html[data-theme="dark"] .jn-lead { color: #b7c0d0; }
   @media (max-width: 1100px) {
@@ -630,6 +728,65 @@
         }
       });
     });
+  });
+</script>
+<script>
+  window.jnEsc = function (value) {
+    return String(value).replace(/[&<>"]/g, function (ch) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch];
+    });
+  };
+  window.jnPaper = function (title, rows, foot) {
+    var sheet = document.getElementById("jn-sheet");
+    if (!sheet) return;
+    var html = "<h3>" + window.jnEsc(title) + "</h3>";
+    html += '<p class="jn-paper-sub">자취노트 · ' + window.jnEsc(new Date().toLocaleString("ko-KR")) + "</p><table>";
+    rows.forEach(function (row) {
+      html += "<tr><th>" + window.jnEsc(row[0]) + "</th><td>" + row[1] + "</td></tr>";
+    });
+    html += '</table><p class="jn-paper-foot">' + window.jnEsc(foot) + "</p>";
+    sheet.innerHTML = html;
+  };
+  document.addEventListener("click", function (event) {
+    var button = event.target.closest("[data-jn-pdf]");
+    if (!button) return;
+    var sheet = document.getElementById("jn-sheet");
+    if (!sheet) return;
+    var label = button.textContent;
+    button.disabled = true;
+    button.textContent = "PDF 만드는 중";
+    var host = document.createElement("div");
+    host.style.cssText = "position:fixed;left:-12000px;top:0;width:720px;background:#fff;";
+    var clone = sheet.cloneNode(true);
+    clone.id = "";
+    host.appendChild(clone);
+    document.body.appendChild(host);
+    function finish() {
+      host.remove();
+      button.disabled = false;
+      button.textContent = label;
+    }
+    function fallback() {
+      finish();
+      window.print();
+    }
+    var src = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js";
+    var ready = window.html2pdf ? Promise.resolve() : new Promise(function (resolve, reject) {
+      var script = document.createElement("script");
+      script.src = src;
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+    ready.then(function () {
+      return window.html2pdf().set({
+        margin: [12, 12, 12, 12],
+        filename: button.getAttribute("data-jn-pdf") || "자취노트.pdf",
+        image: { type: "jpeg", quality: 0.96 },
+        html2canvas: { scale: 2, backgroundColor: "#ffffff" },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+      }).from(clone).save();
+    }).then(finish).catch(fallback);
   });
 </script>
 <!-- end custom head snippets -->
