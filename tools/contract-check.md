@@ -48,8 +48,10 @@ author_profile: false
       try { localStorage.setItem(key, JSON.stringify(saved)); } catch (e) {}
       paint();
     });
+    var words = document.createElement("span");
+    words.textContent = text;
     label.appendChild(box);
-    label.appendChild(document.createTextNode(text));
+    label.appendChild(words);
     root.appendChild(label);
   });
   function paint() {

@@ -646,7 +646,7 @@
   .jn-meta { margin: 0 0 12px; font-size: 13px; color: #64748b; }
 
   .jn-tool label { display: block; margin: 0 0 8px; font-size: 13px; font-weight: 550; color: #43536a; }
-  .jn-tool input, .jn-tool select {
+  .jn-tool input:not([type="checkbox"]), .jn-tool select {
     width: 100%;
     max-width: 420px;
     box-sizing: border-box;
@@ -659,12 +659,12 @@
     color: #172033;
     font-size: 15px;
   }
-  .jn-tool input:focus, .jn-tool select:focus {
+  .jn-tool input:not([type="checkbox"]):focus, .jn-tool select:focus {
     border-color: #2563eb;
     box-shadow: 0 0 0 3px #2563eb12;
     outline: none;
   }
-  html[data-theme="dark"] .jn-tool input,
+  html[data-theme="dark"] .jn-tool input:not([type="checkbox"]),
   html[data-theme="dark"] .jn-tool select,
   html[data-theme="dark"] .jn-result { background: #121826; color: #e7ecf5; border-color: #2a3348; }
   .jn-result {
@@ -676,9 +676,10 @@
     font-size: 15px;
   }
   .jn-tool label.jn-check {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
+    display: grid !important;
+    grid-template-columns: 22px minmax(0, 1fr) !important;
+    column-gap: 8px;
+    align-items: start;
     margin: 0 0 8px;
     padding: 12px 14px;
     background: #f6f8fc;
@@ -693,15 +694,31 @@
   }
   .jn-tool label.jn-check input[type="checkbox"] {
     appearance: auto;
-    width: 18px;
-    height: 18px;
-    min-height: 18px;
-    max-width: 18px;
-    flex: 0 0 18px;
-    margin: 2px 0 0;
-    padding: 0;
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
+    align-self: start;
+    display: inline-block !important;
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px !important;
+    min-height: 18px !important;
+    max-width: 18px !important;
+    max-height: 18px !important;
+    margin: 2px 0 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
     border-radius: 4px;
+    background: transparent !important;
+    box-shadow: none !important;
+    float: none !important;
+    position: static !important;
     accent-color: #2563eb;
+  }
+  .jn-tool label.jn-check > span {
+    grid-column: 2;
+    grid-row: 1;
+    min-width: 0;
   }
   .jn-tool label.jn-check:has(input:checked) {
     background: #eef4ff;
@@ -796,7 +813,7 @@
   }
   .jn-paper th { width: 34%; color: #526176; font-size: 12px; }
   .jn-paper td.jn-mark { width: 28px; font-size: 15px; }
-  .jn-work .jn-tool input, .jn-work .jn-tool select { max-width: none; }
+  .jn-work .jn-tool input:not([type="checkbox"]), .jn-work .jn-tool select { max-width: none; }
   html[data-theme="dark"] .jn-panel { background: #171d2b; border-color: #2a3348; }
   html[data-theme="dark"] .jn-panel > h2, html[data-theme="dark"] .jn-preview-bar h2 { color: #e7ecf5; }
   html[data-theme="dark"] .jn-paper-scroll { background: #0f1420; }

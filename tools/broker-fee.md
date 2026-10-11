@@ -20,7 +20,7 @@ author_profile: false
       <input id="price" inputmode="numeric" value="200000000">
       <label for="rent">월세 (원, 전세면 0)</label>
       <input id="rent" inputmode="numeric" value="0">
-      <label class="jn-check"><input type="checkbox" id="vat"> 일반과세 사업자면 부가가치세 10%를 더해 보기</label>
+      <label class="jn-check"><input type="checkbox" id="vat"><span>일반과세 사업자면 부가가치세 10%를 더해 보기</span></label>
       <p class="jn-note">월세가 있으면 거래금액은 보증금 + 월세 × 100입니다. 그 합이 5천만 원 미만이면 보증금 + 월세 × 70으로 다시 계산합니다. 오피스텔은 이 표와 요율이 다를 수 있습니다.</p>
     </div>
   </section>
