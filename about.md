@@ -23,13 +23,14 @@ author_profile: false
 <section class="jn-panel" id="jn-scope">
   <h2>다루는 것</h2>
   <p>자취노트는 월세와 보증금을 어떻게 비교하는지, 계약 전에 등기부등본에서 무엇을 보는지, 이사 다음 날 전입신고와 공과금 명의를 어떤 순서로 바꾸는지처럼 그날 흩어지는 질문을 한 편씩 정리합니다.</p>
-  <p>글은 다섯 갈래입니다. 계산과 체크는 <a href="/tools/">도구</a>에서 브라우저 안에서만 처리하고, 입력한 금액과 체크 목록은 서버로 보내지 않습니다.</p>
+  <p>글은 여섯 갈래입니다. 계산과 체크는 <a href="/tools/">도구</a>에서 브라우저 안에서만 처리하고, 입력한 금액과 체크 목록은 서버로 보내지 않습니다.</p>
   <ul>
     <li><a href="/categories/#jn-1">계약·보증금</a> — 임대차계약, 등기부등본, 확정일자, 중개수수료 상한</li>
     <li><a href="/categories/#jn-2">이사·살림</a> — 집 보기, 이삿날, 입주 직후 할 일</li>
     <li><a href="/categories/#jn-3">공과금·생활비</a> — 관리비, 난방, 전기·가스 명의, 한 달 생활비</li>
     <li><a href="/categories/#jn-4">장보기·살림기술</a> — 혼자 먹는 장보기, 분리배출, 음식물쓰레기</li>
-    <li><a href="/categories/#jn-5">안전·수선</a> — 곰팡이, 수압, 도어록, 보일러</li>
+    <li><a href="/categories/#jn-5">초초초간단 요리</a> — 재료 적고, 불 하나, 10분 안팎의 한 끼</li>
+    <li><a href="/categories/#jn-6">안전·수선</a> — 곰팡이, 수압, 도어록, 보일러</li>
   </ul>
 </section>
 <section class="jn-panel" id="jn-method">

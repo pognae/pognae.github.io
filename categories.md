@@ -1,17 +1,17 @@
 ---
 layout: hub
 title: "카테고리"
-description: "계약·보증금, 이사·살림, 공과금·생활비, 장보기·살림기술, 안전·수선으로 글을 모았습니다."
+description: "계약·보증금, 이사·살림, 공과금·생활비, 장보기·살림기술, 초초초간단 요리, 안전·수선으로 글을 모았습니다."
 permalink: /categories/
 author_profile: false
 ---
 
 <section class="jn-hero">
   <h1>카테고리</h1>
-  <p>글을 다섯 갈래로 나눴습니다. 제목을 누르면 해당 안내로 이동합니다.</p>
+  <p>글을 여섯 갈래로 나눴습니다. 제목을 누르면 해당 안내로 이동합니다.</p>
 </section>
 
-{% assign groups = "계약·보증금,이사·살림,공과금·생활비,장보기·살림기술,안전·수선" | split: "," %}
+{% assign groups = "계약·보증금,이사·살림,공과금·생활비,장보기·살림기술,초초초간단 요리,안전·수선" | split: "," %}
 <div class="jn-directory">
 <aside class="jn-side" aria-label="분류">
   <p class="jn-side-label">분류</p>
