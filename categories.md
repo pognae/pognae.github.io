@@ -31,6 +31,9 @@ author_profile: false
     </a>
     {% endfor %}
   </div>
+  {% if name == "초초초간단 요리" %}
+  {% include coupang-recipe.html %}
+  {% endif %}
 </section>
 {% endfor %}
 </div>
