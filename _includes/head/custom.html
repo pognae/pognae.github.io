@@ -458,12 +458,25 @@
   }
   html[data-theme="dark"] a { color: #8eb4ff; }
   html[data-theme="dark"] .greedy-nav,
-  html[data-theme="dark"] .greedy-nav .visible-links {
+  html[data-theme="dark"] .greedy-nav .visible-links,
+  html[data-theme="dark"] .masthead__menu {
+    background: #0f1420 !important;
+  }
+  .masthead { animation: none !important; }
+  .greedy-nav__toggle::before {
+    content: none !important;
     background: transparent !important;
+    opacity: 0 !important;
   }
   html[data-theme="dark"] .greedy-nav .hidden-links {
     background: #171d2b !important;
     border: 1px solid #2a3348;
+  }
+  html[data-theme="dark"] .greedy-nav .hidden-links::before {
+    border-color: #2a3348 transparent !important;
+  }
+  html[data-theme="dark"] .greedy-nav .hidden-links::after {
+    border-color: #171d2b transparent !important;
   }
   html[data-theme="dark"] .greedy-nav a,
   html[data-theme="dark"] .greedy-nav button,
