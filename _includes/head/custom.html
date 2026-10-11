@@ -249,8 +249,14 @@
     background: #f6f8fc !important;
     border-top: 1px solid #e2e4ec;
     font-size: 13px;
-    color: #526176;
+    color: #344054 !important;
   }
+  .page__footer a,
+  .page__footer .page__footer-copyright,
+  .page__footer-copyright {
+    color: #344054 !important;
+  }
+  .page__footer a:hover { color: #172033 !important; }
   .page__taxonomy, .page__share, .page__related {
     font-size: 13px;
   }
@@ -350,6 +356,10 @@
   }
   html[data-theme="dark"] .masthead,
   html[data-theme="dark"] .page__footer { border-color: #2a3348 !important; }
+  html[data-theme="dark"] .page__footer a,
+  html[data-theme="dark"] .page__footer-copyright {
+    color: #c5cedd !important;
+  }
   html[data-theme="dark"] .page:not(:has(.jn-hub)) {
     background: #171d2b !important;
     border-color: #2a3348;
