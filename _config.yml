@@ -96,7 +96,7 @@ defaults:
       show_date: true
       read_time: false
       comments: true
-      share: true
+      share: false
       related: true
 
 repository: "pognae/pognae.github.io"

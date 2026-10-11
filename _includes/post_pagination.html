@@ -4,7 +4,7 @@
     {% assign prev_title = page.previous.title | remove: "**" | remove: "*" | strip %}
     <a href="{{ page.previous.url | relative_url }}" class="pagination--pager__btn prev" title="{{ prev_title }}">
       <span class="pager-label">← 이전 글</span>
-      <span class="pager-title">{{ prev_title | truncate: 32 }}</span>
+      <span class="pager-title">{{ prev_title }}</span>
     </a>
   {% else %}
     <div class="pagination--pager__btn prev disabled">
@@ -17,7 +17,7 @@
     {% assign next_title = page.next.title | remove: "**" | remove: "*" | strip %}
     <a href="{{ page.next.url | relative_url }}" class="pagination--pager__btn next" title="{{ next_title }}">
       <span class="pager-label">다음 글 →</span>
-      <span class="pager-title">{{ next_title | truncate: 32 }}</span>
+      <span class="pager-title">{{ next_title }}</span>
     </a>
   {% else %}
     <div class="pagination--pager__btn next disabled">
