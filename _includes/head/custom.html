@@ -808,6 +808,16 @@
     .jn-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
   @media (max-width: 760px) {
+    .masthead__inner-wrap,
+    .page__footer {
+      padding-left: 20px !important;
+      padding-right: 20px !important;
+    }
+    .jn-hub {
+      box-sizing: border-box;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
     .jn-hero h1, .page__title { font-size: 27px !important; }
     .jn-hero p { font-size: 14px; }
     #jn-q { font-size: 15px; min-height: 56px; }
@@ -818,7 +828,8 @@
     .jn-card { min-height: 102px; padding: 16px 28px 16px 16px; }
     .jn-card strong { font-size: 15px; }
     .jn-card span { font-size: 12px; }
-    .page__inner-wrap { padding: 18px 16px 22px; }
+    .page__inner-wrap,
+    .page:has(.jn-hub) .page__inner-wrap { padding: 18px 20px 22px; }
   }
   @media (max-width: 440px) {
     .jn-grid { grid-template-columns: 1fr; }
