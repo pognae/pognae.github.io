@@ -1,0 +1,14 @@
+{% assign locale = include.locale | default: site.locale %}
+{% if site.footer.links %}
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    {% for link in site.footer.links %}
+      {% if link.label and link.url %}
+        <li><a href="{{ link.url | relative_url }}">{{ link.label | escape_once | strip }}</a></li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+<div class="page__footer-copyright">&copy; {{ site.time | date: '%Y' }} {{ site.title | escape_once | strip }}. {{ site.data.ui-text[locale].powered_by | default: "Powered by" }} <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll/" rel="nofollow">Minimal Mistakes</a>.</div>

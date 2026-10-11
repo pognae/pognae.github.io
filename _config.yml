@@ -35,6 +35,11 @@ footer:
       url: "/terms.html"
     - label: "문의"
       url: "/contact.html"
+    - label: "피드"
+      url: "/feed/"
+
+atom_feed:
+  hide: true
 
 plugins:
   - jekyll-paginate

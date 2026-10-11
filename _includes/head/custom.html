@@ -566,7 +566,36 @@
   html[data-theme="dark"] .jn-card { background: #171d2b; border-color: #2a3348; }
   html[data-theme="dark"] .jn-card span,
   html[data-theme="dark"] .jn-side a { color: #b7c0d0; }
+  html[data-theme="dark"] .jn-copy .jn-panel p,
+  html[data-theme="dark"] .jn-copy .jn-panel li { color: #c5cedd; }
+  html[data-theme="dark"] .jn-copy .jn-panel h3 { color: #e7ecf5; }
+  html[data-theme="dark"] .jn-meta { color: #b7c0d0; }
   .jn-empty { display: none; color: #64748b; font-size: 14px; }
+  .jn-hub h2, .jn-hub h3 {
+    border-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+  .jn-copy { display: flex; flex-direction: column; gap: 12px; }
+  .jn-copy .jn-panel p,
+  .jn-copy .jn-panel li {
+    margin: 0 0 10px;
+    font-size: 15px;
+    line-height: 1.75;
+    color: #344054;
+    word-break: keep-all;
+  }
+  .jn-copy .jn-panel li:last-child,
+  .jn-copy .jn-panel p:last-child { margin-bottom: 0; }
+  .jn-copy .jn-panel ul, .jn-copy .jn-panel ol { margin: 8px 0 0; padding-left: 1.15em; }
+  .jn-copy .jn-panel h2 { margin: 0 0 12px !important; }
+  .jn-copy .jn-panel h3 {
+    margin: 16px 0 6px;
+    font-size: 15px !important;
+    font-weight: 650 !important;
+    color: #172033;
+  }
+  .jn-copy a { color: #2055c8; }
+  .jn-meta { margin: 0 0 12px; font-size: 13px; color: #64748b; }
 
   .jn-tool label { display: block; margin: 0 0 8px; font-size: 13px; font-weight: 550; color: #43536a; }
   .jn-tool input, .jn-tool select {
