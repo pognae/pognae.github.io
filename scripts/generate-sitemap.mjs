@@ -14,12 +14,23 @@ const BASE = "https://monopoint.app";
 
 const STATIC_PAGES = [
   { loc: "/", changefreq: "daily", priority: "1.0" },
+  { loc: "/tools/", changefreq: "weekly", priority: "0.8" },
+  { loc: "/tools/broker-fee/", changefreq: "monthly", priority: "0.7" },
+  { loc: "/tools/move-checklist/", changefreq: "monthly", priority: "0.7" },
+  { loc: "/tools/waste-sort/", changefreq: "monthly", priority: "0.7" },
+  { loc: "/tools/budget-split/", changefreq: "monthly", priority: "0.7" },
+  { loc: "/tools/contract-check/", changefreq: "monthly", priority: "0.7" },
   { loc: "/categories/", changefreq: "weekly", priority: "0.7" },
   { loc: "/about.html", changefreq: "monthly", priority: "0.6" },
   { loc: "/privacy.html", changefreq: "monthly", priority: "0.5" },
   { loc: "/terms.html", changefreq: "monthly", priority: "0.5" },
   { loc: "/contact.html", changefreq: "monthly", priority: "0.5" },
+  { loc: "/feed/", changefreq: "daily", priority: "0.4" },
 ];
+
+function todayKst() {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Seoul" }).format(new Date());
+}
 
 function escapeXml(value) {
   return value
@@ -60,8 +71,9 @@ function urlEntry({ loc, lastmod, changefreq, priority }) {
   return lines.join("\n");
 }
 
+const today = todayKst();
 const entries = STATIC_PAGES.map((page) =>
-  urlEntry({ ...page, lastmod: null })
+  urlEntry({ ...page, lastmod: today })
 );
 
 if (fs.existsSync(POSTS_DIR)) {
