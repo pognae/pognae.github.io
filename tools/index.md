@@ -1,7 +1,7 @@
 ---
 layout: single
 title: "도구"
-description: "중개수수료, 이사 체크리스트, 분리배출, 생활비 나누기, 계약 전 확인. 입력값은 브라우저 안에만 있습니다."
+description: "중개수수료, 이사 비용 계산, 이사 체크리스트, 분리배출, 생활비 나누기, 계약 전 확인. 입력값은 브라우저 안에만 있습니다."
 permalink: /tools/
 author_profile: false
 ---
@@ -10,6 +10,7 @@ author_profile: false
 
 <div class="jn-grid">
   <a class="jn-card" href="/tools/broker-fee/"><strong>중개수수료</strong><span>매매·전세·월세 상한요율과 한도액. → <em>계산·협의 가이드</em></span></a>
+  <a class="jn-card" href="/tools/moving-cost/"><strong>이사 비용 계산기</strong><span>짐 양·유형·거리·날짜로 예상 범위 계산. 견적 비교 기준점.</span></a>
   <a class="jn-card" href="/tools/move-checklist/"><strong>이사·입주 체크리스트</strong><span>잔금 전에 할 일과 입주 다음 날. → <em>D-7~D+3 타임라인</em></span></a>
   <a class="jn-card" href="/tools/waste-sort/"><strong>분리배출 찾기</strong><span>품목별 버리는 방법. 지역 차이가 있으면 구청이 우선.</span></a>
   <a class="jn-card" href="/tools/budget-split/"><strong>생활비 나누기</strong><span>월세·관리비·식비 합계와 비율. → <em>한 달 생활비 가이드</em></span></a>
@@ -23,4 +24,3 @@ author_profile: false
 - [첫 자취 한 달 생활비 나누기](/blog/2026/10/20/first-month-budget-split/)
 - [월세 계약 전 7일 체크리스트](/blog/2026/10/20/lease-seven-day-checklist/) · [등기 현장 읽기](/blog/2026/10/20/registry-field-walkthrough/)
 - [장보기·식비 루틴](/blog/2026/10/20/solo-grocery-month-routine/) (분리배출 도구와 함께)
-
