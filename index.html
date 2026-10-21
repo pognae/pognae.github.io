@@ -7,21 +7,39 @@ author_profile: false
 
 <section class="jn-hero">
   <h1>어떤 자취 정보가 필요하세요?</h1>
-  <p>원룸 계약부터 쓰레기 분리배출까지. 편안한 싱글 라이프의 모든 것</p>
-  <input id="jn-q" type="search" placeholder="예: 등기부등본, 계란볶음밥, 관리비" aria-label="글 검색">
+  <p>원룸 계약부터 쓰레기 분리배출까지. 짧은 팁보다 아래에서 기둥 가이드를 먼저 보세요.</p>
+  <input id="jn-q" type="search" placeholder="예: 등기부등본, 관리비, 전입신고" aria-label="글 검색">
   <p class="jn-empty" id="jn-empty">해당하는 글이 없습니다. 다른 단어로 찾아 보세요.</p>
 </section>
 
-{% assign groups = "계약·보증금,이사·살림,공과금·생활비,장보기·살림기술,초초초간단 요리,안전·수선" | split: "," %}
 <div class="jn-directory">
 <aside class="jn-side" aria-label="분류">
   <p class="jn-side-label">분류</p>
+  <a href="#jn-pillars">추천 가이드</a>
+  {% assign groups = "계약·보증금,이사·살림,공과금·생활비,장보기·살림기술,초초초간단 요리,안전·수선" | split: "," %}
   {% for name in groups %}
   <a href="#jn-{{ forloop.index }}">{{ name }}</a>
   {% endfor %}
   <a href="#jn-tools">도구</a>
 </aside>
 <div class="jn-main">
+
+<section class="jn-sec" id="jn-pillars">
+  <h2>추천 가이드</h2>
+  <p class="jn-note" style="margin:0 0 1rem;color:#6B7280;font-size:0.95rem;">한 주제를 표·일정·출처로 묶은 글입니다. AdSense·검색 심사에서도 이 글을 기준으로 보세요.</p>
+  <div class="jn-grid">
+    <a class="jn-card" href="{{ '/blog/2026/10/20/lease-seven-day-checklist/' | relative_url }}"><strong>월세 계약 전 7일 체크리스트</strong><span>등기·가계약·특약·잔금 전날을 날짜별로 정리했습니다.</span></a>
+    <a class="jn-card" href="{{ '/blog/2026/10/20/deposit-protect-move-in/' | relative_url }}"><strong>보증금 지키기</strong><span>전입신고·확정일자·계량기 사진을 하루 순서로 잇습니다.</span></a>
+    <a class="jn-card" href="{{ '/blog/2026/10/20/broker-fee-guide/' | relative_url }}"><strong>중개수수료 계산·협의</strong><span>상한 요율과 월세 환산, 영수증까지. 도구와 연결됩니다.</span></a>
+    <a class="jn-card" href="{{ '/blog/2026/10/20/moving-timeline-d7-d3/' | relative_url }}"><strong>이사 D-7~D+3</strong><span>잔금·열쇠·명의·인터넷을 한 주 타임라인으로 나눕니다.</span></a>
+    <a class="jn-card" href="{{ '/blog/2026/10/20/maintenance-fee-heating-guide/' | relative_url }}"><strong>관리비·난방 고지서</strong><span>정액·사용량·장기수선충당금과 첫 달 함정.</span></a>
+    <a class="jn-card" href="{{ '/blog/2026/10/20/first-month-budget-split/' | relative_url }}"><strong>첫 자취 한 달 생활비</strong><span>실수령액에서 월세·식비를 칸으로 나누는 방법.</span></a>
+    <a class="jn-card" href="{{ '/blog/2026/10/20/viewing-day-checklist/' | relative_url }}"><strong>집 보기 현장 체크</strong><span>채광·수압·곰팡이·소음·주차 순서를 한 장으로.</span></a>
+    <a class="jn-card" href="{{ '/blog/2026/10/20/solo-grocery-month-routine/' | relative_url }}"><strong>장보기·식비 루틴</strong><span>요일 장보기와 냄비 하나 메뉴 표를 모았습니다.</span></a>
+  </div>
+</section>
+
+{% assign groups = "계약·보증금,이사·살림,공과금·생활비,장보기·살림기술,초초초간단 요리,안전·수선" | split: "," %}
 {% for name in groups %}
 <section class="jn-sec" id="jn-{{ forloop.index }}">
   <h2>{{ name }}</h2>

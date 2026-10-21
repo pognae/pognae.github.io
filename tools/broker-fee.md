@@ -6,6 +6,8 @@ permalink: /tools/broker-fee/
 author_profile: false
 ---
 
+<p class="jn-note">상한 숫자만 보고 끝내기보다, <a href="/blog/2026/10/20/broker-fee-guide/">중개수수료 계산·협의 가이드</a>에서 월세 환산·부가세·영수증 순서까지 같이 확인하세요. 이 도구는 주택 상한 참고용이며 법률 자문이 아닙니다.</p>
+
 <div class="jn-work">
   <section class="jn-panel">
     <h2>입력</h2>

@@ -125,5 +125,7 @@ function main() {
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  main();
+  // AdSense 저가치 콘텐츠 대응: pending → _posts 자동 이동 중단
+  console.error("publish-due-posts is disabled. Add pillar guides to _posts/ manually.");
+  process.exit(1);
 }

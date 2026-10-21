@@ -2,6 +2,12 @@ const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
 
+// AdSense 저가치 콘텐츠 대응: 자동 양산 발행 중단. 기둥 가이드는 _posts에 수동 작성.
+if (require.main === module) {
+    console.error('auto_post.js is disabled. Write original pillar guides under _posts/ instead.');
+    process.exit(1);
+}
+
 const NVIDIA_API_KEY = process.env.NVIDIA_API_KEY;
 if (!NVIDIA_API_KEY) {
     console.error('Error: NVIDIA_API_KEY is not set in the environment variables.');

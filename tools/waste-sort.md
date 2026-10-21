@@ -6,6 +6,8 @@ permalink: /tools/waste-sort/
 author_profile: false
 ---
 
+<p class="jn-note">장보기·음식물과 맞춰 보려면 <a href="/blog/2026/10/20/solo-grocery-month-routine/">자취 1인분 장보기·식비 루틴</a>을 함께 보세요. 구청 안내가 이 도구와 다르면 구청이 우선입니다.</p>
+
 <div class="jn-work">
   <section class="jn-panel">
     <h2>입력</h2>

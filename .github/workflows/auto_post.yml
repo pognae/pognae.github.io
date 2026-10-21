@@ -1,45 +1,18 @@
-name: Auto Post Realtime Keywords
+name: Auto Post Realtime Keywords (DISABLED)
+
+# AdSense 저가치 콘텐츠 대응: 자동 양산 발행 영구 중단.
+# 신규 글은 손으로 쓴 기둥 가이드만 _posts에 추가합니다.
+# 이 워크플로는 실수로라도 돌아가지 않도록 jobs를 비워 둡니다.
 
 on:
-  # schedule:
-  #   - cron: '0 */5 * * *' # 5시간마다 자동 포스팅
-  workflow_dispatch: # 수동 실행 트리거
+  workflow_dispatch:
 
 jobs:
-  scrape-and-post:
+  disabled:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      actions: write
-    
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          
-      - name: Install dependencies
-        run: npm install
-        
-      - name: Run Scraper and Generator Script
-        env:
-          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+      - name: Refuse auto-post
         run: |
-          node scripts/auto_post.js
-          node scripts/generate-sitemap.mjs
-        
-      - name: Commit and push new post
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git add _posts/ sitemap.xml
-          git commit -m "Auto-post realtime keyword and update sitemap" || echo "No changes to commit"
-          git push
-
-      - name: Trigger Build and Deploy
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh workflow run pages.yml
+          echo "auto_post is disabled for content quality (AdSense)."
+          echo "Write pillar guides manually under _posts/."
+          exit 1

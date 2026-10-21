@@ -1,10 +1,10 @@
 {
-  "name": "monpoint-autopost",
-  "version": "1.0.0",
-  "description": "Automated SEO blog posting script",
-  "main": "scripts/auto_post.js",
+  "name": "monopoint-jachwi",
+  "version": "2.0.0",
+  "description": "자취노트 — 수동 작성 기둥 가이드. 자동 양산 발행 비활성.",
+  "private": true,
   "scripts": {
-    "start": "node scripts/auto_post.js"
+    "start": "node -e \"console.error('auto_post disabled'); process.exit(1)\""
   },
   "dependencies": {
     "axios": "^1.6.0"

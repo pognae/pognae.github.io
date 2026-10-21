@@ -6,6 +6,8 @@ permalink: /tools/budget-split/
 author_profile: false
 ---
 
+<p class="jn-note">칸을 나누는 순서와 석 달 뒤 줄이는 법은 <a href="/blog/2026/10/20/first-month-budget-split/">첫 자취 한 달 생활비 나누기</a>를 보세요. 관리비·난방 항목 이름은 <a href="/blog/2026/10/20/maintenance-fee-heating-guide/">고지서 가이드</a>와 맞춥니다.</p>
+
 <div class="jn-work">
   <section class="jn-panel">
     <h2>입력</h2>

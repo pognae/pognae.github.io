@@ -1,38 +1,15 @@
-name: Seed Factual Soccer Posts
+name: Seed Factual Soccer Posts (DISABLED)
+
+# 주제는 자취로 고정. 축구 시드·자동 양산 금지.
 
 on:
-  workflow_dispatch: # 수동 실행 트리거
+  workflow_dispatch:
 
 jobs:
-  seed-posts:
+  disabled:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      actions: write
-    
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          
-      - name: Install dependencies
-        run: npm install
-        
-      - name: Run Seeding Script
-        env:
-          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+      - name: Refuse seed posts
         run: |
-          node scripts/seed_soccer_posts.js
-          node scripts/generate-sitemap.mjs
-        
-      - name: Commit and push seeded posts
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git add _posts/ sitemap.xml
-          git commit -m "chore: seed 20 high-quality factual soccer posts" || echo "No changes to commit"
-          git push
+          echo "seed_posts is disabled. Site topic is 자취 only."
+          exit 1

@@ -17,7 +17,7 @@ minimal_mistakes_skin: "air" # 깔끔하고 가독성 좋은 'air' 스킨 적용
 author:
   name   : "자취노트"
   avatar : "/icons/icon.svg"
-  bio    : "처음 혼자 사는 사람이 계약·이사·살림에서 빠뜨리기 쉬운 항목을 정리합니다."
+  bio    : "계약·이사·생활비를 표와 일정으로 정리하는 자취 가이드. 자동 양산 글은 올리지 않습니다."
   links:
     - label: "Home"
       icon: "fas fa-fw fa-home"
@@ -46,6 +46,7 @@ plugins:
   - jekyll-feed
   - jekyll-seo-tag
   - jekyll-include-cache
+  - jekyll-redirect-from
 
 paginate: 10
 paginate_path: "/page:num/"

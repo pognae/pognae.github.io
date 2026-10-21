@@ -3,16 +3,9 @@ name: Build and deploy site
 on:
   push:
     branches: [main]
-    # 큐에만 글이 들어온 커밋은 humanize.yml이 처리한 뒤 배포를 요청한다.
     paths-ignore: ["_admin-queue/**"]
-  schedule:
-    # 매일 09:00 KST (UTC 00:00) — 1차
-    - cron: "0 0 * * *"
-    # 매일 15:00 KST (UTC 06:00) — 2차 백업 (GitHub cron 지연·누락 대비)
-    - cron: "0 6 * * *"
+  # AdSense 품질: pending 자동 발행 크론 제거. 배포는 push / 수동만.
   workflow_dispatch:
-  repository_dispatch:
-    types: [publish-blog]
 
 permissions:
   contents: read
@@ -38,12 +31,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "24"
-
-      - name: Publish due posts (KST filename date)
-        run: node scripts/publish-due-posts.mjs
-
-      - name: Verify auto-publish pipeline
-        run: node scripts/verify-auto-publish.mjs
 
       - name: Sync preview collection
         run: node scripts/sync-preview.mjs

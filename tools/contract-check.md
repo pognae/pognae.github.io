@@ -6,6 +6,8 @@ permalink: /tools/contract-check/
 author_profile: false
 ---
 
+<p class="jn-note">날짜별 순서는 <a href="/blog/2026/10/20/lease-seven-day-checklist/">월세 계약 전 7일 체크리스트</a>, 등기 읽는 법은 <a href="/blog/2026/10/20/registry-field-walkthrough/">등기 현장 읽기</a>, 특약 문장 예시는 <a href="/blog/2026/10/20/lease-special-clause-templates/">특약 예시 10개</a>를 참고하세요.</p>
+
 <div class="jn-work">
   <section class="jn-panel">
     <h2>입력</h2>

@@ -6,6 +6,8 @@ permalink: /tools/move-checklist/
 author_profile: false
 ---
 
+<p class="jn-note">체크 항목의 배경 설명은 <a href="/blog/2026/10/20/moving-timeline-d7-d3/">이사 D-7~D+3 타임라인</a>과 <a href="/blog/2026/10/20/deposit-protect-move-in/">보증금 지키기(전입·확정일자·계량기)</a>에 모아 두었습니다.</p>
+
 <div class="jn-work">
   <section class="jn-panel">
     <h2>입력</h2>
