@@ -12,7 +12,8 @@ try {
 }
 
 const pages = await loadPages();
-const today = new Date().toISOString().slice(0, 10);
+// 사이트 기준 시간대(Asia/Seoul)로 날짜를 찍는다. (UTC로 하면 밤 빌드에서 하루 전 날짜가 된다)
+const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
 
 const entries = [
   { path: '/', changefreq: 'weekly', priority: '1.0' },
