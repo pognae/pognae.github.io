@@ -1,92 +1,319 @@
----
-layout: hub
-title: "자취노트"
-description: "월세 계약, 이사, 관리비와 공과금, 장보기와 집 수리를 카드와 계산기로 찾는 자취 생활 안내입니다."
-author_profile: false
----
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>3년 다이어리 — 오늘과 3년 전 오늘을 한 화면에</title>
+    <meta
+      name="description"
+      content="블렛으로 오늘을 기록하면 3년 전부터 어제까지 12개 시점의 기록을 한 화면에서 다시 읽을 수 있습니다. 서버 없이 브라우저에만 저장하는 무료 다이어리."
+    />
+    <link rel="canonical" href="https://monopoint.app/" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <meta name="theme-color" content="#f2efe7" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="3년 다이어리" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="og:title" content="3년 다이어리 — 오늘과 3년 전 오늘을 한 화면에" />
+    <meta
+      property="og:description"
+      content="하루 한 줄을 블렛으로 남기면 3년 전 오늘까지 12개 시점이 한 화면에 모입니다. 기록은 이 브라우저에만 저장됩니다."
+    />
+    <meta property="og:url" content="https://monopoint.app/" />
+    <meta property="og:image" content="https://monopoint.app/og-image.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="3년 다이어리 — 오늘과 3년 전 오늘을 한 화면에" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="3년 다이어리 — 오늘과 3년 전 오늘을 한 화면에" />
+    <meta name="twitter:description" content="오늘 한 줄과 3년 전 오늘을 나란히 보는 블렛 일기. 무료, 회원가입 없음." />
+    <meta name="twitter:image" content="https://monopoint.app/og-image.png" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "3년 다이어리",
+        "url": "https://monopoint.app/",
+        "inLanguage": "ko",
+        "description": "오늘 쓴 한 줄과 3년 전 오늘을 한 화면에서 읽는 블렛 일기. 서버 없이 브라우저에만 저장합니다."
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "3년 다이어리",
+        "url": "https://monopoint.app/",
+        "applicationCategory": "LifestyleApplication",
+        "operatingSystem": "웹 브라우저",
+        "inLanguage": "ko",
+        "description": "블렛으로 하루를 기록하고 어제부터 3년 전까지 12개 시점을 한 화면에서 회고하는 무료 다이어리입니다. 기록은 서버로 전송되지 않습니다.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "KRW" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "회원가입이나 로그인이 필요한가요?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "필요 없습니다. 3년 다이어리는 계정 없이 동작하며 이름·이메일·전화번호를 받지 않습니다. 주소를 열면 바로 오늘 기록을 쓸 수 있습니다."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "휴대폰과 컴퓨터에서 같은 기록을 볼 수 있나요?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "자동 동기화는 없습니다. 기록은 그 브라우저에만 저장되기 때문입니다. 한 기기에서 JSON으로 내려받아 다른 기기에서 가져오기(병합)하면 기록을 옮길 수 있습니다."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "기록을 지우면 되돌릴 수 있나요?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "되돌릴 수 없습니다. 날짜별 기록 지우기나 브라우저 사이트 데이터 삭제 전에 도구 메뉴의 JSON 백업으로 사본을 남겨 두시길 권합니다."
+            }
+          }
+        ]
+      }
+    </script>
+    <style>
+      body {
+        margin: 0;
+        background: #f2efe7;
+        color: #22231f;
+      }
+      .app-intro {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 40px 20px 64px;
+        border-top: 1px solid #e2ddd0;
+        color: #22231f;
+        font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic',
+          'Noto Sans KR', system-ui, sans-serif;
+        line-height: 1.8;
+        word-break: keep-all;
+      }
+      .app-intro h1 {
+        margin: 0 0 12px;
+        font-size: clamp(22px, 4vw, 30px);
+        line-height: 1.4;
+        letter-spacing: -0.02em;
+      }
+      .app-intro h2 {
+        margin: 36px 0 10px;
+        font-size: 17px;
+        line-height: 1.5;
+        letter-spacing: -0.01em;
+      }
+      .app-intro p {
+        margin: 0 0 12px;
+        font-size: 15px;
+        color: #3a3b36;
+      }
+      .app-intro .lead {
+        font-size: 16px;
+        color: #22231f;
+      }
+      .app-intro .muted {
+        color: #6f6b5f;
+        font-size: 14px;
+      }
+      .app-intro ol,
+      .app-intro ul {
+        margin: 0 0 12px;
+        padding-left: 22px;
+        font-size: 15px;
+        color: #3a3b36;
+      }
+      .app-intro ol {
+        list-style: decimal;
+      }
+      .app-intro ul {
+        list-style: disc;
+      }
+      .app-intro li {
+        margin: 0 0 8px;
+      }
+      .app-intro dl {
+        margin: 0 0 12px;
+      }
+      .app-intro dt {
+        margin: 14px 0 4px;
+        font-size: 15px;
+        font-weight: 600;
+      }
+      .app-intro dd {
+        margin: 0;
+        font-size: 15px;
+        color: #3a3b36;
+      }
+      .app-intro a {
+        color: #36654f;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+      .app-intro a:hover {
+        text-decoration-thickness: 2px;
+      }
+      .app-intro .link-groups {
+        display: grid;
+        gap: 18px;
+        margin-top: 28px;
+        padding-top: 24px;
+        border-top: 1px solid #e2ddd0;
+      }
+      .app-intro .link-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 16px;
+        font-size: 14px;
+      }
+      .app-intro .link-group-title {
+        flex-basis: 100%;
+        margin: 0;
+        font-size: 13px;
+        font-weight: 600;
+        color: #6f6b5f;
+      }
+      .app-intro .column-list {
+        columns: 2;
+        font-size: 14px;
+        list-style: none;
+        padding-left: 0;
+      }
+      .app-intro .column-list li {
+        margin: 0 0 8px;
+        break-inside: avoid;
+      }
+      .app-intro .updated {
+        margin-top: 28px;
+        font-size: 13px;
+        color: #8d897c;
+      }
+      @media (max-width: 520px) {
+        .app-intro .column-list {
+          columns: 1;
+        }
+      }
+    </style>
+  </head>
+  <body class="safe-bottom">
+    <div id="root"></div>
+    <noscript>
+      <p class="app-intro muted" style="padding-bottom: 0">
+        다이어리 입력 화면은 자바스크립트로 동작합니다. 스크립트를 켜면 오늘 한 줄을 쓰고 3년 전 오늘을 함께 볼 수
+        있으며, 아래 안내는 스크립트 없이도 그대로 읽을 수 있습니다.
+      </p>
+    </noscript>
+    <section class="app-intro" id="about-site" aria-labelledby="about-site-title">
+      <h1 id="about-site-title">3년 다이어리 — 오늘과 3년 전 오늘을 한 화면에</h1>
+      <p class="lead">
+        3년 다이어리는 오늘 쓴 한 줄과 3년 전 같은 날의 한 줄을 나란히 놓고 읽는 무료 기록 도구입니다. 회원가입도,
+        앱 설치도, 서버 전송도 없습니다. 주소만 열면 바로 쓰고, 쓴 내용은 그 브라우저 안에만 남습니다.
+      </p>
 
-<section class="jn-hero">
-  <h1>어떤 자취 정보가 필요하세요?</h1>
-  <p>원룸 계약부터 쓰레기 분리배출까지. 짧은 팁보다 아래에서 기둥 가이드를 먼저 보세요.</p>
-  <input id="jn-q" type="search" placeholder="예: 등기부등본, 관리비, 전입신고" aria-label="글 검색">
-  <p class="jn-empty" id="jn-empty">해당하는 글이 없습니다. 다른 단어로 찾아 보세요.</p>
-</section>
+      <h2>한 화면에 모이는 12개 시점</h2>
+      <p>
+        날짜를 고르면 어제, 2일 전, 3일 전, 1주일 전, 2주일 전, 3주일 전, 1달 전, 3개월 전, 6개월 전, 1년 전,
+        2년 전, 3년 전까지 열두 시점의 기록이 카드로 나란히 놓입니다. 하루치 기록을 따로 찾아 들어갈 필요가 없어서
+        지난 결정과 지금의 상황을 같은 자리에서 견줄 수 있습니다.
+      </p>
+      <p>
+        회고가 필요한 이유와 실제로 결정이 바뀌는 장면은
+        <a href="/articles/01-why-three-year-diary/">3년 전 오늘을 다시 읽어야 하는 이유</a>에 적어 두었습니다.
+      </p>
 
-<div class="jn-directory">
-<aside class="jn-side" aria-label="분류">
-  <p class="jn-side-label">분류</p>
-  <a href="#jn-pillars">추천 가이드</a>
-  {% assign groups = "계약·보증금,이사·살림,공과금·생활비,장보기·살림기술,초초초간단 요리,안전·수선" | split: "," %}
-  {% for name in groups %}
-  <a href="#jn-{{ forloop.index }}">{{ name }}</a>
-  {% endfor %}
-  <a href="#jn-tools">도구</a>
-</aside>
-<div class="jn-main">
+      <h2>쓰는 방법 세 단계</h2>
+      <ol>
+        <li>
+          오늘 날짜에서 블렛(<strong>•</strong>)으로 한 줄씩 적습니다. Enter를 누르면 다음 줄이 열리고, 입력이
+          멈추면 1.2초 뒤 자동으로 저장됩니다.
+        </li>
+        <li>
+          아래쪽 <strong>과거의 오늘</strong>에서 지난 시점의 기록을 읽습니다. 비어 있는 시점은 숨기고 기록이 있는
+          날짜만 볼 수 있습니다.
+        </li>
+        <li>
+          도구 메뉴에서 JSON·CSV·마크다운으로 내려받아 백업합니다. 브라우저 데이터를 지우면 기록도 함께 사라지므로
+          주 1회 백업을 권합니다.
+        </li>
+      </ol>
+      <p class="muted">
+        더 자세한 절차는 <a href="/guide/">활용 가이드</a>와
+        <a href="/articles/10-local-backup-security/">로컬 저장 기록의 백업과 보안 관리</a>에 정리했습니다.
+      </p>
 
-<section class="jn-sec" id="jn-pillars">
-  <h2>추천 가이드</h2>
-  <p class="jn-note" style="margin:0 0 1rem;color:#6B7280;font-size:0.95rem;">한 주제를 표·일정·출처로 묶은 글입니다. AdSense·검색 심사에서도 이 글을 기준으로 보세요.</p>
-  <div class="jn-grid">
-    <a class="jn-card" href="{{ '/blog/2026/10/20/lease-seven-day-checklist/' | relative_url }}"><strong>월세 계약 전 7일 체크리스트</strong><span>등기·가계약·특약·잔금 전날을 날짜별로 정리했습니다.</span></a>
-    <a class="jn-card" href="{{ '/blog/2026/10/20/deposit-protect-move-in/' | relative_url }}"><strong>보증금 지키기</strong><span>전입신고·확정일자·계량기 사진을 하루 순서로 잇습니다.</span></a>
-    <a class="jn-card" href="{{ '/blog/2026/10/20/broker-fee-guide/' | relative_url }}"><strong>중개수수료 계산·협의</strong><span>상한 요율과 월세 환산, 영수증까지. 도구와 연결됩니다.</span></a>
-    <a class="jn-card" href="{{ '/blog/2026/10/20/moving-timeline-d7-d3/' | relative_url }}"><strong>이사 D-7~D+3</strong><span>잔금·열쇠·명의·인터넷을 한 주 타임라인으로 나눕니다.</span></a>
-    <a class="jn-card" href="{{ '/blog/2026/10/20/maintenance-fee-heating-guide/' | relative_url }}"><strong>관리비·난방 고지서</strong><span>정액·사용량·장기수선충당금과 첫 달 함정.</span></a>
-    <a class="jn-card" href="{{ '/blog/2026/10/20/first-month-budget-split/' | relative_url }}"><strong>첫 자취 한 달 생활비</strong><span>실수령액에서 월세·식비를 칸으로 나누는 방법.</span></a>
-    <a class="jn-card" href="{{ '/blog/2026/10/20/viewing-day-checklist/' | relative_url }}"><strong>집 보기 현장 체크</strong><span>채광·수압·곰팡이·소음·주차 순서를 한 장으로.</span></a>
-    <a class="jn-card" href="{{ '/blog/2026/10/20/solo-grocery-month-routine/' | relative_url }}"><strong>장보기·식비 루틴</strong><span>요일 장보기와 냄비 하나 메뉴 표를 모았습니다.</span></a>
-  </div>
-</section>
+      <h2>기록은 어디에 저장되나요</h2>
+      <p>
+        일기 내용과 마지막 수정 시각은 브라우저의 localStorage(선택하면 IndexedDB)에만 저장되며 서버로 전송되지
+        않습니다. 운영자가 보관하는 사본이 없으므로 내용을 열람하거나 제공할 수 없습니다. 대신 기기 간 자동 동기화는
+        없고, 시크릿 창을 닫거나 브라우저의 사이트 데이터를 지우면 기록도 사라집니다.
+      </p>
+      <p>
+        어떤 정보를 다루고 다루지 않는지, 광고 쿠키와 맞춤 광고를 끄는 방법은
+        <a href="/privacy/">개인정보처리방침</a>에, 서비스 이용 조건은 <a href="/terms/">이용약관</a>에 적어
+        두었습니다.
+      </p>
 
-{% assign groups = "계약·보증금,이사·살림,공과금·생활비,장보기·살림기술,초초초간단 요리,안전·수선" | split: "," %}
-{% for name in groups %}
-<section class="jn-sec" id="jn-{{ forloop.index }}">
-  <h2>{{ name }}</h2>
-  <div class="jn-grid">
-    {% for post in site.categories[name] %}
-    <a class="jn-card" href="{{ post.url | relative_url }}">
-      <strong>{{ post.title }}</strong>
-      <span>{{ post.description }}</span>
-    </a>
-    {% endfor %}
-  </div>
-</section>
-{% endfor %}
+      <h2>자주 묻는 질문</h2>
+      <dl>
+        <dt>회원가입이나 로그인이 필요한가요?</dt>
+        <dd>필요 없습니다. 계정 없이 동작하고 이름·이메일·전화번호를 받지 않습니다.</dd>
+        <dt>휴대폰과 컴퓨터에서 같은 기록을 볼 수 있나요?</dt>
+        <dd>
+          자동 동기화는 없습니다. 한 기기에서 JSON으로 내려받아 다른 기기에서 가져오기(병합)하면 기록을 옮길 수
+          있습니다.
+        </dd>
+        <dt>기록을 지우면 되돌릴 수 있나요?</dt>
+        <dd>되돌릴 수 없습니다. 지우기 전에 JSON 백업으로 사본을 남겨 두세요.</dd>
+      </dl>
+      <p class="muted">
+        열 가지 질문과 답은 <a href="/faq/">자주 묻는 질문</a>에, 만든 이유와 운영 방식은
+        <a href="/about/">서비스 소개</a>에 있습니다.
+      </p>
 
-<section class="jn-sec" id="jn-tools">
-  <h2>도구</h2>
-  <div class="jn-grid">
-    <a class="jn-card" href="{{ '/tools/broker-fee/' | relative_url }}"><strong>중개수수료</strong><span>매매·전세·월세 상한. 시행규칙 별표 기준, 부가세는 따로 볼 수 있습니다.</span></a>
-    <a class="jn-card" href="{{ '/tools/move-checklist/' | relative_url }}"><strong>이사·입주 체크리스트</strong><span>계약 다음 날부터 전입신고까지. 체크는 이 기기에만 남습니다.</span></a>
-    <a class="jn-card" href="{{ '/tools/waste-sort/' | relative_url }}"><strong>분리배출 찾기</strong><span>품목을 검색하면 버리는 방법. 구청 안내가 다르면 그쪽이 우선입니다.</span></a>
-    <a class="jn-card" href="{{ '/tools/budget-split/' | relative_url }}"><strong>생활비 나누기</strong><span>월세, 관리비, 식비를 넣어 한 달 합계와 비율을 봅니다.</span></a>
-    <a class="jn-card" href="{{ '/tools/contract-check/' | relative_url }}"><strong>계약 전 확인 목록</strong><span>등기, 특약, 시설. 체크는 이 기기에만 저장됩니다.</span></a>
-  </div>
-</section>
-</div>
-</div>
+      <h2>기록과 회고에 관한 글 12편</h2>
+      <ul class="column-list">
+        <li><a href="/articles/01-why-three-year-diary/">3년 전 오늘을 다시 읽어야 하는 이유</a></li>
+        <li><a href="/articles/02-three-line-bullet-diary/">하루 3줄 블렛 일기 루틴</a></li>
+        <li><a href="/articles/03-bad-vs-good-diary/">나쁜 일기와 좋은 일기: 실전 비교 5쌍</a></li>
+        <li><a href="/articles/04-review-cycles/">3개월·6개월·1년 회고 주기 활용법</a></li>
+        <li><a href="/articles/05-five-minute-recording/">작심삼일을 깨는 5분 기록법</a></li>
+        <li><a href="/articles/06-emotion-vs-fact/">감정과 사실을 분리해 쓰는 법</a></li>
+        <li><a href="/articles/07-career-reflection-4050/">4050 직장인 커리어 회고 질문 10가지</a></li>
+        <li><a href="/articles/08-spending-health-sleep-tracking/">소비·건강·수면 한 줄 트래킹</a></li>
+        <li><a href="/articles/09-year-end-settlement/">연말·연초, 1년 기록 결산하는 법</a></li>
+        <li><a href="/articles/10-local-backup-security/">로컬 저장 기록의 백업과 보안 관리</a></li>
+        <li><a href="/articles/11-paper-to-web/">종이 일기에서 웹 다이어리로 옮길 때</a></li>
+        <li><a href="/articles/12-100-days-365-days/">100일·365일 기록 후 달라지는 의사결정</a></li>
+      </ul>
 
-<script>
-  (function () {
-    var input = document.getElementById("jn-q");
-    var empty = document.getElementById("jn-empty");
-    if (!input) return;
-    input.addEventListener("input", function () {
-      var q = input.value.trim().toLowerCase();
-      var shown = 0;
-      document.querySelectorAll(".jn-sec").forEach(function (sec) {
-        if (sec.id === "jn-tools") return;
-        var n = 0;
-        sec.querySelectorAll(".jn-card").forEach(function (card) {
-          var hit = !q || card.textContent.toLowerCase().indexOf(q) !== -1;
-          card.style.display = hit ? "" : "none";
-          if (hit) n += 1;
-        });
-        sec.style.display = n ? "" : "none";
-        shown += n;
-      });
-      empty.style.display = q && shown === 0 ? "block" : "none";
-    });
-  })();
-</script>
+      <div class="link-groups">
+        <nav class="link-group" aria-label="서비스 안내">
+          <p class="link-group-title">서비스 안내</p>
+          <a href="/guide/">활용 가이드</a>
+          <a href="/faq/">자주 묻는 질문</a>
+          <a href="/about/">서비스 소개</a>
+          <a href="/privacy/">개인정보처리방침</a>
+          <a href="/terms/">이용약관</a>
+          <a href="/contact/">문의</a>
+        </nav>
+      </div>
+
+      <p class="updated">
+        이 사이트는 개인 기록 도구이며 광고로 운영됩니다. 기록은 서버로 전송되지 않고 이용자의 브라우저에만
+        저장됩니다. 최근 수정: 2026-11-20
+      </p>
+    </section>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

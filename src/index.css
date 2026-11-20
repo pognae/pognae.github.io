@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --paper: #f2efe7;
+  --card: #fffdf8;
+  --line: #e2ddd0;
+  --ink: #22231f;
+  --muted: #6f6b5f;
+  --pine: #36654f;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family:
+    'Pretendard',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Apple SD Gothic Neo',
+    'Malgun Gothic',
+    'Noto Sans KR',
+    system-ui,
+    sans-serif;
+  font-size: 16px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* iOS 자동 확대 방지: 입력 글꼴 16px 이상 유지 */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* 좁은 화면(360px)에서 이미지·미디어가 카드 폭을 밀지 않게 한다. */
+#root {
+  min-width: 0;
+}
+
+img,
+video,
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 블렛 입력칸은 flex 안에 있어, 긴 주소를 붙여넣으면 칸이 카드 밖으로 커질 수 있다.
+   어절 하나가 폭을 넘을 때만 글자 단위로 나누고, flex 최소 폭을 0으로 둔다. */
+.bullet-input {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* 블렛 입력칸: 비어 있을 때만 안내 문구, 포커스 중에는 숨김 */
+.bullet-input:empty::before {
+  content: attr(data-placeholder);
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.bullet-input:focus::before {
+  content: '';
+}
+
+.bullet-input:focus-visible {
+  outline: none;
+}
+
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

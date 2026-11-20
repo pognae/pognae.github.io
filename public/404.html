@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>페이지를 찾을 수 없습니다 — 3년 다이어리</title>
+    <meta name="description" content="주소가 바뀌었거나 입력한 주소가 없습니다. 3년 다이어리 홈과 활용 가이드, 기록 칼럼 12편으로 안내합니다." />
+    <meta name="robots" content="noindex,follow" />
+    <style>
+      :root {
+        color-scheme: light;
+        --paper: #f2efe7;
+        --card: #fffdf8;
+        --line: #e2ddd0;
+        --ink: #22231f;
+        --muted: #6f6b5f;
+        --pine: #36654f;
+        --pine-soft: #e7efe9;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        -webkit-text-size-adjust: 100%;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px 16px;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic',
+          'Noto Sans KR', system-ui, sans-serif;
+        line-height: 1.75;
+        word-break: keep-all;
+        overflow-wrap: break-word;
+      }
+      main {
+        width: 100%;
+        max-width: 560px;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 30px 24px;
+      }
+      .mark {
+        width: 9px;
+        height: 9px;
+        border-radius: 2px;
+        background: var(--pine);
+        display: inline-block;
+        margin-right: 8px;
+      }
+      h1 {
+        margin: 0 0 10px;
+        font-size: 22px;
+        line-height: 1.4;
+        letter-spacing: -0.02em;
+      }
+      h2 {
+        margin: 26px 0 8px;
+        font-size: 15px;
+        letter-spacing: -0.01em;
+      }
+      p {
+        margin: 0 0 14px;
+        color: var(--muted);
+        font-size: 15px;
+      }
+      ul {
+        margin: 0;
+        padding-left: 18px;
+      }
+      li {
+        margin-bottom: 6px;
+        font-size: 14.5px;
+      }
+      a {
+        color: var(--pine);
+        text-underline-offset: 3px;
+      }
+      .old-path {
+        margin: 0 0 16px;
+        padding: 12px 14px;
+        border: 1px solid #cbdbd0;
+        border-radius: 12px;
+        background: var(--pine-soft);
+      }
+      .old-path p {
+        margin: 0;
+        color: #2f4137;
+        font-size: 14px;
+      }
+      .old-path code {
+        display: inline-block;
+        max-width: 100%;
+        margin-bottom: 4px;
+        font-size: 13px;
+        color: #26473a;
+        overflow-wrap: anywhere;
+      }
+      .columns {
+        columns: 2;
+        column-gap: 22px;
+        padding-left: 16px;
+      }
+      .columns li {
+        break-inside: avoid;
+        margin-bottom: 8px;
+      }
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 20px;
+      }
+      .button {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        padding: 0 16px;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        color: var(--ink);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .button.home {
+        background: var(--pine);
+        border-color: var(--pine);
+        color: #fff;
+      }
+      @media (max-width: 480px) {
+        main {
+          padding: 24px 18px;
+        }
+        .columns {
+          columns: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1><span class="mark" aria-hidden="true"></span>페이지를 찾을 수 없습니다</h1>
+      <p>주소가 바뀌었거나 입력한 주소가 없습니다. 3년 다이어리는 서버 없이 동작하는 앱이라 잘못된 주소로 들어오면 이 안내만 보입니다.</p>
+
+      <div class="old-path" id="old-path" hidden>
+        <p>
+          <code id="old-path-name"></code><br />
+          <span id="old-path-text"></span>
+        </p>
+      </div>
+
+      <p>아래에서 다시 시작하세요.</p>
+      <ul>
+        <li><a href="/">오늘 일기 쓰기 (앱 홈)</a></li>
+        <li><a href="/guide/">3년 다이어리 활용 가이드 — 기록 루틴과 백업 절차</a></li>
+        <li><a href="/faq/">자주 묻는 질문 — 저장 위치와 기기 이전</a></li>
+      </ul>
+
+      <h2>기록과 회고 칼럼 12편</h2>
+      <ul class="columns">
+        <li><a href="/articles/01-why-three-year-diary/">3년 전 오늘을 다시 읽어야 하는 이유</a></li>
+        <li><a href="/articles/02-three-line-bullet-diary/">하루 3줄 블렛 일기 루틴</a></li>
+        <li><a href="/articles/03-bad-vs-good-diary/">나쁜 일기와 좋은 일기: 실전 비교 5쌍</a></li>
+        <li><a href="/articles/04-review-cycles/">3개월·6개월·1년 회고 주기 활용법</a></li>
+        <li><a href="/articles/05-five-minute-recording/">작심삼일을 깨는 5분 기록법</a></li>
+        <li><a href="/articles/06-emotion-vs-fact/">감정과 사실을 분리해 쓰는 법</a></li>
+        <li><a href="/articles/07-career-reflection-4050/">4050 직장인 커리어 회고 질문 10가지</a></li>
+        <li><a href="/articles/08-spending-health-sleep-tracking/">소비·건강·수면 한 줄 트래킹</a></li>
+        <li><a href="/articles/09-year-end-settlement/">연말·연초, 1년 기록 결산하는 법</a></li>
+        <li><a href="/articles/10-local-backup-security/">로컬 저장 기록의 백업과 보안 관리</a></li>
+        <li><a href="/articles/11-paper-to-web/">종이 일기에서 웹 다이어리로 옮길 때</a></li>
+        <li><a href="/articles/12-100-days-365-days/">100일·365일 기록 후 달라지는 의사결정</a></li>
+      </ul>
+
+      <h2>서비스 안내</h2>
+      <ul>
+        <li><a href="/about/">서비스 소개 — 만든 이유와 데이터 정책</a></li>
+        <li><a href="/privacy/">개인정보처리방침</a></li>
+        <li><a href="/terms/">이용약관</a></li>
+        <li><a href="/contact/">문의 — imaxaug@gmail.com</a></li>
+      </ul>
+
+      <div class="actions">
+        <a class="button home" href="/">오늘 일기 쓰러 가기</a>
+        <a class="button" href="/guide/">활용 가이드 보기</a>
+      </div>
+    </main>
+    <script>
+      // 예전 monopoint.app의 /blog/*, /tools/* 주소로 들어온 방문자에게 무엇이 바뀌었는지 알려 준다.
+      (function () {
+        var path = location.pathname.replace(/\/+$/, '');
+        var section = path.split('/').filter(Boolean)[0];
+        var notices = {
+          blog: '예전 블로그 글 주소입니다. 지난 자취 기록 글은 새 사이트로 옮기지 않았고, 기록과 회고에 관한 글 12편을 아래에 모아 두었습니다.',
+          tools: '예전 도구 페이지 주소입니다. 도구는 지금 홈 화면의 일기 앱 하나로 합쳤습니다. 아래 링크에서 바로 쓸 수 있습니다.'
+        };
+        var text = notices[section];
+        var box = document.getElementById('old-path');
+        if (!text || !box) return;
+        document.getElementById('old-path-name').textContent = path + '/';
+        document.getElementById('old-path-text').textContent = text;
+        box.hidden = false;
+      })();
+    </script>
+  </body>
+</html>
