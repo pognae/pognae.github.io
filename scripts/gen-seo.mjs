@@ -52,5 +52,7 @@ Sitemap: ${SITE.url}/sitemap.xml
 
 await writeFile(join(dist, 'sitemap.xml'), sitemap, 'utf8');
 await writeFile(join(dist, 'robots.txt'), robots, 'utf8');
+// GitHub Pages(브랜치 서빙)에서 Jekyll 처리를 건너뛰게 하는 빈 파일
+await writeFile(join(dist, '.nojekyll'), '', 'utf8');
 
 console.log(`[gen-seo] sitemap.xml ${entries.length}개 주소, robots.txt를 생성했습니다.`);
