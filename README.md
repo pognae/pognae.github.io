@@ -83,11 +83,26 @@ scripts/
 
 `.env.example`을 복사해 `.env.local`로 쓰면 됩니다. 값은 `vite.config.ts`에서 `define`으로 주입됩니다.
 
-## GitHub Pages 배포 (3단계)
+## GitHub Pages 배포 (현재 방식)
 
-1. 저장소 **Settings → Pages → Build and deployment → Source**를 **GitHub Actions**으로 바꿉니다.
-2. **Settings → Secrets and variables → Actions**에 `VITE_ADSENSE_CLIENT`(없으면 기본값 사용)와 선택적으로 `VITE_AD_SLOT_*`를 추가하고, **Variables**에 `SITE_URL=https://monopoint.app`을 넣습니다.
-3. `main` 브랜치에 푸시하면 `.github/workflows/deploy.yml`이 `npm ci → typecheck → test → build` 후 `dist`를 배포합니다. Actions 탭에서 초록불을 확인하고 `https://monopoint.app/`를 엽니다.
+`pognae/pognae.github.io` 저장소는 **Pages Source = GitHub Actions**, 브랜치 `main`을 씁니다.
+그런데 저장소에 연결된 GitHub App 권한에 워크플로 파일 쓰기(`workflows`)가 없어
+새 `deploy.yml`을 추가할 수 없습니다. 그래서 저장소에 원래 있던
+`.github/workflows/pages.yml`(이름: `Build and deploy site`)을 그대로 씁니다.
+
+1. 그 워크플로의 `node scripts/generate-sitemap.mjs` 단계가 실제 빌드를 합니다.
+   `npm ci → npm run build` 후 `dist/` 결과물을 저장소 루트로 펼치고 `_site/blog/index.html`용 칼럼 허브를 만듭니다.
+2. 이어지는 `bundle exec jekyll build`가 루트의 정적 파일을 그대로 `_site`로 복사합니다
+   (`Gemfile`·`_config.yml`은 최소 설정만 둡니다).
+3. `_site`가 Pages 아티팩트로 배포됩니다. `main`에 푸시하면 2~3분 뒤 `https://monopoint.app/`에 반영됩니다.
+
+> 로컬에서는 `scripts/generate-sitemap.mjs`가 CI가 아니면 아무 일도 하지 않습니다(진입점 `index.html` 보호).
+> 나중에 App에 `workflows` 권한이 생기면 이 디렉터리의 `.github/workflows/deploy.yml`을 그대로 올려
+> 정공법(`npm ci → typecheck → test → build → dist 배포`)으로 바꾸면 됩니다.
+>
+> 배포 전 사이트(자치노트, Jekyll)는 태그 `legacy-jekyll-pre-diary`에 그대로 남아 있습니다.
+
+> `package-lock.json`이 반드시 커밋되어 있어야 `npm ci`가 동작합니다. 저장소가 `아이디.github.io`가 아니면 `base`가 자동으로 `/저장소이름/`이 됩니다. 커스텀 도메인을 쓰는 이 프로젝트는 루트(`/`)로 배포됩니다.
 
 > `package-lock.json`이 반드시 커밋되어 있어야 `npm ci`가 동작합니다. 저장소가 `아이디.github.io`가 아니면 `base`가 자동으로 `/저장소이름/`이 됩니다. 커스텀 도메인을 쓰는 이 프로젝트는 루트(`/`)로 배포됩니다.
 
