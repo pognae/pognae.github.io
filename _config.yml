@@ -1,0 +1,26 @@
+title: 3년 다이어리
+description: 오늘과 3년 전 오늘을 한 화면에 보는 블렛 일기
+url: "https://monopoint.app"
+baseurl: ""
+lang: ko-KR
+timezone: Asia/Seoul
+
+# 실제 사이트는 Vite 빌드 산출물이 저장소 루트에 펼쳐진 뒤 Jekyll이 그대로 복사하는 방식이다.
+# (scripts/generate-sitemap.mjs 참고) 빌드에 필요 없는 원본 소스는 결과물에서 제외한다.
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - package.json
+  - package-lock.json
+  - tsconfig.json
+  - vite.config.ts
+  - vitest.config.ts
+  - tailwind.config.js
+  - postcss.config.js
+  - src
+  - scripts
+  - public
+  - node_modules
+  - vendor
+  - .env.example
