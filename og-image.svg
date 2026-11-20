@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="3년 다이어리 — 오늘과 3년 전 오늘을 한 화면에">
+  <rect width="1200" height="630" fill="#f2efe7" />
+  <rect x="84" y="84" width="1032" height="462" rx="28" fill="#fffdf8" stroke="#e2ddd0" stroke-width="3" />
+  <rect x="132" y="132" width="36" height="36" rx="8" fill="#36654f" />
+  <text x="186" y="161" font-family="Pretendard, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="30" font-weight="600" fill="#22231f">3년 다이어리</text>
+  <text x="132" y="286" font-family="Pretendard, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="66" font-weight="700" fill="#22231f" letter-spacing="-2">오늘과 3년 전 오늘을</text>
+  <text x="132" y="366" font-family="Pretendard, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="66" font-weight="700" fill="#36654f" letter-spacing="-2">한 화면에</text>
+  <text x="132" y="438" font-family="Pretendard, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="27" fill="#6f6b5f">하루 한 줄 블렛 일기 · 12개 시점 회고 · 브라우저에만 저장</text>
+  <g font-family="Pretendard, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif" font-size="22" fill="#8d897c">
+    <text x="132" y="496">무료</text>
+    <text x="222" y="496">·</text>
+    <text x="248" y="496">회원가입 없음</text>
+    <text x="410" y="496">·</text>
+    <text x="436" y="496">광고로 운영</text>
+  </g>
+  <rect x="884" y="300" width="160" height="120" rx="16" fill="#e7efe9" />
+  <g fill="#36654f">
+    <rect x="912" y="330" width="12" height="12" rx="3" />
+    <rect x="912" y="360" width="12" height="12" rx="3" />
+    <rect x="912" y="390" width="12" height="12" rx="3" />
+  </g>
+  <g fill="#a9bfb0">
+    <rect x="938" y="332" width="72" height="8" rx="4" />
+    <rect x="938" y="362" width="58" height="8" rx="4" />
+    <rect x="938" y="392" width="66" height="8" rx="4" />
+  </g>
+</svg>

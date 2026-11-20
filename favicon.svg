@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="3년 다이어리">
+  <rect width="64" height="64" rx="14" fill="#f2efe7" />
+  <rect x="12" y="12" width="40" height="40" rx="10" fill="#36654f" />
+  <circle cx="24" cy="26" r="3.2" fill="#fffdf8" />
+  <circle cx="24" cy="33" r="3.2" fill="#fffdf8" />
+  <circle cx="24" cy="40" r="3.2" fill="#fffdf8" />
+  <rect x="31" y="24" width="14" height="4" rx="2" fill="#e7efe9" />
+  <rect x="31" y="31" width="11" height="4" rx="2" fill="#e7efe9" />
+  <rect x="31" y="38" width="13" height="4" rx="2" fill="#e7efe9" />
+</svg>
